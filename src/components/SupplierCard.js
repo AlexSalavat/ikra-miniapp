@@ -1,3 +1,5 @@
+// src/components/SupplierCard.js
+
 import React from 'react';
 
 const SupplierCard = ({ name, logo }) => (
@@ -7,7 +9,7 @@ const SupplierCard = ({ name, logo }) => (
       borderRadius: '22px',
       overflow: 'hidden',
       width: '100%',
-      aspectRatio: '1/1', // квадрат, если нужно прямоугольник — например '1.6/1'
+      aspectRatio: '1/1',
       background: '#18181A',
       boxShadow: '0 3px 12px 0 rgba(0,0,0,0.20)',
       cursor: 'pointer',
@@ -47,7 +49,7 @@ const SupplierCard = ({ name, logo }) => (
         right: 0,
         bottom: 0,
         background: 'rgba(20, 20, 20, 0.62)',
-        padding: '15px 0 11px 0',
+        padding: '3px 0 2px 0', // стало уже!
         textAlign: 'center',
         zIndex: 2
       }}
@@ -55,9 +57,10 @@ const SupplierCard = ({ name, logo }) => (
       <span
         style={{
           color: '#fff',
-          fontWeight: 700,
-          fontSize: '1.09rem',
-          textShadow: '0 2px 7px rgba(0,0,0,0.16)'
+          fontWeight: 600,
+          fontSize: '0.93rem',
+          textShadow: '0 1px 2.5px rgba(0,0,0,0.20)',
+          letterSpacing: '-0.2px'
         }}
       >
         {name}

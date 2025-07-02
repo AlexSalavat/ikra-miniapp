@@ -38,7 +38,7 @@ const Catalog = () => {
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '12px', // регулируй здесь нужный тебе зазор!
+        gap: '5px', // регулируй здесь нужный тебе зазор!
         justifyItems: 'stretch',
       }}>
         {fullList.map((item, idx) => (

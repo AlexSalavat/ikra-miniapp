@@ -1,16 +1,17 @@
+// src/components/Catalog.js
+
 import React from 'react';
 import suppliers from '../data/suppliers';
 import SupplierCard from './SupplierCard';
 
-// В строке 3 карточки
 const CARDS_PER_ROW = 3;
 
+// Добавляем заглушки, если меньше 3-х карточек
 const placeholders = Array.from(
   { length: Math.max(0, CARDS_PER_ROW - suppliers.length) },
   (_, idx) => ({
     id: `placeholder-${idx}`,
     name: 'Место свободно',
-    logo: '/images/placeholder-logo.png', // сюда свою иконку-заглушку
     isPlaceholder: true,
   })
 );
@@ -37,11 +38,15 @@ const Catalog = () => {
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '5px',
-        justifyItems: 'stretch', // чтобы карточки тянулись на всю ширину колонки!
+        gap: '12px', // регулируй здесь нужный тебе зазор!
+        justifyItems: 'stretch',
       }}>
-        {fullList.map((item) => (
-          <SupplierCard key={item.id} {...item} />
+        {fullList.map((item, idx) => (
+          <SupplierCard
+            key={item.id}
+            {...item}
+            isFirst={idx === 0 && !item.isPlaceholder}
+          />
         ))}
       </div>
     </div>

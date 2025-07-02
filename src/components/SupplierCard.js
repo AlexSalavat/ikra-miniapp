@@ -13,11 +13,9 @@ const SupplierCard = ({ name, logo, isPlaceholder, isFirst }) => (
       cursor: isPlaceholder ? 'default' : 'pointer',
       display: 'flex',
       alignItems: 'flex-end',
-      margin: '0',
+      margin: 0,
       opacity: isPlaceholder ? 0.92 : 1,
-      minWidth: 0,
-      padding: 0,            // никакого паддинга
-      border: 'none'         // и бордеров нет
+      minWidth: 0
     }}
   >
     {isPlaceholder ? (
@@ -32,9 +30,7 @@ const SupplierCard = ({ name, logo, isPlaceholder, isFirst }) => (
           position: 'absolute',
           left: 0,
           top: 0,
-          zIndex: 1,
-          padding: 0,           // никаких внутренних отступов
-          border: 'none'
+          zIndex: 1
         }}
       >
         <span
@@ -57,16 +53,13 @@ const SupplierCard = ({ name, logo, isPlaceholder, isFirst }) => (
         style={{
           width: '100%',
           height: '100%',
-          objectFit: isFirst ? 'cover' : 'contain', // первая картинка — cover
+          objectFit: isFirst ? 'cover' : 'contain', // Первая — на всю карточку, остальные — аккуратно
           display: 'block',
           position: 'absolute',
           left: 0,
           top: 0,
           zIndex: 1,
-          padding: 0,       // никаких отступов
-          margin: 0,        // никаких внешних отступов
-          background: '#23232a',
-          border: 'none'
+          background: '#23232a'
         }}
       />
     )}

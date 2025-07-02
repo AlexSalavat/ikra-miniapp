@@ -5,7 +5,7 @@ const suppliers = [
     id: 'more-i-sol',
     name: 'Море и Соль',
     region: 'Москва',
-    products: 'Икра, рыба',
+    products: ['Икра', 'Рыба'], // ← вот так!
     logo: '/images/more-i-sol.png',
     verified: true,
     shortDescription: 'Поставщик морепродуктов премиум-класса',

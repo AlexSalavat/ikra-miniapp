@@ -44,6 +44,7 @@ const Catalog = () => {
         {fullList.map((item, idx) => (
           <SupplierCard
             key={item.id}
+            id={item.id} 
             {...item}
             isFirst={idx === 0 && !item.isPlaceholder}
           />

@@ -2,6 +2,21 @@ import React from 'react';
 import suppliers from '../data/suppliers';
 import SupplierCard from './SupplierCard';
 
+// В строке 3 карточки
+const CARDS_PER_ROW = 3;
+
+const placeholders = Array.from(
+  { length: Math.max(0, CARDS_PER_ROW - suppliers.length) },
+  (_, idx) => ({
+    id: `placeholder-${idx}`,
+    name: 'Место свободно',
+    logo: '/images/placeholder-logo.png', // сюда свою иконку-заглушку
+    isPlaceholder: true,
+  })
+);
+
+const fullList = [...suppliers, ...placeholders];
+
 const Catalog = () => {
   return (
     <div style={{
@@ -21,11 +36,11 @@ const Catalog = () => {
 
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)', // ТРИ колонки!
-        gap: '10px',
-        justifyItems: 'center', // чтобы карточки были по центру
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: '16px',
+        justifyItems: 'stretch', // чтобы карточки тянулись на всю ширину колонки!
       }}>
-        {suppliers.map((item) => (
+        {fullList.map((item) => (
           <SupplierCard key={item.id} {...item} />
         ))}
       </div>

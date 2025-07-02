@@ -37,7 +37,7 @@ const Catalog = () => {
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '16px',
+        gap: '5px',
         justifyItems: 'stretch', // чтобы карточки тянулись на всю ширину колонки!
       }}>
         {fullList.map((item) => (

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SupplierCard = ({ name, logo, isPlaceholder }) => (
+const SupplierCard = ({ name, logo, isPlaceholder, isFirst }) => (
   <div
     style={{
       position: 'relative',
@@ -15,7 +15,9 @@ const SupplierCard = ({ name, logo, isPlaceholder }) => (
       alignItems: 'flex-end',
       margin: '0',
       opacity: isPlaceholder ? 0.92 : 1,
-      minWidth: 0
+      minWidth: 0,
+      padding: 0,            // никакого паддинга
+      border: 'none'         // и бордеров нет
     }}
   >
     {isPlaceholder ? (
@@ -30,14 +32,16 @@ const SupplierCard = ({ name, logo, isPlaceholder }) => (
           position: 'absolute',
           left: 0,
           top: 0,
-          zIndex: 1
+          zIndex: 1,
+          padding: 0,           // никаких внутренних отступов
+          border: 'none'
         }}
       >
         <span
           style={{
             color: '#bdbdbd',
             fontWeight: 700,
-            fontSize: '0.73rem',    // меньше!
+            fontSize: '0.73rem',
             letterSpacing: '0.5px',
             textAlign: 'center',
             opacity: 0.88
@@ -53,13 +57,16 @@ const SupplierCard = ({ name, logo, isPlaceholder }) => (
         style={{
           width: '100%',
           height: '100%',
-          objectFit: 'contain',
+          objectFit: isFirst ? 'cover' : 'contain', // первая картинка — cover
           display: 'block',
           position: 'absolute',
           left: 0,
           top: 0,
           zIndex: 1,
-          background: '#23232a'
+          padding: 0,       // никаких отступов
+          margin: 0,        // никаких внешних отступов
+          background: '#23232a',
+          border: 'none'
         }}
       />
     )}

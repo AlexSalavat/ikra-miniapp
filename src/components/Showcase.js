@@ -11,7 +11,7 @@ const categories = [
   {
     id: 'logistics',
     title: 'Логистика ДВ',
-    description: 'Авто / ЖД / Авиа по Дальнему Востоку',
+    description: 'Авто / ЖД / Авиа',
     image: '/images/logistics.jpg',
   },
   {
@@ -32,12 +32,25 @@ const Showcase = () => {
   const navigate = useNavigate();
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1 style={{ marginBottom: '20px' }}>Витрина</h1>
+    <div style={{
+      minHeight: '100vh',
+      background: '#000',
+      padding: '24px 14px 14px 14px',
+    }}>
+      <h1 style={{
+        marginBottom: '24px',
+        color: '#fff',
+        fontWeight: 400,
+        fontSize: '1.6rem',
+        letterSpacing: '-0.5px',
+        textShadow: '0 2px 8px rgba(0,0,0,0.22)',
+      }}>
+        Витрина
+      </h1>
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
-        gap: '16px'
+        gap: '18px'
       }}>
         {categories.map(cat => (
           <div
@@ -47,26 +60,50 @@ const Showcase = () => {
               backgroundImage: `url(${cat.image})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              borderRadius: '12px',
-              height: '120px',
+              borderRadius: '16px',
+              height: '130px',
               color: '#fff',
               position: 'relative',
               cursor: 'pointer',
               overflow: 'hidden',
               display: 'flex',
               alignItems: 'flex-end',
-              padding: '12px',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
+              padding: '0',
+              boxShadow: '0 4px 18px 0 rgba(0,0,0,0.60)',
+              transition: 'transform 0.14s, box-shadow 0.18s',
+            }}
+            onMouseOver={e => {
+              e.currentTarget.style.transform = 'scale(1.035)';
+              e.currentTarget.style.boxShadow = '0 8px 26px 0 rgba(0,0,0,0.72)';
+            }}
+            onMouseOut={e => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = '0 4px 18px 0 rgba(0,0,0,0.60)';
             }}
           >
             <div style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.4)',
+              background: 'rgba(12, 12, 12, 0.28)',
               borderRadius: '8px',
-              padding: '6px',
-              width: '100%'
+              padding: '4px 6px 3px 7px',
+              margin: '8px',
+              width: 'calc(100% - 16px)',
+              backdropFilter: 'blur(1px)',
+              boxShadow: '0 1px 4px rgba(0,0,0,0.09)',
+              zIndex: 2
             }}>
-              <div style={{ fontWeight: 'bold' }}>{cat.title}</div>
-              <div style={{ fontSize: '0.8rem' }}>{cat.description}</div>
+              <div style={{
+                fontWeight: 400,
+                fontSize: '0.75rem', // название меньше!
+                textShadow: '0 1px 3px rgba(0,0,0,0.16)',
+                letterSpacing: '-0.5px',
+                lineHeight: '1.18',
+              }}>{cat.title}</div>
+              <div style={{
+                fontSize: '0.59rem', // описание минимал!
+                color: '#f2f2f2',
+                marginTop: '1px',
+                textShadow: '0 1px 2px rgba(0,0,0,0.15)'
+              }}>{cat.description}</div>
             </div>
           </div>
         ))}

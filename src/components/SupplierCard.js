@@ -1,42 +1,69 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
-const SupplierCard = ({ id, logo, name }) => {
-  const navigate = useNavigate();
-
-  return (
-    <div
-      onClick={() => navigate(`/supplier/${id}`)}
+const SupplierCard = ({ name, logo }) => (
+  <div
+    style={{
+      position: 'relative',
+      borderRadius: '22px',
+      overflow: 'hidden',
+      width: '100%',
+      aspectRatio: '1/1', // квадрат, если нужно прямоугольник — например '1.6/1'
+      background: '#18181A',
+      boxShadow: '0 3px 12px 0 rgba(0,0,0,0.20)',
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'flex-end',
+      minHeight: '120px',
+      maxWidth: '280px',
+      margin: '0 auto'
+    }}
+    onMouseOver={e => {
+      e.currentTarget.style.transform = 'scale(1.035)';
+      e.currentTarget.style.boxShadow = '0 7px 22px 0 rgba(0,0,0,0.28)';
+    }}
+    onMouseOut={e => {
+      e.currentTarget.style.transform = 'scale(1)';
+      e.currentTarget.style.boxShadow = '0 3px 12px 0 rgba(0,0,0,0.20)';
+    }}
+  >
+    <img
+      src={logo}
+      alt={name}
       style={{
-        position: 'relative',
         width: '100%',
-        aspectRatio: '1 / 1',
-        borderRadius: '12px',
-        overflow: 'hidden',
-        cursor: 'pointer',
-        backgroundImage: `url(${logo})`,
-        backgroundSize: 'contain', // ⬅️ Важное изменение
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundColor: '#f0f0f0', // Фон за изображением
-        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-      }}
-    >
-      <div style={{
+        height: '100%',
+        objectFit: 'cover',
+        display: 'block',
         position: 'absolute',
-        bottom: 0,
+        left: 0,
+        top: 0,
+        zIndex: 1
+      }}
+    />
+    <div
+      style={{
+        position: 'absolute',
         left: 0,
         right: 0,
-        height: '36px',
-        background: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-        <span style={{ color: '#fff', fontWeight: '600', fontSize: '0.85rem' }}>{name}</span>
-      </div>
+        bottom: 0,
+        background: 'rgba(20, 20, 20, 0.62)',
+        padding: '15px 0 11px 0',
+        textAlign: 'center',
+        zIndex: 2
+      }}
+    >
+      <span
+        style={{
+          color: '#fff',
+          fontWeight: 700,
+          fontSize: '1.09rem',
+          textShadow: '0 2px 7px rgba(0,0,0,0.16)'
+        }}
+      >
+        {name}
+      </span>
     </div>
-  );
-};
+  </div>
+);
 
 export default SupplierCard;

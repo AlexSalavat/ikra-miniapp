@@ -34,5 +34,8 @@ function App() {
     </Router>
   );
 }
+<div className="text-red-500 p-4">
+  Привет, Tailwind работает!
+</div>
 
 export default App;

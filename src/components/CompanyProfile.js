@@ -46,7 +46,7 @@ const CompanyProfile = ({ company }) => {
           <img
             src={company.logo}
             alt={company.name}
-            className="w-28 h-28 rounded-2xl object-contain bg-zinc-800 shadow-lg border border-zinc-800"
+            className="w-32 h-32 rounded-2xl object-contain bg-zinc-800 shadow-lg border border-zinc-800"
           />
         </div>
         {/* Инфо справа */}
@@ -148,7 +148,7 @@ const CompanyProfile = ({ company }) => {
       {/* Наши партнёры - только иконка и текст на чёрном фоне */}
       <div className="mb-6">
         <div className="font-semibold text-base mb-1 text-center">🤝 Наши партнёры</div>
-        <div className="flex flex-wrap justify-center gap-4 mb-2">
+        <div className="flex flex-wrap justify-center gap-1 mb-2">
           {partners.map((p, idx) => (
             <div key={idx} className="flex items-center gap-2 text-xs bg-black">
               {p.type === 'image' ? (

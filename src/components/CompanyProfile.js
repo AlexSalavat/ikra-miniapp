@@ -2,8 +2,15 @@ import React, { useState } from 'react';
 
 const partners = [
   {
-    icon: '/images/koryak.jpg', // логотип
+    icon: '/images/koryak.jpg',
     name: 'ООО "Корякморепродукт"',
+    city: 'Камчатка',
+    role: 'производство',
+    type: 'image',
+  },
+  {
+    icon: '/images/VA.jpg',
+    name: 'ООО "Витязь-Авто"',
     city: 'Камчатка',
     role: 'производство',
     type: 'image',
@@ -22,13 +29,12 @@ const CERT_COLORS = {
   'Меркурий': 'bg-blue-500 text-white',
 };
 
+const BADGE_STYLE = 'px-2 py-0.5 rounded text-[11px] font-semibold select-none whitespace-nowrap';
+
 const CompanyProfile = ({ company }) => {
   const [showFullDesc, setShowFullDesc] = useState(false);
   const [showAllPartners, setShowAllPartners] = useState(false);
 
-  const mainCerts = (company.certs || []).filter(
-    c => c === 'Честный знак' || c === 'Меркурий'
-  );
   const otherCerts = (company.certs || []).filter(
     c => c !== 'Честный знак' && c !== 'Меркурий'
   );
@@ -36,6 +42,9 @@ const CompanyProfile = ({ company }) => {
   if (!company) {
     return <div className="p-6 text-white">Поставщик не найден</div>;
   }
+
+  // основные серты (для одной линии)
+  const certBadges = ['Честный знак', 'Меркурий'].filter(cert => company.certs?.includes(cert));
 
   return (
     <div className="bg-black text-white min-h-screen p-4 pb-36 max-w-2xl mx-auto rounded-2xl shadow-2xl font-sans">
@@ -51,21 +60,22 @@ const CompanyProfile = ({ company }) => {
         </div>
         {/* Инфо справа */}
         <div className="flex-1 min-w-0 flex flex-col justify-center items-start gap-2">
+          {/* Одна строка: название + бейджи */}
           <div className="flex items-center gap-2 flex-wrap w-full">
             <span className="font-bold text-base break-words leading-tight text-white max-w-xs">
               {company.name}
             </span>
             {company.verified && (
-              <span className="bg-green-600 text-white rounded px-2 py-0.5 text-[10px] font-semibold select-none whitespace-nowrap">
+              <span className={`bg-green-600 text-white ${BADGE_STYLE}`}>
                 Проверенный
               </span>
             )}
-            {mainCerts.length > 0 && (
-              <span className="flex gap-1 items-center ml-1">
-                {mainCerts.map(cert => (
+            {certBadges.length > 0 && (
+              <span className="flex gap-1 items-center">
+                {certBadges.map(cert => (
                   <span
                     key={cert}
-                    className={`px-2 py-0.5 rounded text-[10px] font-semibold select-none whitespace-nowrap ${CERT_COLORS[cert]}`}
+                    className={`${CERT_COLORS[cert]} ${BADGE_STYLE}`}
                   >
                     {cert}
                   </span>
@@ -74,7 +84,8 @@ const CompanyProfile = ({ company }) => {
             )}
           </div>
           <div className="text-zinc-400 text-sm">
-            🌍 {company.region}{company.city && <> · {company.city}</>}
+            🌍 {company.region}
+            {company.city && company.city !== company.region && <> · {company.city}</>}
           </div>
           {/* Категории */}
           <div className="flex flex-wrap gap-2">
@@ -145,20 +156,35 @@ const CompanyProfile = ({ company }) => {
         </div>
       )}
 
-      {/* Наши партнёры - только иконка и текст на чёрном фоне */}
+      {/* Наши партнёры */}
       <div className="mb-6">
-        <div className="font-semibold text-base mb-1 text-center">🤝 Наши партнёры</div>
-        <div className="flex flex-wrap justify-center gap-1 mb-2">
+        <div className="font-semibold text-base mb-1 text-center">
+          🤝 Наши партнёры
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4 justify-items-start mb-2">
           {partners.map((p, idx) => (
-            <div key={idx} className="flex items-center gap-2 text-xs bg-black">
+            <div
+              key={idx}
+              className="flex items-center gap-2 text-xs bg-black"
+            >
               {p.type === 'image' ? (
-                <img src={p.icon} alt={p.name} className="w-8 h-8 rounded-full object-cover bg-black border border-zinc-700" />
+                <img
+                  src={p.icon}
+                  alt={p.name}
+                  className="w-8 h-8 rounded-full object-cover bg-black border border-zinc-700"
+                />
               ) : (
                 <span className="text-2xl">{p.icon}</span>
               )}
-              <span className="font-medium text-white whitespace-nowrap text-xs">{p.name}</span>
-              <span className="text-zinc-400 whitespace-nowrap text-xs">({p.city})</span>
-              <span className="ml-1 text-zinc-400 whitespace-nowrap text-xs">{p.role}</span>
+              <span className="font-medium text-white whitespace-nowrap text-xs">
+                {p.name}
+              </span>
+              <span className="text-zinc-400 whitespace-nowrap text-xs">
+                ({p.city})
+              </span>
+              <span className="ml-1 text-zinc-400 whitespace-nowrap text-xs">
+                {p.role}
+              </span>
             </div>
           ))}
         </div>
@@ -173,7 +199,7 @@ const CompanyProfile = ({ company }) => {
         </div>
         {showAllPartners && (
           <div className="mt-2 p-2 text-xs text-center text-zinc-300 bg-zinc-900 rounded-md shadow">
-            ООО "Корякморепродукт", ЕвразияТрансКарго и др.
+            ООО "Начикинское", ООО "Камчат-Рыба", ООО "Коль"
           </div>
         )}
       </div>
@@ -181,7 +207,9 @@ const CompanyProfile = ({ company }) => {
       {/* Адрес склада с картой + прайс-лист */}
       <div className="mb-6 flex flex-col md:flex-row gap-2 justify-center items-center">
         <div className="flex flex-col gap-2 items-center w-full md:w-auto">
-          <div className="font-semibold text-base mb-1">📍 Адрес склада</div>
+          <div className="font-semibold text-base mb-1">
+            📍 Адрес склада
+          </div>
           <p className="text-sm text-center">{company.address}</p>
         </div>
         <div className="flex gap-2 mt-2 md:mt-0">
@@ -218,21 +246,26 @@ const CompanyProfile = ({ company }) => {
             Telegram: {company.contacts.telegram}
           </a>
         )}
-        {company.contacts?.phone && <span>Телефон: {company.contacts.phone}</span>}
+        {company.contacts?.phone && (
+          <span>Телефон: {company.contacts.phone}</span>
+        )}
         {company.contacts?.email && (
-          <a href={`mailto:${company.contacts.email}`} className="text-zinc-200 hover:underline">
+          <a
+            href={`mailto:${company.contacts.email}`}
+            className="text-zinc-200 hover:underline"
+          >
             {company.contacts.email}
           </a>
         )}
       </div>
 
-      {/* Только кнопка "Стать партнёром" */}
-      <div className="fixed left-0 right-0 bottom-0 bg-black pb-4 pt-4 z-50 flex flex-col md:flex-row justify-center items-center gap-2 border-t border-zinc-800">
+      {/* Кнопка "Стать партнёром" (внизу, минимализм, белый текст, черная кнопка) */}
+      <div className="flex flex-col md:flex-row justify-center items-center gap-2 my-6">
         <a
           href="https://t.me/your_bot_partner_form"
           target="_blank"
           rel="noopener noreferrer"
-          className="w-56 bg-yellow-400 text-yellow-900 font-bold text-base rounded-xl py-3 px-2 text-center shadow-lg hover:bg-yellow-300 transition-colors"
+          className="w-44 bg-zinc-900 text-white font-semibold text-sm rounded-xl py-2 px-2 text-center shadow hover:bg-zinc-800 transition-colors"
         >
           Стать партнёром
         </a>

@@ -64,17 +64,17 @@ const MarketSell = () => {
         {filtered.map((offer) => (
           <div
             key={offer.id}
-            className="bg-zinc-900 rounded-2xl shadow flex flex-row items-center overflow-hidden min-h-[100px] max-h-[116px]"
+            className="bg-zinc-900 rounded-2xl shadow flex flex-row items-center overflow-hidden min-h-[120px] max-h-[136px]"
           >
-            {/* Фото слева - квадратное, больше */}
+            {/* Фото слева - чуть больше */}
             <img
               src={offer.img}
               alt={offer.title}
-              className="w-24 h-24 object-cover bg-zinc-800"
-              style={{ minWidth: 88, minHeight: 88, maxWidth: 96, maxHeight: 96 }}
+              className="w-28 h-28 object-cover bg-zinc-800"
+              style={{ minWidth: 104, minHeight: 104, maxWidth: 116, maxHeight: 116 }}
             />
-            {/* Контент справа — текст левый, сдвинут вправо через pl-2 */}
-            <div className="flex-1 flex flex-col justify-center bg-black px-2 py-1 h-full pl-2">
+            {/* Контент справа — шире, текст левый, pl-3 */}
+            <div className="flex-1 flex flex-col justify-center bg-black px-2 py-1 h-full pl-3">
               <div className="flex flex-col justify-center h-full text-left">
                 <div className="font-bold text-white text-xs leading-tight mb-0.5 truncate">{offer.title}</div>
                 <div className="flex flex-wrap gap-2 mb-0.5 text-xs items-center leading-tight">

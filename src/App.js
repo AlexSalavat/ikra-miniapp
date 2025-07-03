@@ -5,6 +5,8 @@ import Home from './components/Home';
 import Showcase from './components/Showcase';
 import Catalog from './components/Catalog';
 import SupplierDetail from './components/SupplierDetail';
+import Market from './components/Market';
+import MarketSell from './components/MarketSell';
 import BottomNav from './components/BottomNav';
 
 function App() {
@@ -13,23 +15,15 @@ function App() {
       <div style={{ backgroundColor: '#000', minHeight: '100vh', paddingBottom: '60px' }}>
         <Routes>
           <Route path="/" element={<Home />} />
-
-          {/* Главная витрина */}
           <Route path="/catalog" element={<Showcase />} />
-
-          {/* Категория Поставщики */}
           <Route path="/catalog/suppliers" element={<Catalog />} />
-
-          {/* Страница поставщика */}
           <Route path="/supplier/:id" element={<SupplierDetail />} />
-
-          {/* Заглушки */}
           <Route path="/news" element={<div style={{ padding: '20px' }}>Новости</div>} />
-          <Route path="/market" element={<div style={{ padding: '20px' }}>Маркет</div>} />
+          <Route path="/market" element={<Market />} />
+          <Route path="/market/sell" element={<MarketSell />} />
           <Route path="/profile" element={<div style={{ padding: '20px' }}>Профиль</div>} />
         </Routes>
       </div>
-
       <BottomNav />
     </Router>
   );

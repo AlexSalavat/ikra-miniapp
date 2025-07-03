@@ -37,7 +37,7 @@ const MarketSell = () => {
       {/* Кнопка назад */}
       <button
         onClick={() => navigate('/market')}
-        className="mb-6 px-4 py-2 rounded-xl bg-zinc-800 text-white font-semibold text-[11px] hover:bg-zinc-700 transition-all"
+        className="mb-6 px-4 py-2 rounded-xl bg-zinc-800 text-white font-semibold text-xs hover:bg-zinc-700 transition-all"
       >
         ← Назад
       </button>
@@ -48,7 +48,7 @@ const MarketSell = () => {
           <button
             key={cat}
             onClick={() => setSelected(cat)}
-            className={`px-3 py-1 rounded-xl font-semibold text-[11px] transition-all
+            className={`px-3 py-1 rounded-xl font-semibold text-xs transition-all
               ${selected === cat
                 ? 'bg-green-500 text-white shadow'
                 : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'}
@@ -76,26 +76,26 @@ const MarketSell = () => {
             {/* Контент справа — текст левый, сдвинут вправо через pl-2 */}
             <div className="flex-1 flex flex-col justify-center bg-black px-2 py-1 h-full pl-2">
               <div className="flex flex-col justify-center h-full text-left">
-                <div className="font-bold text-white text-[11px] leading-[1.13] mb-0.5 truncate">{offer.title}</div>
-                <div className="flex flex-wrap gap-2 mb-0.5 text-[11px] items-center leading-[1.07]">
+                <div className="font-bold text-white text-xs leading-tight mb-0.5 truncate">{offer.title}</div>
+                <div className="flex flex-wrap gap-2 mb-0.5 text-xs items-center leading-tight">
                   <span className="text-white font-bold">Цена: <span className="text-green-400">{offer.price}</span></span>
                   <span className="text-white font-bold">Объем: {offer.volume}</span>
                 </div>
-                <div className="flex flex-wrap gap-2 mb-0.5 text-[11px] items-center leading-[1.07]">
+                <div className="flex flex-wrap gap-2 mb-0.5 text-xs items-center leading-tight">
                   <span className="text-zinc-400">Компания: <span className="text-white">{offer.company}</span></span>
                 </div>
-                <div className="text-zinc-400 text-[11px] mb-1 leading-[1.07]">
+                <div className="text-zinc-400 text-xs mb-1 leading-tight">
                   Тел: <a href={`tel:${offer.phone.replace(/\s+/g, '')}`} className="text-sky-400 hover:underline">{offer.phone}</a>
                 </div>
                 <div className="flex gap-1 mt-0.5">
                   <a
                     href={`tel:${offer.phone.replace(/\s+/g, '')}`}
-                    className="bg-green-600 hover:bg-green-700 text-white rounded-lg px-2 py-0.5 text-[11px] font-semibold transition-colors"
+                    className="bg-green-600 hover:bg-green-700 text-white rounded-lg px-2 py-0.5 text-xs font-semibold transition-colors"
                   >
                     Позвонить
                   </a>
                   <button
-                    className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-2 py-0.5 text-[11px] font-semibold transition-colors"
+                    className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-2 py-0.5 text-xs font-semibold transition-colors"
                     onClick={() => { setModalOffer(offer); setPhotoIdx(0); }}
                   >
                     Подробнее

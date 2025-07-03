@@ -1,7 +1,7 @@
 const suppliers = [
   {
     id: 'more-i-sol',
-    name: 'Море и Соль',
+    name: 'ООО "Море и Соль"',
     region: 'Москва',
     city: 'Москва',
     address: 'г. Москва, ул. Никулинская 33 стр 1',
@@ -20,8 +20,8 @@ const suppliers = [
     },
     certs: ['Честный знак', 'Меркурий'],
     gallery: [
-      '/images/more-i-sol-1.jpg',
-      '/images/more-i-sol-2.jpg',
+      '/images/more-i-sol-1.png',
+      '/images/more-i-sol-2.png',
     ],
   },
 ];

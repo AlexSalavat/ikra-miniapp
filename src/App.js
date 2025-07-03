@@ -10,7 +10,7 @@ import BottomNav from './components/BottomNav';
 function App() {
   return (
     <Router>
-      <div style={{ paddingBottom: '60px' }}> {/* чтобы контент не перекрывался меню */}
+      <div style={{ backgroundColor: '#000', minHeight: '100vh', paddingBottom: '60px' }}> {/* чтобы контент не перекрывался меню */}
         <Routes>
           <Route path="/" element={<Home />} />
           

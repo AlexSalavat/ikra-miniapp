@@ -1,25 +1,28 @@
-// src/data/suppliers.js
-
 const suppliers = [
   {
     id: 'more-i-sol',
     name: 'Море и Соль',
     region: 'Москва',
-    products: ['Икра', 'Рыба'], // ← вот так!
+    city: 'Москва',
+    address: 'г. Москва, ул. Никулинская 33 стр 1',
+    products: ['Икра', 'Рыба'],
     logo: '/images/more-i-sol.png',
     verified: true,
     shortDescription: 'Поставщик морепродуктов премиум-класса',
-    fullDescription: 'Компания “Море и Соль” — прямые поставки с Дальнего Востока. Работают с крупнейшими переработчиками и экспортёрами. Поставка в любой регион России. Контроль качества, документы, соблюдение сроков.',
+    fullDescription:
+      '“Море и Соль” — надёжный поставщик красной икры и рыбы, оптом и в розницу. Гарантируем высокое качество, свежесть продукции и своевременную доставку. Работает с крупнейшими переработчиками и экспортёрами, контролирует все этапы поставки.',
+    volumes: 'Объемы поставок: 10 тонн в месяц. Сезонность: круглый год',
+    priceList: '/files/more-i-sol-price.pdf',
     contacts: {
-      telegram: '@moreisol',
-      phone: '+7 900 123 45 67',
-      email: 'info@moreisol.ru'
+      telegram: '@moreisol_yg',
+      phone: '+7 985 550 57 47',
+      email: 'info@moreisol.ru',
     },
     certs: ['Честный знак', 'Меркурий'],
     gallery: [
       '/images/more-i-sol-1.jpg',
-      '/images/more-i-sol-2.jpg'
-    ]
+      '/images/more-i-sol-2.jpg',
+    ],
   },
 ];
 

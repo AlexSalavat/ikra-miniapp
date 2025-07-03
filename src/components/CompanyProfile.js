@@ -6,10 +6,9 @@ const CompanyProfile = ({ company }) => {
   }
 
   return (
-    <div className="bg-black text-white min-h-screen p-6 pb-32 max-w-md mx-auto rounded-2xl shadow-2xl relative font-sans">
-      
+    <div className="bg-black text-white min-h-screen p-4 pb-32 max-w-md mx-auto rounded-2xl shadow-2xl relative font-sans">
       {/* Логотип */}
-      <div className="flex justify-center mb-6">
+      <div className="flex justify-center mb-5">
         <img
           src={company.logo}
           alt={company.name}
@@ -18,8 +17,8 @@ const CompanyProfile = ({ company }) => {
       </div>
 
       {/* Название и бейдж */}
-      <div className="text-2xl font-bold mb-2 flex items-center justify-center gap-3">
-        ООО "{company.name}"
+      <div className="text-xl font-semibold mb-2 flex items-center justify-center gap-3 break-words text-center leading-tight max-w-xs mx-auto">
+        {company.name}
         {company.verified && (
           <span className="bg-green-600 text-white rounded px-2 py-0.5 text-xs font-semibold select-none">
             Проверенный
@@ -28,20 +27,20 @@ const CompanyProfile = ({ company }) => {
       </div>
 
       {/* Регион и город */}
-      <div className="text-zinc-400 text-base mb-4 text-center">
+      <div className="text-zinc-400 text-base mb-3 text-center">
         🌍 {company.region}
         {company.city && <> · {company.city}</>}
       </div>
 
       {/* Описание */}
-      <p className="text-zinc-300 text-base mb-6 whitespace-pre-line">{company.fullDescription}</p>
+      <p className="text-zinc-300 text-base mb-5 whitespace-pre-line text-center">{company.fullDescription}</p>
 
       {/* Категории / Продукция */}
-      <div className="flex flex-wrap gap-2 justify-center mb-6">
+      <div className="flex flex-wrap gap-2 justify-center mb-5">
         {(company.products || []).map(prod => (
           <span
             key={prod}
-            className="bg-zinc-800 text-white text-xs rounded-md px-3 py-1 font-semibold"
+            className="bg-zinc-800 text-white text-xs rounded-md px-3 py-1 font-medium"
           >
             {prod}
           </span>
@@ -50,12 +49,12 @@ const CompanyProfile = ({ company }) => {
 
       {/* Объёмы / сезонность */}
       {company.volumes && (
-        <div className="text-zinc-400 text-sm mb-6 text-center">{company.volumes}</div>
+        <div className="text-zinc-400 text-sm mb-4 text-center">{company.volumes}</div>
       )}
 
       {/* Сертификация */}
       {company.certs && company.certs.length > 0 && (
-        <div className="flex flex-wrap gap-2 justify-center mb-6">
+        <div className="flex flex-wrap gap-2 justify-center mb-5">
           {company.certs.map(cert => (
             <span
               key={cert}
@@ -68,21 +67,21 @@ const CompanyProfile = ({ company }) => {
       )}
 
       {/* Адрес склада с ссылкой на карту */}
-      <div className="mb-6 text-center">
-        <h3 className="text-white mb-1 font-semibold">📍 Адрес склада</h3>
-        <p>г. Москва, ул. Никулинская 33 стр 1</p>
+      <div className="mb-5 text-center">
+        <h3 className="text-white mb-1 font-semibold text-base">📍 Адрес склада</h3>
+        <p className="text-sm">{company.address}</p>
         <a
           href="https://yandex.ru/maps/-/CHsNY49G"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block mt-2 px-4 py-2 bg-blue-600 rounded hover:bg-blue-700 text-white font-semibold"
+          className="inline-block mt-2 px-4 py-2 bg-blue-600 rounded hover:bg-blue-700 text-white font-semibold text-sm"
         >
           Открыть на Яндекс.Картах
         </a>
       </div>
 
       {/* Контакты */}
-      <div className="text-zinc-300 text-sm mb-8 text-center flex flex-col gap-2 items-center">
+      <div className="text-zinc-300 text-sm mb-6 text-center flex flex-col gap-2 items-center">
         {company.contacts?.telegram && (
           <a
             href={`https://t.me/${company.contacts.telegram.replace(/^@/, '')}`}
@@ -120,7 +119,6 @@ const CompanyProfile = ({ company }) => {
       <div className="fixed left-0 right-0 bottom-0 bg-black pb-4 pt-4 z-50 flex justify-center border-t border-zinc-800">
         <button
           onClick={() => {
-            // Открыть Telegram чат, если есть
             if (company.contacts?.telegram) {
               window.open(`https://t.me/${company.contacts.telegram.replace(/^@/, '')}`, '_blank');
             }

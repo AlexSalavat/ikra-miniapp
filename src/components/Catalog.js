@@ -1,5 +1,3 @@
-// src/components/Catalog.js
-
 import React from 'react';
 import suppliers from '../data/suppliers';
 import SupplierCard from './SupplierCard';
@@ -38,13 +36,13 @@ const Catalog = () => {
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '5px', // регулируй здесь нужный тебе зазор!
+        gap: '5px',
         justifyItems: 'stretch',
       }}>
         {fullList.map((item, idx) => (
           <SupplierCard
             key={item.id}
-            id={item.id} 
+            id={item.id}
             {...item}
             isFirst={idx === 0 && !item.isPlaceholder}
           />

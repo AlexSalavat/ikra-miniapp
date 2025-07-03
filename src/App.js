@@ -4,13 +4,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
 import Showcase from './components/Showcase';
 import Catalog from './components/Catalog';
-import SupplierDetail from './components/SupplierDetail';
+// Импортируем новую страницу компании
+import CompanyProfile from './components/CompanyProfile';
 import BottomNav from './components/BottomNav';
 
 function App() {
   return (
     <Router>
-      <div style={{ backgroundColor: '#000', minHeight: '100vh', paddingBottom: '60px' }}> {/* чтобы контент не перекрывался меню */}
+      <div style={{ backgroundColor: '#000', minHeight: '100vh', paddingBottom: '60px' }}>
         <Routes>
           <Route path="/" element={<Home />} />
           
@@ -20,10 +21,10 @@ function App() {
           {/* Категория Поставщики */}
           <Route path="/catalog/suppliers" element={<Catalog />} />
 
-          {/* Страница поставщика */}
-          <Route path="/supplier/:id" element={<SupplierDetail />} />
+          {/* Страница поставщика теперь CompanyProfile */}
+          <Route path="/supplier/:id" element={<CompanyProfile />} />
 
-          {/* Заглушки на будущее */}
+          {/* Заглушки */}
           <Route path="/news" element={<div style={{ padding: '20px' }}>Новости</div>} />
           <Route path="/market" element={<div style={{ padding: '20px' }}>Маркет</div>} />
           <Route path="/profile" element={<div style={{ padding: '20px' }}>Профиль</div>} />
@@ -34,8 +35,5 @@ function App() {
     </Router>
   );
 }
-<div className="text-red-500 p-4">
-  Привет, Tailwind работает!
-</div>
 
 export default App;

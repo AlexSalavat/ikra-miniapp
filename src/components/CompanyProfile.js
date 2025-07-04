@@ -9,7 +9,7 @@ const partners = [
     type: 'image',
   },
   {
-    icon: '/images/VA.jpg',
+    icon: '/images/VA.webp',
     name: 'ООО "Витязь-Авто"',
     city: 'Камчатка',
     role: 'производство',

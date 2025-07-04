@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 const partners = [
   {
@@ -9,7 +10,7 @@ const partners = [
     type: 'image',
   },
   {
-    icon: '/images/VA.webp',
+    icon: '/images/VA.jpg',
     name: 'ООО "Витязь-Авто"',
     city: 'Камчатка',
     role: 'производство',
@@ -34,6 +35,7 @@ const BADGE_STYLE = 'px-2 py-0.5 rounded text-[11px] font-semibold select-none w
 const CompanyProfile = ({ company }) => {
   const [showFullDesc, setShowFullDesc] = useState(false);
   const [showAllPartners, setShowAllPartners] = useState(false);
+  const navigate = useNavigate();
 
   const otherCerts = (company.certs || []).filter(
     c => c !== 'Честный знак' && c !== 'Меркурий'
@@ -47,6 +49,16 @@ const CompanyProfile = ({ company }) => {
 
   return (
     <div className="bg-black text-white min-h-screen p-4 pb-36 max-w-2xl mx-auto rounded-2xl shadow-2xl font-sans">
+      {/* КНОПКА НАЗАД */}
+      <button
+        onClick={() => navigate('/catalog/suppliers')}
+        className="mb-4 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg px-5 py-2 text-sm font-semibold shadow transition"
+        style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+      >
+        <span style={{ fontSize: '1.2em', marginRight: '4px' }}>←</span>
+        Назад к поставщикам
+      </button>
+
       {/* Верхний блок: логотип + инфа */}
       <div className="flex flex-row items-center mb-6 gap-6">
         {/* Логотип */}

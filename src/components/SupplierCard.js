@@ -56,7 +56,7 @@ const SupplierCard = ({ id, name, logo, isPlaceholder, isFirst }) => {
         </div>
       ) : (
         <img
-          src={logo}
+          src={logo || '/images/no-logo.png'}
           alt={name}
           style={{
             width: '100%',

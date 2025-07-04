@@ -53,7 +53,13 @@ const Showcase = () => {
         {categories.map(cat => (
           <div
             key={cat.id}
-            onClick={() => navigate(`/catalog/${cat.id}`)}
+            onClick={() => {
+              if (cat.id === 'neirobiz') {
+                navigate('/neirobiz');
+              } else {
+                navigate(`/catalog/${cat.id}`);
+              }
+            }}
             style={{
               backgroundImage: `url(${cat.image})`,
               backgroundSize: 'cover',
@@ -78,14 +84,14 @@ const Showcase = () => {
             }}>
               <div style={{
                 fontWeight: 700,
-                fontSize: '1.01rem', // чуть меньше
+                fontSize: '1.01rem',
                 marginBottom: '3px',
                 textShadow: '0 1px 8px rgba(0,0,0,0.12)'
               }}>
                 {cat.title}
               </div>
               <div style={{
-                fontSize: '0.89rem', // чуть меньше
+                fontSize: '0.89rem',
                 fontWeight: 400,
                 textShadow: '0 1px 8px rgba(0,0,0,0.10)'
               }}>

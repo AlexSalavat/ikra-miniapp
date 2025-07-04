@@ -6,7 +6,7 @@ const suppliers = [
     city: 'Москва',
     address: 'г. Москва, ул. Никулинская 33 стр 1',
     products: ['Икра', 'Рыба'],
-    logo: '/images/more-i-sol.png',
+    logo: '/images/more-i-sol.jpg',
     verified: true,
     shortDescription: 'Поставщик морепродуктов премиум-класса',
     fullDescription: '“Море и Соль” — надёжный поставщик красной икры и рыбы, оптом и в розницу. Гарантируем высокое качество, свежесть продукции и своевременную доставку. Работает с крупнейшими переработчиками и экспортёрами, контролирует все этапы поставки.',
@@ -19,8 +19,8 @@ const suppliers = [
     },
     certs: ['Честный знак', 'Меркурий'],
     gallery: [
-      '/images/more-i-sol-1.png',
-      '/images/more-i-sol-2.png',
+      '/images/more-i-sol-1.jpg',
+      '/images/more-i-sol-2.jpg',
     ],
   },
 

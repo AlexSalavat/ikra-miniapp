@@ -53,7 +53,7 @@ const CompanyProfile = ({ company }) => {
         {/* Логотип */}
         <div className="flex-shrink-0 flex items-center justify-center">
           <img
-            src={company.logo}
+            src={company.logo || '/images/no-logo.png'}
             alt={company.name}
             className="w-32 h-32 rounded-2xl object-contain bg-zinc-800 shadow-lg border border-zinc-800"
           />
@@ -147,7 +147,7 @@ const CompanyProfile = ({ company }) => {
           {company.gallery.map((img, idx) => (
             <img
               key={idx}
-              src={img}
+              src={img || '/images/no-image.png'}
               alt={`Фото ${idx + 1}`}
               className="w-28 h-20 object-cover rounded-lg shadow cursor-pointer border border-zinc-800 bg-zinc-900"
               onClick={() => window.open(img, '_blank')}
@@ -169,7 +169,7 @@ const CompanyProfile = ({ company }) => {
             >
               {p.type === 'image' ? (
                 <img
-                  src={p.icon}
+                  src={p.icon || '/images/no-logo.png'}
                   alt={p.name}
                   className="w-8 h-8 rounded-full object-cover bg-black border border-zinc-700"
                 />
@@ -259,7 +259,7 @@ const CompanyProfile = ({ company }) => {
         )}
       </div>
 
-      {/* Кнопка "Стать партнёром" (внизу, минимализм, белый текст, черная кнопка) */}
+      {/* Кнопка "Стать партнёром" */}
       <div className="flex flex-col md:flex-row justify-center items-center gap-2 my-6">
         <a
           href="https://t.me/your_bot_partner_form"

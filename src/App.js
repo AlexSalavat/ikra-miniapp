@@ -5,8 +5,10 @@ import Home from './components/Home';
 import Showcase from './components/Showcase';
 import Catalog from './components/Catalog';
 import SupplierDetail from './components/SupplierDetail';
+import NeirobizScreen from './components/NeirobizScreen';
 import Market from './components/Market';
 import MarketSell from './components/MarketSell';
+import MarketBuy from './components/MarketBuy';
 import BottomNav from './components/BottomNav';
 
 function App() {
@@ -21,7 +23,10 @@ function App() {
           <Route path="/news" element={<div style={{ padding: '20px' }}>Новости</div>} />
           <Route path="/market" element={<Market />} />
           <Route path="/market/sell" element={<MarketSell />} />
+          <Route path="/market/buy" element={<MarketBuy />} />
           <Route path="/profile" element={<div style={{ padding: '20px' }}>Профиль</div>} />
+          {/* NeiroBiz Витрина */}
+          <Route path="/neirobiz" element={<NeirobizScreen />} />
         </Routes>
       </div>
       <BottomNav />

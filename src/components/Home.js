@@ -6,7 +6,7 @@ const Home = () => {
       position: 'relative',
       width: '100%',
       height: '100vh',
-      backgroundImage: 'url(/images/port-bg.jpg)',
+      backgroundImage: 'url(/images/port-bg.webp)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       color: '#fff',

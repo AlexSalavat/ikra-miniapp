@@ -6,7 +6,7 @@ const offers = [
     id: 1,
     img: '/images/ikr.jpg',
     gallery: [
-      '/images/ikr.jpg',
+      '/images/ikr.webp',
       '/images/caviar2.jpg',
       '/images/caviar3.jpg',
     ],

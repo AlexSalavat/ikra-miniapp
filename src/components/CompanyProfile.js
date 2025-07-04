@@ -10,7 +10,7 @@ const partners = [
     type: 'image',
   },
   {
-    icon: '/images/VA.jpg',
+    icon: '/images/VA.webp', // Исправлено!
     name: 'ООО "Витязь-Авто"',
     city: 'Камчатка',
     role: 'производство',
@@ -49,6 +49,7 @@ const CompanyProfile = ({ company }) => {
 
   return (
     <div className="bg-black text-white min-h-screen p-4 pb-36 max-w-2xl mx-auto rounded-2xl shadow-2xl font-sans">
+
       {/* КНОПКА НАЗАД */}
       <button
         onClick={() => navigate('/catalog/suppliers')}
@@ -153,6 +154,7 @@ const CompanyProfile = ({ company }) => {
         )}
       </div>
 
+      {/* Галерея фото */}
       {company.gallery && company.gallery.length > 0 && (
         <div className="flex gap-3 justify-center flex-wrap mb-8">
           {company.gallery.map((img, idx) => (
@@ -187,6 +189,7 @@ const CompanyProfile = ({ company }) => {
                   src={p.icon}
                   alt={p.name}
                   className="w-8 h-8 rounded-full object-cover bg-black border border-zinc-700"
+                  loading="lazy"
                 />
               ) : (
                 <span className="text-2xl">{p.icon}</span>
@@ -215,6 +218,61 @@ const CompanyProfile = ({ company }) => {
           <div className="mt-2 p-2 text-xs text-center text-zinc-300 bg-zinc-900 rounded-md shadow">
             ООО "Начикинское", ООО "Камчат-Рыба", ООО "Коль"
           </div>
+        )}
+      </div>
+
+      {/* Адрес склада с картой + прайс-лист */}
+      <div className="mb-6 flex flex-col md:flex-row gap-2 justify-center items-center">
+        <div className="flex flex-col gap-2 items-center w-full md:w-auto">
+          <div className="font-semibold text-base mb-1">
+            📍 Адрес склада
+          </div>
+          <p className="text-sm text-center">{company.address}</p>
+        </div>
+        <div className="flex gap-2 mt-2 md:mt-0">
+          <a
+            href={company.mapUrl || "https://yandex.ru/maps/-/CHsNY49G"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-2 min-w-[160px] bg-blue-600 rounded hover:bg-blue-700 text-white font-semibold text-sm text-center transition-colors"
+          >
+            Карта
+          </a>
+          {company.priceList && (
+            <a
+              href={company.priceList}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 min-w-[160px] bg-yellow-500 text-yellow-900 rounded font-semibold shadow hover:bg-yellow-600 transition-colors text-center"
+            >
+              Прайс-лист
+            </a>
+          )}
+        </div>
+      </div>
+
+      {/* Контакты */}
+      <div className="text-zinc-300 text-sm mb-6 text-center flex flex-col gap-2 items-center">
+        {company.contacts?.telegram && (
+          <a
+            href={`https://t.me/${company.contacts.telegram.replace(/^@/, '')}`}
+            className="text-sky-400 hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Telegram: {company.contacts.telegram}
+          </a>
+        )}
+        {company.contacts?.phone && (
+          <span>Телефон: {company.contacts.phone}</span>
+        )}
+        {company.contacts?.email && (
+          <a
+            href={`mailto:${company.contacts.email}`}
+            className="text-zinc-200 hover:underline"
+          >
+            {company.contacts.email}
+          </a>
         )}
       </div>
     </div>

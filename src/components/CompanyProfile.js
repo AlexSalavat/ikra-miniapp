@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
 
 const partners = [
   {
@@ -10,7 +9,7 @@ const partners = [
     type: 'image',
   },
   {
-    icon: '/images/VA.webp', // Исправлено!
+    icon: '/images/VA.webp', // ОБНОВЛЕНО: теперь .webp!
     name: 'ООО "Витязь-Авто"',
     city: 'Камчатка',
     role: 'производство',
@@ -35,42 +34,42 @@ const BADGE_STYLE = 'px-2 py-0.5 rounded text-[11px] font-semibold select-none w
 const CompanyProfile = ({ company }) => {
   const [showFullDesc, setShowFullDesc] = useState(false);
   const [showAllPartners, setShowAllPartners] = useState(false);
-  const navigate = useNavigate();
-
-  const otherCerts = (company.certs || []).filter(
-    c => c !== 'Честный знак' && c !== 'Меркурий'
-  );
 
   if (!company) {
     return <div className="p-6 text-white">Поставщик не найден</div>;
   }
 
+  const otherCerts = (company.certs || []).filter(
+    c => c !== 'Честный знак' && c !== 'Меркурий'
+  );
+
   const certBadges = ['Честный знак', 'Меркурий'].filter(cert => company.certs?.includes(cert));
 
   return (
     <div className="bg-black text-white min-h-screen p-4 pb-36 max-w-2xl mx-auto rounded-2xl shadow-2xl font-sans">
-
-      {/* КНОПКА НАЗАД */}
-      <button
-        onClick={() => navigate('/catalog/suppliers')}
-        className="mb-4 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg px-5 py-2 text-sm font-semibold shadow transition"
-        style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
-      >
-        <span style={{ fontSize: '1.2em', marginRight: '4px' }}>←</span>
-        Назад к поставщикам
-      </button>
-
       {/* Верхний блок: логотип + инфа */}
       <div className="flex flex-row items-center mb-6 gap-6">
         {/* Логотип */}
-        <div className="flex-shrink-0 flex items-center justify-center">
+        <div className="flex-shrink-0 flex items-center justify-center w-32 h-32 rounded-2xl bg-white shadow-lg border border-zinc-800 overflow-hidden">
           <picture>
-            <source srcSet={company.logo && company.logo.replace(/\.(jpg|png)$/, '.webp')} type="image/webp" />
+            <source
+              srcSet={company.logo && company.logo.replace(/\.(jpg|png|jpeg)$/, '.webp')}
+              type="image/webp"
+            />
             <img
               src={company.logo || '/images/no-logo.png'}
               alt={company.name}
               loading="lazy"
-              className="w-32 h-32 rounded-2xl object-contain bg-zinc-800 shadow-lg border border-zinc-800"
+              className="w-full h-full object-contain p-3"
+              style={{
+                background: "#fff",
+                borderRadius: "1rem",
+                display: "block",
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                padding: "0.75rem"
+              }}
               onError={e => { e.target.src = '/images/no-logo.png'; }}
             />
           </picture>
@@ -159,7 +158,7 @@ const CompanyProfile = ({ company }) => {
         <div className="flex gap-3 justify-center flex-wrap mb-8">
           {company.gallery.map((img, idx) => (
             <picture key={idx}>
-              <source srcSet={img.replace(/\.(jpg|png)$/, '.webp')} type="image/webp" />
+              <source srcSet={img.replace(/\.(jpg|png|jpeg)$/, '.webp')} type="image/webp" />
               <img
                 src={img || '/images/no-image.png'}
                 alt={`Фото ${idx + 1}`}
@@ -190,6 +189,7 @@ const CompanyProfile = ({ company }) => {
                   alt={p.name}
                   className="w-8 h-8 rounded-full object-cover bg-black border border-zinc-700"
                   loading="lazy"
+                  onError={e => { e.target.src = '/images/no-logo.png'; }}
                 />
               ) : (
                 <span className="text-2xl">{p.icon}</span>
@@ -274,6 +274,18 @@ const CompanyProfile = ({ company }) => {
             {company.contacts.email}
           </a>
         )}
+      </div>
+
+      {/* Кнопка "Стать партнёром" */}
+      <div className="flex flex-col md:flex-row justify-center items-center gap-2 my-6">
+        <a
+          href="https://t.me/your_bot_partner_form"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-44 bg-zinc-900 text-white font-semibold text-sm rounded-xl py-2 px-2 text-center shadow hover:bg-zinc-800 transition-colors"
+        >
+          Стать партнёром
+        </a>
       </div>
     </div>
   );

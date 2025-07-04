@@ -22,8 +22,8 @@ const suppliers = [
       '/images/more-i-sol-1.webp',
       '/images/more-i-sol-2.webp',
     ],
+    mapUrl: 'https://yandex.ru/maps/213/moscow/house/nikulinskaya_ulitsa_33s1/Z04Ycw9hTUYBQFtvfXx0d3xrZg==/?ll=37.447537%2C55.676405&utm_medium=mapframe&utm_source=maps&z=17',
   },
-
   {
     id: 'morya-i-okeany',
     name: 'ООО "Моря и Океаны"',
@@ -31,7 +31,7 @@ const suppliers = [
     city: 'Подольск',
     address: 'пр-кт Ленина д.107/49 помещение 1Б, офис 317',
     products: ['Икра', 'Рыба', 'Морепродукты'],
-    logo: '/images/fish-logo.webp',  // ← сюда путь к твоему webp-лого!
+    logo: '/images/fish-logo.webp',
     verified: true,
     shortDescription: 'Поставщик рыбы и морепродуктов. Москва и регионы.',
     fullDescription: 'ООО "Моря и Океаны" — комплексные поставки рыбы и морепродуктов в Москву и регионы. Работаем с проверенными производителями. Доставляем оптом и в розницу.',
@@ -44,7 +44,7 @@ const suppliers = [
     },
     certs: ['Честный знак', 'Меркурий'],
     gallery: [],
-    mapUrl: 'https://yandex.ru/maps/10747/podolsk/house/prospekt_lenina_107_49/Z04YcwNoSkMBQFtvfXhyc3VmZA==/?ll=37.548366%2C55.432950&utm_medium=mapframe&utm_source=maps&z=16.67'
+    mapUrl: 'https://yandex.ru/maps/10747/podolsk/house/prospekt_lenina_107_49/Z04YcwNoSkMBQFtvfXhyc3VmZA==/?ll=37.548366%2C55.432950&utm_medium=mapframe&utm_source=maps&z=16.67',
   }
 ];
 

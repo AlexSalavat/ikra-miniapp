@@ -3,8 +3,6 @@ import suppliers from '../data/suppliers';
 import SupplierCard from './SupplierCard';
 
 const CARDS_PER_ROW = 3;
-
-// Добавляем заглушки, если меньше 3-х карточек
 const placeholders = Array.from(
   { length: Math.max(0, CARDS_PER_ROW - suppliers.length) },
   (_, idx) => ({
@@ -32,7 +30,6 @@ const Catalog = () => {
       }}>
         Витрина: Поставщики
       </h2>
-
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',

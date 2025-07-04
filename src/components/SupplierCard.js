@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 const SupplierCard = ({ id, name, logo, isPlaceholder, isFirst }) => {
   const navigate = useNavigate();
-  const webpLogo = logo && logo.replace(/\.(jpg|png)$/, '.webp');
 
   return (
     <div
@@ -11,7 +10,6 @@ const SupplierCard = ({ id, name, logo, isPlaceholder, isFirst }) => {
         if (!isPlaceholder) navigate(`/supplier/${id}`);
       }}
       style={{
-        position: 'relative',
         borderRadius: '16px',
         overflow: 'hidden',
         width: '100%',
@@ -21,8 +19,7 @@ const SupplierCard = ({ id, name, logo, isPlaceholder, isFirst }) => {
         cursor: isPlaceholder ? 'default' : 'pointer',
         display: 'flex',
         alignItems: 'flex-end',
-        margin: 0,
-        opacity: isPlaceholder ? 0.92 : 1,
+        position: 'relative',
         minWidth: 0
       }}
     >
@@ -56,26 +53,23 @@ const SupplierCard = ({ id, name, logo, isPlaceholder, isFirst }) => {
           </span>
         </div>
       ) : (
-        <picture>
-          <source srcSet={webpLogo} type="image/webp" />
-          <img
-            src={logo || '/images/no-logo.png'}
-            alt={name}
-            loading="lazy"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: isFirst ? 'cover' : 'contain',
-              display: 'block',
-              position: 'absolute',
-              left: 0,
-              top: 0,
-              zIndex: 1,
-              background: '#23232a'
-            }}
-            onError={e => { e.target.src = '/images/no-logo.png'; }}
-          />
-        </picture>
+        <img
+          src={logo || '/images/no-logo.webp'}
+          alt={name}
+          loading="lazy"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            display: 'block',
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            zIndex: 1,
+            background: '#23232a'
+          }}
+          onError={e => { e.target.src = '/images/no-logo.webp'; }}
+        />
       )}
       <div
         style={{

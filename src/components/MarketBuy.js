@@ -2,36 +2,32 @@ import React from 'react';
 
 const categories = [
   {
-    emoji: '🧊',
     title: 'Икра',
     description: 'Красная, чёрная, фасованная',
-    image: 'https://via.placeholder.com/150',
+    image: '/images/ikr.webp',
   },
   {
-    emoji: '🦀',
     title: 'Краб',
     description: 'Живой, мороженый, фаланги',
-    image: 'https://via.placeholder.com/150',
+    image: '/images/no-image.webp',
   },
   {
-    emoji: '🐟',
     title: 'Рыба',
     description: 'Лосось, треска, палтус и другие',
-    image: 'https://via.placeholder.com/150',
+    image: '/images/fish-logo.webp',
   },
   {
-    emoji: '🦐',
     title: 'Морепродукты',
     description: 'Креветки, гребешки, кальмары и пр.',
-    image: 'https://via.placeholder.com/150',
+    image: '/images/production.webp',
   },
 ];
 
 const MarketBuy = () => {
   return (
     <div style={{ padding: '20px' }}>
-      <h1>Запросить улов</h1>
-      <p>Выберите, что вы ищете:</p>
+      <h1 style={{ color: '#fff', marginBottom: '10px' }}>Запросить улов</h1>
+      <p style={{ color: '#ccc' }}>Выберите, что вы ищете:</p>
 
       <div style={{
         display: 'grid',
@@ -41,15 +37,16 @@ const MarketBuy = () => {
       }}>
         {categories.map((item, index) => (
           <div key={index} style={{
-            border: '1px solid #ccc',
+            border: '1px solid #222',
             borderRadius: '12px',
             padding: '15px',
-            backgroundColor: '#f9f9f9',
-            textAlign: 'center'
+            backgroundColor: '#18181A',
+            textAlign: 'center',
+            color: '#fff'
           }}>
-            <img src={item.image} alt={item.title} style={{ width: '100%', borderRadius: '8px' }} />
-            <h3 style={{ marginTop: '10px' }}>{item.emoji} {item.title}</h3>
-            <p>{item.description}</p>
+            <img src={item.image} alt={item.title} style={{ width: '100%', borderRadius: '8px', objectFit: 'cover' }} onError={e => { e.target.src = '/images/no-image.webp'; }} />
+            <h3 style={{ marginTop: '10px', fontWeight: 'bold', fontSize: '1.05rem' }}>{item.title}</h3>
+            <p style={{ color: '#ccc', fontSize: '0.98rem' }}>{item.description}</p>
           </div>
         ))}
       </div>

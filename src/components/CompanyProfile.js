@@ -1,80 +1,65 @@
 import React, { useState } from 'react';
-
-const partners = [
-  {
-    icon: '/images/koryak.webp',
-    name: 'ООО "Корякморепродукт"',
-    city: 'Камчатка',
-    role: 'производство',
-    type: 'image',
-  },
-  {
-    icon: '/images/VA.webp', // ОБНОВЛЕНО: теперь .webp!
-    name: 'ООО "Витязь-Авто"',
-    city: 'Камчатка',
-    role: 'производство',
-    type: 'image',
-  },
-  {
-    icon: '🚚',
-    name: '"ЕвразияТрансКарго"',
-    city: 'Камчатка',
-    role: 'логистика',
-    type: 'emoji',
-  },
-];
+import { useNavigate } from 'react-router-dom';
+import partners from '../data/partners';
+import PartnersList from './PartnersList';
 
 const CERT_COLORS = {
   'Честный знак': 'bg-blue-600 text-white',
   'Меркурий': 'bg-blue-500 text-white',
 };
-
 const BADGE_STYLE = 'px-2 py-0.5 rounded text-[11px] font-semibold select-none whitespace-nowrap';
 
 const CompanyProfile = ({ company }) => {
-  const [showFullDesc, setShowFullDesc] = useState(false);
   const [showAllPartners, setShowAllPartners] = useState(false);
-
-  if (!company) {
-    return <div className="p-6 text-white">Поставщик не найден</div>;
-  }
-
-  const otherCerts = (company.certs || []).filter(
-    c => c !== 'Честный знак' && c !== 'Меркурий'
-  );
+  const [showFullDesc, setShowFullDesc] = useState(false);
+  const navigate = useNavigate();
 
   const certBadges = ['Честный знак', 'Меркурий'].filter(cert => company.certs?.includes(cert));
 
+  // Для description с возможностью "Показать полностью"
+  const shortDesc =
+    company.fullDescription.length > 160 && !showFullDesc
+      ? company.fullDescription.slice(0, 160) + '...'
+      : company.fullDescription;
+
   return (
     <div className="bg-black text-white min-h-screen p-4 pb-36 max-w-2xl mx-auto rounded-2xl shadow-2xl font-sans">
-      {/* Верхний блок: логотип + инфа */}
+      <div className="mb-3">
+        <button
+          onClick={() => navigate('/catalog/suppliers')}
+          className="px-4 py-1 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-semibold mb-2"
+        >
+          ← Назад
+        </button>
+      </div>
       <div className="flex flex-row items-center mb-6 gap-6">
-        {/* Логотип */}
-        <div className="flex-shrink-0 flex items-center justify-center w-32 h-32 rounded-2xl bg-white shadow-lg border border-zinc-800 overflow-hidden">
-          <picture>
-            <source
-              srcSet={company.logo && company.logo.replace(/\.(jpg|png|jpeg)$/, '.webp')}
-              type="image/webp"
-            />
+        <div className="flex-shrink-0 flex items-center justify-center">
+          <div style={{
+            width: 90,
+            height: 90,
+            background: '#fff',
+            borderRadius: 18,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+            boxShadow: '0 1.5px 7px #2226',
+            border: '1.5px solid #eee',
+          }}>
             <img
-              src={company.logo || '/images/no-logo.png'}
+              src={company.logo || '/images/no-logo.webp'}
               alt={company.name}
               loading="lazy"
-              className="w-full h-full object-contain p-3"
               style={{
-                background: "#fff",
-                borderRadius: "1rem",
-                display: "block",
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                padding: "0.75rem"
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                background: '#eee'
               }}
-              onError={e => { e.target.src = '/images/no-logo.png'; }}
+              onError={e => { e.target.src = '/images/no-logo.webp'; }}
             />
-          </picture>
+          </div>
         </div>
-        {/* Инфо справа */}
         <div className="flex-1 min-w-0 flex flex-col justify-center items-start gap-2">
           <div className="flex items-center gap-2 flex-wrap w-full">
             <span className="font-bold text-base break-words leading-tight text-white max-w-xs">
@@ -115,135 +100,60 @@ const CompanyProfile = ({ company }) => {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-4 justify-between items-center mb-4">
-        {company.volumes && (
-          <div className="text-zinc-400 text-xs">{company.volumes}</div>
-        )}
-        {otherCerts.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {otherCerts.map(cert => (
-              <span
-                key={cert}
-                className="bg-yellow-300 text-yellow-900 rounded px-2 py-0.5 text-xs font-semibold"
-              >
-                {cert}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div className="mb-4 text-zinc-300 text-base text-center">
-        {company.fullDescription && (
-          <>
-            {showFullDesc || company.fullDescription.length < 140 ? (
-              company.fullDescription
-            ) : (
-              <>
-                {company.fullDescription.slice(0, 140)}...{' '}
-                <button
-                  className="underline text-blue-400"
-                  onClick={() => setShowFullDesc(true)}
-                >
-                  Показать полностью
-                </button>
-              </>
-            )}
-          </>
-        )}
-      </div>
-
-      {/* Галерея фото */}
-      {company.gallery && company.gallery.length > 0 && (
-        <div className="flex gap-3 justify-center flex-wrap mb-8">
-          {company.gallery.map((img, idx) => (
-            <picture key={idx}>
-              <source srcSet={img.replace(/\.(jpg|png|jpeg)$/, '.webp')} type="image/webp" />
-              <img
-                src={img || '/images/no-image.png'}
-                alt={`Фото ${idx + 1}`}
-                loading="lazy"
-                className="w-28 h-20 object-cover rounded-lg shadow cursor-pointer border border-zinc-800 bg-zinc-900"
-                onClick={() => window.open(img, '_blank')}
-                onError={e => { e.target.src = '/images/no-image.png'; }}
-              />
-            </picture>
-          ))}
+      {/* Объемы поставок / сезонность */}
+      {company.volumes && (
+        <div className="mb-2 text-sm text-zinc-300">
+          {company.volumes}
         </div>
       )}
 
-      {/* Наши партнёры */}
-      <div className="mb-6">
-        <div className="font-semibold text-base mb-1 text-center">
-          🤝 Наши партнёры
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4 justify-items-start mb-2">
-          {partners.map((p, idx) => (
-            <div
-              key={idx}
-              className="flex items-center gap-2 text-xs bg-black"
+      {/* Описание с кнопкой "Показать полностью" */}
+      <div className="mb-3">
+        <div className="text-white text-base font-semibold mb-1">О компании</div>
+        <div className="text-zinc-300 text-sm">
+          {shortDesc}
+          {company.fullDescription.length > 160 && (
+            <button
+              onClick={() => setShowFullDesc(v => !v)}
+              className="text-blue-400 underline ml-2"
             >
-              {p.type === 'image' ? (
-                <img
-                  src={p.icon}
-                  alt={p.name}
-                  className="w-8 h-8 rounded-full object-cover bg-black border border-zinc-700"
-                  loading="lazy"
-                  onError={e => { e.target.src = '/images/no-logo.png'; }}
-                />
-              ) : (
-                <span className="text-2xl">{p.icon}</span>
-              )}
-              <span className="font-medium text-white whitespace-nowrap text-xs">
-                {p.name}
-              </span>
-              <span className="text-zinc-400 whitespace-nowrap text-xs">
-                ({p.city})
-              </span>
-              <span className="ml-1 text-zinc-400 whitespace-nowrap text-xs">
-                {p.role}
-              </span>
-            </div>
-          ))}
+              {showFullDesc ? 'Скрыть' : 'Показать полностью'}
+            </button>
+          )}
         </div>
-        <div className="flex justify-center">
-          <button
-            onClick={() => setShowAllPartners(!showAllPartners)}
-            className="mt-1 px-3 py-1 bg-zinc-700 text-white text-xs rounded hover:bg-zinc-600 shadow"
-          >
-            {showAllPartners ? 'Скрыть список' : 'Показать всех'}
-          </button>
-        </div>
-        {showAllPartners && (
-          <div className="mt-2 p-2 text-xs text-center text-zinc-300 bg-zinc-900 rounded-md shadow">
-            ООО "Начикинское", ООО "Камчат-Рыба", ООО "Коль"
-          </div>
-        )}
       </div>
 
-      {/* Адрес склада с картой + прайс-лист */}
-      <div className="mb-6 flex flex-col md:flex-row gap-2 justify-center items-center">
-        <div className="flex flex-col gap-2 items-center w-full md:w-auto">
-          <div className="font-semibold text-base mb-1">
-            📍 Адрес склада
+      {/* Галерея */}
+      {company.gallery && company.gallery.length > 0 && (
+        <div className="mb-4">
+          <div className="flex gap-2">
+            {company.gallery.map((img, idx) => (
+              <img key={idx} src={img} alt="" className="w-24 h-24 rounded-lg object-cover bg-zinc-700" onError={e => { e.target.src = '/images/no-image.webp'; }} />
+            ))}
           </div>
-          <p className="text-sm text-center">{company.address}</p>
         </div>
-        <div className="flex gap-2 mt-2 md:mt-0">
-          <a
-            href={company.mapUrl || "https://yandex.ru/maps/-/CHsNY49G"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-4 py-2 min-w-[160px] bg-blue-600 rounded hover:bg-blue-700 text-white font-semibold text-sm text-center transition-colors"
-          >
-            Карта
-          </a>
+      )}
+
+      {/* Партнеры */}
+      <PartnersList partners={partners} showAll={showAllPartners} onToggleAll={() => setShowAllPartners(!showAllPartners)} />
+
+      {/* Адрес и кнопки */}
+      <div className="mb-2 text-base text-zinc-300 mt-5">
+        <div style={{ fontWeight: 600, color: '#fff', fontSize: 18, marginBottom: 3 }}>📍 Адрес склада</div>
+        {company.address && (
+          <div style={{ marginBottom: 10, color: '#fff' }}>{company.address}</div>
+        )}
+        <div className="flex gap-3 mb-4 mt-2">
+          {company.mapUrl && (
+            <a href={company.mapUrl} target="_blank" rel="noopener noreferrer"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg shadow text-sm font-semibold transition-colors"
+            >
+              Карта
+            </a>
+          )}
           {company.priceList && (
-            <a
-              href={company.priceList}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 min-w-[160px] bg-yellow-500 text-yellow-900 rounded font-semibold shadow hover:bg-yellow-600 transition-colors text-center"
+            <a href={company.priceList} target="_blank" rel="noopener noreferrer"
+              className="bg-yellow-500 hover:bg-yellow-600 text-black px-5 py-2 rounded-lg shadow text-sm font-semibold transition-colors"
             >
               Прайс-лист
             </a>
@@ -252,40 +162,23 @@ const CompanyProfile = ({ company }) => {
       </div>
 
       {/* Контакты */}
-      <div className="text-zinc-300 text-sm mb-6 text-center flex flex-col gap-2 items-center">
+      <div className="mb-4 text-base text-zinc-300">
         {company.contacts?.telegram && (
-          <a
-            href={`https://t.me/${company.contacts.telegram.replace(/^@/, '')}`}
-            className="text-sky-400 hover:underline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Telegram: {company.contacts.telegram}
-          </a>
+          <div>Telegram: <a href={`https://t.me/${company.contacts.telegram.replace('@', '')}`} className="text-sky-400 hover:underline" target="_blank" rel="noreferrer">{company.contacts.telegram}</a></div>
         )}
         {company.contacts?.phone && (
-          <span>Телефон: {company.contacts.phone}</span>
+          <div>Телефон: <a href={`tel:${company.contacts.phone.replace(/\s+/g, '')}`} className="text-sky-400 hover:underline">{company.contacts.phone}</a></div>
         )}
         {company.contacts?.email && (
-          <a
-            href={`mailto:${company.contacts.email}`}
-            className="text-zinc-200 hover:underline"
-          >
-            {company.contacts.email}
-          </a>
+          <div>{company.contacts.email}</div>
         )}
       </div>
 
-      {/* Кнопка "Стать партнёром" */}
-      <div className="flex flex-col md:flex-row justify-center items-center gap-2 my-6">
-        <a
-          href="https://t.me/your_bot_partner_form"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-44 bg-zinc-900 text-white font-semibold text-sm rounded-xl py-2 px-2 text-center shadow hover:bg-zinc-800 transition-colors"
-        >
+      {/* Стать партнёром */}
+      <div className="flex justify-center">
+        <button className="bg-zinc-800 hover:bg-zinc-700 text-white px-5 py-2 rounded-lg shadow text-base font-semibold transition-colors">
           Стать партнёром
-        </a>
+        </button>
       </div>
     </div>
   );

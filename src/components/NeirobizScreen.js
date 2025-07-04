@@ -3,14 +3,16 @@ import neirobizServices from '../data/neirobizServices';
 
 const Card = ({ title, description, image }) => (
   <div className="bg-zinc-900 rounded-2xl shadow-lg overflow-hidden border border-zinc-800 flex flex-row items-start gap-4 p-4 hover:scale-[1.01] transition-transform duration-150 mb-2">
-    {/* Квадратная картинка слева */}
-    <img
-      src={image}
-      alt={title}
-      className="w-20 h-20 min-w-[5rem] min-h-[5rem] object-cover rounded-xl bg-zinc-800"
-      onError={e => { e.target.src = '/images/no-image.png'; }}
-    />
-    {/* Контент справа */}
+    <picture>
+      <source srcSet={image.replace(/\.(jpg|png)$/, '.webp')} type="image/webp" />
+      <img
+        src={image || '/images/no-image.png'}
+        alt={title}
+        loading="lazy"
+        className="w-20 h-20 min-w-[5rem] min-h-[5rem] object-cover rounded-xl bg-zinc-800"
+        onError={e => { e.target.src = '/images/no-image.png'; }}
+      />
+    </picture>
     <div className="flex flex-col flex-1 justify-between h-full">
       <div>
         <div className="font-bold text-base mb-1 text-white">{title}</div>

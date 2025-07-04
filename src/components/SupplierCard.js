@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const SupplierCard = ({ id, name, logo, isPlaceholder, isFirst }) => {
   const navigate = useNavigate();
+  const webpLogo = logo && logo.replace(/\.(jpg|png)$/, '.webp');
 
   return (
     <div
@@ -55,21 +56,26 @@ const SupplierCard = ({ id, name, logo, isPlaceholder, isFirst }) => {
           </span>
         </div>
       ) : (
-        <img
-          src={logo || '/images/no-logo.png'}
-          alt={name}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: isFirst ? 'cover' : 'contain',
-            display: 'block',
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            zIndex: 1,
-            background: '#23232a'
-          }}
-        />
+        <picture>
+          <source srcSet={webpLogo} type="image/webp" />
+          <img
+            src={logo || '/images/no-logo.png'}
+            alt={name}
+            loading="lazy"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: isFirst ? 'cover' : 'contain',
+              display: 'block',
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              zIndex: 1,
+              background: '#23232a'
+            }}
+            onError={e => { e.target.src = '/images/no-logo.png'; }}
+          />
+        </picture>
       )}
       <div
         style={{

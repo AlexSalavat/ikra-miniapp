@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const partners = [
   {
-    icon: '/images/koryak.jpg',
+    icon: '/images/koryak.webp',
     name: 'ООО "Корякморепродукт"',
     city: 'Камчатка',
     role: 'производство',
@@ -43,7 +43,6 @@ const CompanyProfile = ({ company }) => {
     return <div className="p-6 text-white">Поставщик не найден</div>;
   }
 
-  // основные серты (для одной линии)
   const certBadges = ['Честный знак', 'Меркурий'].filter(cert => company.certs?.includes(cert));
 
   return (
@@ -52,15 +51,19 @@ const CompanyProfile = ({ company }) => {
       <div className="flex flex-row items-center mb-6 gap-6">
         {/* Логотип */}
         <div className="flex-shrink-0 flex items-center justify-center">
-          <img
-            src={company.logo || '/images/no-logo.png'}
-            alt={company.name}
-            className="w-32 h-32 rounded-2xl object-contain bg-zinc-800 shadow-lg border border-zinc-800"
-          />
+          <picture>
+            <source srcSet={company.logo && company.logo.replace(/\.(jpg|png)$/, '.webp')} type="image/webp" />
+            <img
+              src={company.logo || '/images/no-logo.png'}
+              alt={company.name}
+              loading="lazy"
+              className="w-32 h-32 rounded-2xl object-contain bg-zinc-800 shadow-lg border border-zinc-800"
+              onError={e => { e.target.src = '/images/no-logo.png'; }}
+            />
+          </picture>
         </div>
         {/* Инфо справа */}
         <div className="flex-1 min-w-0 flex flex-col justify-center items-start gap-2">
-          {/* Одна строка: название + бейджи */}
           <div className="flex items-center gap-2 flex-wrap w-full">
             <span className="font-bold text-base break-words leading-tight text-white max-w-xs">
               {company.name}
@@ -87,7 +90,6 @@ const CompanyProfile = ({ company }) => {
             🌍 {company.region}
             {company.city && company.city !== company.region && <> · {company.city}</>}
           </div>
-          {/* Категории */}
           <div className="flex flex-wrap gap-2">
             {(company.products || []).map(prod => (
               <span
@@ -101,7 +103,6 @@ const CompanyProfile = ({ company }) => {
         </div>
       </div>
 
-      {/* Объемы / сезонность + остальные сертификаты */}
       <div className="flex flex-wrap gap-4 justify-between items-center mb-4">
         {company.volumes && (
           <div className="text-zinc-400 text-xs">{company.volumes}</div>
@@ -120,7 +121,6 @@ const CompanyProfile = ({ company }) => {
         )}
       </div>
 
-      {/* Описание */}
       <div className="mb-4 text-zinc-300 text-base text-center">
         {company.fullDescription && (
           <>
@@ -141,17 +141,20 @@ const CompanyProfile = ({ company }) => {
         )}
       </div>
 
-      {/* Галерея фото */}
       {company.gallery && company.gallery.length > 0 && (
         <div className="flex gap-3 justify-center flex-wrap mb-8">
           {company.gallery.map((img, idx) => (
-            <img
-              key={idx}
-              src={img || '/images/no-image.png'}
-              alt={`Фото ${idx + 1}`}
-              className="w-28 h-20 object-cover rounded-lg shadow cursor-pointer border border-zinc-800 bg-zinc-900"
-              onClick={() => window.open(img, '_blank')}
-            />
+            <picture key={idx}>
+              <source srcSet={img.replace(/\.(jpg|png)$/, '.webp')} type="image/webp" />
+              <img
+                src={img || '/images/no-image.png'}
+                alt={`Фото ${idx + 1}`}
+                loading="lazy"
+                className="w-28 h-20 object-cover rounded-lg shadow cursor-pointer border border-zinc-800 bg-zinc-900"
+                onClick={() => window.open(img, '_blank')}
+                onError={e => { e.target.src = '/images/no-image.png'; }}
+              />
+            </picture>
           ))}
         </div>
       )}
@@ -169,7 +172,7 @@ const CompanyProfile = ({ company }) => {
             >
               {p.type === 'image' ? (
                 <img
-                  src={p.icon || '/images/no-logo.png'}
+                  src={p.icon}
                   alt={p.name}
                   className="w-8 h-8 rounded-full object-cover bg-black border border-zinc-700"
                 />
@@ -188,7 +191,6 @@ const CompanyProfile = ({ company }) => {
             </div>
           ))}
         </div>
-        {/* Кнопка показать всех */}
         <div className="flex justify-center">
           <button
             onClick={() => setShowAllPartners(!showAllPartners)}
@@ -202,73 +204,6 @@ const CompanyProfile = ({ company }) => {
             ООО "Начикинское", ООО "Камчат-Рыба", ООО "Коль"
           </div>
         )}
-      </div>
-
-      {/* Адрес склада с картой + прайс-лист */}
-      <div className="mb-6 flex flex-col md:flex-row gap-2 justify-center items-center">
-        <div className="flex flex-col gap-2 items-center w-full md:w-auto">
-          <div className="font-semibold text-base mb-1">
-            📍 Адрес склада
-          </div>
-          <p className="text-sm text-center">{company.address}</p>
-        </div>
-        <div className="flex gap-2 mt-2 md:mt-0">
-          <a
-            href="https://yandex.ru/maps/-/CHsNY49G"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-4 py-2 min-w-[160px] bg-blue-600 rounded hover:bg-blue-700 text-white font-semibold text-sm text-center transition-colors"
-          >
-            Карта
-          </a>
-          {company.priceList && (
-            <a
-              href={company.priceList}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 min-w-[160px] bg-yellow-500 text-yellow-900 rounded font-semibold shadow hover:bg-yellow-600 transition-colors text-center"
-            >
-              Прайс-лист
-            </a>
-          )}
-        </div>
-      </div>
-
-      {/* Контакты */}
-      <div className="text-zinc-300 text-sm mb-6 text-center flex flex-col gap-2 items-center">
-        {company.contacts?.telegram && (
-          <a
-            href={`https://t.me/${company.contacts.telegram.replace(/^@/, '')}`}
-            className="text-sky-400 hover:underline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Telegram: {company.contacts.telegram}
-          </a>
-        )}
-        {company.contacts?.phone && (
-          <span>Телефон: {company.contacts.phone}</span>
-        )}
-        {company.contacts?.email && (
-          <a
-            href={`mailto:${company.contacts.email}`}
-            className="text-zinc-200 hover:underline"
-          >
-            {company.contacts.email}
-          </a>
-        )}
-      </div>
-
-      {/* Кнопка "Стать партнёром" */}
-      <div className="flex flex-col md:flex-row justify-center items-center gap-2 my-6">
-        <a
-          href="https://t.me/your_bot_partner_form"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-44 bg-zinc-900 text-white font-semibold text-sm rounded-xl py-2 px-2 text-center shadow hover:bg-zinc-800 transition-colors"
-        >
-          Стать партнёром
-        </a>
       </div>
     </div>
   );

@@ -6,25 +6,25 @@ const categories = [
     id: 'suppliers',
     title: 'Поставщики',
     description: 'Визуальный каталог проверенных игроков',
-    image: '/images/suppliers.jpg',
+    image: '/images/suppliers.webp',
   },
   {
     id: 'logistics',
     title: 'Логистика ДВ',
     description: 'Авто / ЖД / Авиа',
-    image: '/images/logistics.jpg',
+    image: '/images/logistics.webp',
   },
   {
     id: 'production',
     title: 'Производство',
     description: 'Фасовка, маркировка, хранение',
-    image: '/images/production.jpg',
+    image: '/images/production.webp',
   },
   {
     id: 'neirobiz',
     title: 'NeiroBiz',
     description: 'AI-сервисы и генерация упаковки',
-    image: '/images/neirobiz.jpg',
+    image: '/images/neirobiz.webp',
   },
 ];
 

@@ -22,7 +22,7 @@ const suppliers = [
       '/images/more-i-sol-1.webp',
       '/images/more-i-sol-2.webp',
     ],
-    mapUrl: 'https://yandex.ru/maps/213/moscow/house/nikulinskaya_ulitsa_33s1/Z04Ycw9hTUYBQFtvfXx0d3xrZg==/?ll=37.447537%2C55.676405&utm_medium=mapframe&utm_source=maps&z=17',
+    mapUrl: 'https://yandex.ru/maps/org/olimp_21/1280003836/?utm_medium=mapframe&utm_source=maps',
   },
   {
     id: 'morya-i-okeany',

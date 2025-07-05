@@ -4,22 +4,22 @@ const categories = [
   {
     title: 'Икра',
     description: 'Красная, чёрная, фасованная',
-    image: '/images/ikr.webp',
+    image: '/images/cav.webp',
   },
   {
     title: 'Краб',
     description: 'Живой, мороженый, фаланги',
-    image: '/images/no-image.webp',
+    image: '/images/krab.webp',
   },
   {
     title: 'Рыба',
     description: 'Лосось, треска, палтус и другие',
-    image: '/images/fish-logo.webp',
+    image: '/images/fish.webp',
   },
   {
     title: 'Морепродукты',
     description: 'Креветки, гребешки, кальмары и пр.',
-    image: '/images/production.webp',
+    image: '/images/mor.webp',
   },
 ];
 

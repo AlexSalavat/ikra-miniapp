@@ -11,6 +11,7 @@ import MarketSell from './components/MarketSell';
 import MarketBuy from './components/MarketBuy';
 import BottomNav from './components/BottomNav';
 import NeirobizScreen from './components/NeirobizScreen';
+import News from './components/News'; // Добавили импорт
 
 function App() {
   return (
@@ -24,8 +25,9 @@ function App() {
           <Route path="/market" element={<Market />} />
           <Route path="/market/sell" element={<MarketSell />} />
           <Route path="/market/buy" element={<MarketBuy />} />
-          <Route path="/profile" element={<div style={{ padding: '20px' }}>Профиль</div>} />
+          <Route path="/profile" element={<div style={{ padding: '20px', color: '#fff' }}>Профиль</div>} />
           <Route path="/neirobiz" element={<NeirobizScreen />} />
+          <Route path="/news" element={<News />} /> {/* Новый маршрут */}
         </Routes>
       </div>
       <BottomNav />

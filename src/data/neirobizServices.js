@@ -33,7 +33,7 @@ const neirobizServices = [
     id: 'copy',
     title: 'Копирайтинг ИИ',
     description: 'Генерация уникальных текстов, постов, рассылок для каналов и лендингов нейросетями.',
-    image: '/images/logistics.webp'
+    image: '/images/neirobiz-copy.webp'
   },
   {
     id: 'analytics',

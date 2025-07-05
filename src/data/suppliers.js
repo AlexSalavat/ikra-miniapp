@@ -44,7 +44,7 @@ const suppliers = [
     },
     certs: ['Честный знак', 'Меркурий'],
     gallery: [],
-    mapUrl: 'https://yandex.ru/maps/-/CHsNY49G',
+    mapUrl: 'https://yandex.ru/maps/org/olimp_21/1280003836/?utm_medium=mapframe&utm_source=maps',
   }
 ];
 

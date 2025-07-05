@@ -44,7 +44,7 @@ const suppliers = [
     },
     certs: ['Честный знак', 'Меркурий'],
     gallery: [],
-    mapUrl: 'https://yandex.ru/maps/10747/podolsk/house/prospekt_lenina_107_49/Z04YcwNoSkMBQFtvfXhyc3VmZA==/?ll=37.548366%2C55.432950&utm_medium=mapframe&utm_source=maps&z=16.67',
+    mapUrl: 'https://yandex.ru/maps/-/CHsNY49G',
   }
 ];
 

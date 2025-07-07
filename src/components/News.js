@@ -2,36 +2,34 @@ import React from 'react';
 
 const newsSections = [
   {
-    emoji: '⚓',
     title: 'Новости побережья',
     description: 'Свежие события, вылов, прогнозы, изменения на рынке',
     image: '/images/new.webp',
   },
   {
-    emoji: '🧾',
     title: 'Икорные войны',
-    description: 'Анализ, сравнение рынков, интересные факты',
+    description: 'Аналитика и тренды производителей',
     image: '/images/war.webp',
   },
   {
-    emoji: '🏆',
-    title: 'ТОП-10 производителей',
-    description: 'Рейтинги поставщиков, доверие рынка, динамика',
+    title: 'Топ производители',
+    description: 'Рейтинги компаний и лидеры сезона',
     image: '/images/pk.webp',
   },
   {
-    emoji: '📸',
-    title: 'Фото и видео',
-    description: 'Stories с рейсов, портов, заводов',
-    image: '/images/new.webp',
+    title: 'Фото/видео репортажи',
+    description: 'Stories c рейсов, портов, заводов',
+    image: '/images/news.webp',
   },
 ];
+
+const CARD_SIZE = 160;
 
 const News = () => (
   <div style={{
     background: '#000',
     minHeight: '100vh',
-    padding: '20px 0 80px 0',
+    padding: '24px 0 80px 0',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
@@ -44,30 +42,29 @@ const News = () => (
       marginTop: 2,
       letterSpacing: 0.15
     }}>
-      Новости и события
+      Новости
     </h1>
     <div style={{
       width: '100%',
       maxWidth: 420,
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      gap: 16,
-      padding: '0 10px',
+      gridTemplateColumns: `repeat(2, ${CARD_SIZE}px)`,
+      gap: 15,
+      justifyContent: 'center',
     }}>
       {newsSections.map((item, idx) => (
         <div
           key={idx}
           style={{
-            borderRadius: 19,
-            backgroundColor: '#191920',
-            color: '#fff',
-            boxShadow: '0 1.5px 8px #2224',
+            borderRadius: 18,
+            background: '#1d1c21',
             overflow: 'hidden',
+            width: CARD_SIZE,
+            height: CARD_SIZE,
             display: 'flex',
             flexDirection: 'column',
-            minHeight: 158,
-            aspectRatio: '1/1',
-            textDecoration: 'none'
+            boxShadow: '0 2px 10px #16141a44',
+            position: 'relative'
           }}
         >
           <img
@@ -75,46 +72,49 @@ const News = () => (
             alt={item.title}
             style={{
               width: '100%',
-              height: '100%',
-              minHeight: 97,
+              height: '76%',
               objectFit: 'cover',
-              flexGrow: 1,
+              background: '#23232a',
+              display: 'block'
             }}
             onError={e => { e.target.src = '/images/no-image.webp'; }}
           />
-          <div
-            style={{
-              background: 'rgba(12,12,14,0.98)',
-              width: '100%',
-              padding: '8px 10px 7px 12px',
-              borderBottomLeftRadius: 19,
-              borderBottomRightRadius: 19,
-              boxSizing: 'border-box',
-              minHeight: 44
-            }}
-          >
-            <div style={{
+          <div style={{
+            width: '100%',
+            padding: '6px 10px 6px 11px',
+            background: '#19191d',
+            minHeight: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            flexGrow: 1,
+            borderBottomLeftRadius: 18,
+            borderBottomRightRadius: 18
+          }}>
+            <span style={{
               fontWeight: 700,
-              fontSize: 13.6,
-              marginBottom: 2,
+              color: '#fff',
+              fontSize: 13.5,
+              marginBottom: 1,
               whiteSpace: 'nowrap',
               overflow: 'hidden',
-              textOverflow: 'ellipsis'
+              textOverflow: 'ellipsis',
+              lineHeight: 1.13
             }}>
-              <span style={{marginRight: 4}}>{item.emoji}</span>
               {item.title}
-            </div>
-            <div style={{
+            </span>
+            <span style={{
               fontWeight: 400,
-              color: '#c9c9c9',
-              fontSize: 10.6,
-              marginTop: 1,
+              color: '#b5b5b5',
+              fontSize: 10.7,
+              lineHeight: 1.14,
               whiteSpace: 'nowrap',
               overflow: 'hidden',
-              textOverflow: 'ellipsis'
+              textOverflow: 'ellipsis',
             }}>
               {item.description}
-            </div>
+            </span>
           </div>
         </div>
       ))}

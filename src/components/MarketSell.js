@@ -2,117 +2,130 @@ import React from 'react';
 
 const categories = [
   {
-    key: 'икра',
     title: 'Икра',
     description: 'Красная, чёрная, фасованная',
     image: '/images/cav.webp',
+    link: '/market/sell/икра',
   },
   {
-    key: 'краб',
     title: 'Краб',
     description: 'Живой, мороженый, фаланги',
     image: '/images/krab.webp',
+    link: '/market/sell/краб',
   },
   {
-    key: 'рыба',
     title: 'Рыба',
     description: 'Лосось, треска, палтус и другие',
     image: '/images/fish.webp',
+    link: '/market/sell/рыба',
   },
   {
-    key: 'морепродукты',
     title: 'Морепродукты',
     description: 'Креветки, гребешки, кальмары и пр.',
     image: '/images/mor.webp',
+    link: '/market/sell/морепродукты',
   },
 ];
 
-const MarketSell = () => {
+const CARD_SIZE = 160;
+
+export default function MarketSell() {
   return (
-    <div style={{ padding: '18px 0 80px 0', background: '#000', minHeight: '100vh' }}>
-      <h1 style={{ color: '#fff', fontWeight: 700, fontSize: 22, marginLeft: 18, marginBottom: 8 }}>Борт полный — забирай!</h1>
-      <p style={{ color: '#ccc', marginLeft: 18, fontSize: 15, marginBottom: 18 }}>
-        Выберите категорию для просмотра объявлений:
-      </p>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 16,
-          justifyContent: 'center',
-          padding: '0 18px',
-        }}
-      >
-        {categories.map((cat) => (
-          <div
-            key={cat.key}
-            onClick={() => window.location.href = `/market/sell/${cat.key}`}
+    <div style={{
+      background: '#000',
+      minHeight: '100vh',
+      padding: '24px 0 80px 0',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
+    }}>
+      <h1 style={{
+        color: '#fff',
+        fontWeight: 700,
+        fontSize: 22,
+        marginBottom: 13,
+        marginTop: 2,
+        letterSpacing: 0.15
+      }}>
+        Борт полный — забирай!
+      </h1>
+      <div style={{
+        width: '100%',
+        maxWidth: 420,
+        display: 'grid',
+        gridTemplateColumns: `repeat(2, ${CARD_SIZE}px)`,
+        gap: 15,
+        justifyContent: 'center',
+      }}>
+        {categories.map((item, idx) => (
+          <a
+            key={idx}
+            href={item.link}
             style={{
-              borderRadius: '17px',
-              backgroundColor: '#191920',
-              color: '#fff',
-              boxShadow: '0 1.5px 8px #2224',
-              cursor: 'pointer',
+              borderRadius: 18,
+              background: '#1d1c21',
               overflow: 'hidden',
-              position: 'relative',
-              minHeight: 180,
-              aspectRatio: '1/1',
+              width: CARD_SIZE,
+              height: CARD_SIZE,
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'stretch'
+              boxShadow: '0 2px 10px #16141a44',
+              textDecoration: 'none',
+              position: 'relative'
             }}
           >
-            {/* Фото сверху */}
+            <img
+              src={item.image}
+              alt={item.title}
+              style={{
+                width: '100%',
+                height: '76%',
+                objectFit: 'cover',
+                background: '#23232a',
+                display: 'block'
+              }}
+              onError={e => { e.target.src = '/images/no-image.webp'; }}
+            />
             <div style={{
               width: '100%',
-              height: '70%',
-              background: '#23232a',
-              overflow: 'hidden'
+              padding: '6px 10px 6px 11px',
+              background: '#19191d',
+              minHeight: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              flexGrow: 1,
+              borderBottomLeftRadius: 18,
+              borderBottomRightRadius: 18
             }}>
-              <img
-                src={cat.image}
-                alt={cat.title}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  display: 'block'
-                }}
-                onError={e => { e.target.src = '/images/no-image.webp'; }}
-              />
-            </div>
-            {/* Текст под фото */}
-            <div style={{
-              width: '100%',
-              padding: '10px 9px 9px 13px',
-              background: '#191920',
-              boxSizing: 'border-box',
-              flexGrow: 1
-            }}>
-              <div style={{
+              <span style={{
                 fontWeight: 700,
-                fontSize: 13.7,
                 color: '#fff',
-                marginBottom: 2,
+                fontSize: 13.5,
+                marginBottom: 1,
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}>{cat.title}</div>
-              <div style={{
+                textOverflow: 'ellipsis',
+                lineHeight: 1.13
+              }}>
+                {item.title}
+              </span>
+              <span style={{
                 fontWeight: 400,
-                color: '#c9c9c9',
-                fontSize: 11.2,
-                marginTop: 1,
+                color: '#b5b5b5',
+                fontSize: 10.7,
+                lineHeight: 1.14,
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}>{cat.description}</div>
+                textOverflow: 'ellipsis',
+              }}>
+                {item.description}
+              </span>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </div>
   );
-};
-
-export default MarketSell;
+}

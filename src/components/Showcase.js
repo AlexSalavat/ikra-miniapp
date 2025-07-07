@@ -20,14 +20,14 @@ const items = [
     link: '/production',
   },
   {
-    title: 'Neirobiz',
+    title: 'Neirobiz (AI)',
     description: 'AI сервисы и генерация упаковки',
     image: '/images/neirobiz.webp',
     link: '/neirobiz',
   },
 ];
 
-const CARD_SIZE = 185; // Было 160
+const CARD_SIZE = 185;
 
 export default function Showcase() {
   return (
@@ -51,7 +51,7 @@ export default function Showcase() {
       </h1>
       <div style={{
         width: '100%',
-        maxWidth: 480, // Чуть шире из-за увеличения
+        maxWidth: 480,
         display: 'grid',
         gridTemplateColumns: `repeat(2, ${CARD_SIZE}px)`,
         gap: 18,
@@ -79,7 +79,7 @@ export default function Showcase() {
               alt={item.title}
               style={{
                 width: '100%',
-                height: '76%',
+                height: '74%',
                 objectFit: 'cover',
                 background: '#23232a',
                 display: 'block'
@@ -88,7 +88,7 @@ export default function Showcase() {
             />
             <div style={{
               width: '100%',
-              padding: '9px 12px 9px 13px',
+              padding: '7px 10px 8px 11px',
               background: '#19191d',
               minHeight: 0,
               display: 'flex',
@@ -102,23 +102,31 @@ export default function Showcase() {
               <span style={{
                 fontWeight: 700,
                 color: '#fff',
-                fontSize: 15,
-                marginBottom: 1,
-                whiteSpace: 'nowrap',
+                fontSize: 13.3,
+                marginBottom: 2,
+                lineHeight: '1.17',
+                maxHeight: 36,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
-                lineHeight: 1.13
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                whiteSpace: 'normal'
               }}>
                 {item.title}
               </span>
               <span style={{
                 fontWeight: 400,
                 color: '#b5b5b5',
-                fontSize: 11.7,
-                lineHeight: 1.14,
-                whiteSpace: 'nowrap',
+                fontSize: 10.1,
+                lineHeight: '1.16',
+                maxHeight: 30,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                whiteSpace: 'normal'
               }}>
                 {item.description}
               </span>

@@ -30,7 +30,7 @@ const Market = () => {
         marginBottom: 13,
         letterSpacing: 0.13
       }}>
-        Маркет
+        Досква объявлений
       </h1>
       <div style={{
         width: '100%',

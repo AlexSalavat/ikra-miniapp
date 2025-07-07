@@ -1,7 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const SupplierCard = ({ id, name, logo, isPlaceholder, isFirst }) => {
+const SupplierCard = ({
+  id,
+  name,
+  logo,
+  isPlaceholder,
+  borderColor = '#363646',
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -20,7 +26,9 @@ const SupplierCard = ({ id, name, logo, isPlaceholder, isFirst }) => {
         display: 'flex',
         alignItems: 'flex-end',
         position: 'relative',
-        minWidth: 0
+        minWidth: 0,
+        border: `2.1px solid ${borderColor}`,
+        transition: 'border 0.18s',
       }}
     >
       {isPlaceholder ? (
@@ -96,7 +104,7 @@ const SupplierCard = ({ id, name, logo, isPlaceholder, isFirst }) => {
           }}
           title={name}
         >
-          {name}
+          {isPlaceholder ? 'Место свободно' : name}
         </span>
       </div>
     </div>

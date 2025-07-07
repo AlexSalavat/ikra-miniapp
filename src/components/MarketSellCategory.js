@@ -1,27 +1,23 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-// Пример объявлений (можно расширять)
 const offers = [
   {
     id: 1,
     category: 'икра',
     img: '/images/more-i-sol-1.webp',
-    gallery: [
-      '/images/more-i-sol-1.webp',
-      '/images/more-i-sol-2.webp'
-    ],
-    title: 'Икра красная 100 кг (горбуша)',
+    gallery: ['/images/more-i-sol-1.webp'],
+    title: 'Красная икра (горбуша) — 100 кг',
     company: 'ООО "Море и Соль"',
+    manufacturer: 'Корякморепродукт',
     sklad: 'Москва',
-    price: '10 500 ₽/кг',
-    desc: 'Свежайшая красная икра с Камчатки. Доставка по РФ, все документы в наличии.',
-    phone: '+7 985 550-57-47',
+    price: '6 500 ₽/кг',
     volume: '100 кг',
+    phone: '+7 985 550-57-47',
+    desc: 'Свежая красная икра Горбуши с Камчатки. Крупное зерно, без консервантов, все документы. Официальный поставщик.',
     docs: 'Ветдокументы, декларация, сертификат происхождения',
     region: 'Камчатка',
   },
-  // Добавь другие объявления!
 ];
 
 const categoriesMap = {
@@ -40,29 +36,29 @@ const MarketSellCategory = () => {
   const filtered = offers.filter(o => o.category === category);
 
   return (
-    <div style={{ padding: 16, background: '#000', minHeight: '100vh' }}>
+    <div style={{ padding: 10, background: '#000', minHeight: '100vh' }}>
       <button
         style={{
-          marginBottom: 16,
-          padding: '7px 18px',
-          borderRadius: 10,
-          background: '#22242a',
+          marginBottom: 10,
+          padding: '5px 14px',
+          borderRadius: 9,
+          background: '#23232a',
           color: '#fff',
           border: 'none',
-          fontWeight: 600,
-          fontSize: 15,
+          fontWeight: 500,
+          fontSize: 13,
           cursor: 'pointer'
         }}
         onClick={() => navigate(-1)}
       >
         ← К категориям
       </button>
-      <h1 style={{ color: '#fff', marginBottom: 13, fontSize: '1.11rem' }}>
+      <h1 style={{ color: '#fff', marginBottom: 10, fontSize: '1.02rem', fontWeight: 600 }}>
         Объявления: {categoriesMap[category] || category}
       </h1>
 
       {filtered.length === 0 && (
-        <div style={{ color: '#888', textAlign: 'center', marginTop: 48, fontSize: 16 }}>
+        <div style={{ color: '#888', textAlign: 'center', marginTop: 35, fontSize: 14 }}>
           Нет объявлений в этой категории.
         </div>
       )}
@@ -73,21 +69,22 @@ const MarketSellCategory = () => {
           style={{
             display: 'flex',
             alignItems: 'flex-start',
-            background: '#17181c',
-            borderRadius: 17,
+            background: '#18191d',
+            borderRadius: 15,
             boxShadow: '0 2px 14px 0 #000a',
-            marginBottom: 18,
-            padding: 13,
-            gap: 13,
-            border: '1.2px solid #222'
+            marginBottom: 13,
+            padding: 9,
+            gap: 11,
+            border: '1.1px solid #222'
           }}
         >
+          {/* Фото */}
           <div
             style={{
               flexShrink: 0,
-              width: 120,
-              height: 120,
-              borderRadius: 13,
+              width: 86,
+              height: 86,
+              borderRadius: 11,
               background: '#23232a',
               overflow: 'hidden',
               display: 'flex',
@@ -106,36 +103,42 @@ const MarketSellCategory = () => {
               onError={e => { e.target.src = '/images/no-image.webp'; }}
             />
           </div>
+          {/* Основная инфо компактно */}
           <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div style={{
               fontWeight: 700,
               color: '#fff',
-              fontSize: 14,
-              lineHeight: 1.18,
-              marginBottom: 2
+              fontSize: 12.6,
+              lineHeight: 1.16,
+              marginBottom: 1,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
             }}>
               {offer.title}
             </div>
-            <div style={{ color: '#bdbdbd', fontSize: 12, marginBottom: 2 }}>
-              Компания: <span style={{ color: '#fff' }}>{offer.company}</span>
+            <div style={{ color: '#bdbdbd', fontSize: 10.3, marginBottom: 1 }}>
+              {offer.company}
             </div>
-            <div style={{ color: '#bdbdbd', fontSize: 12, marginBottom: 4 }}>
-              Склад: <span style={{ color: '#fff' }}>{offer.sklad}</span>
+            <div style={{ color: '#c3c3c3', fontSize: 9.5, marginBottom: 2 }}>
+              {offer.manufacturer ? `Производитель: ${offer.manufacturer}, ` : ''}
+              {offer.sklad ? `Склад: ${offer.sklad}` : ''}
             </div>
-            <div style={{ display: 'flex', gap: 7, marginTop: 4 }}>
+            {/* Кнопки */}
+            <div style={{ display: 'flex', gap: 6, marginTop: 5 }}>
               <a
                 href={`tel:${offer.phone.replace(/\s+/g, '')}`}
                 style={{
                   background: '#29bf5b',
                   color: '#fff',
-                  fontWeight: 600,
-                  fontSize: 12,
-                  borderRadius: 7,
-                  padding: '4px 9px',
+                  fontWeight: 500,
+                  fontSize: 11.3,
+                  borderRadius: 6,
+                  padding: '4px 7px',
                   border: 'none',
                   cursor: 'pointer',
                   textDecoration: 'none',
-                  minWidth: 62,
+                  minWidth: 65,
                   textAlign: 'center'
                 }}
               >
@@ -146,13 +149,13 @@ const MarketSellCategory = () => {
                 style={{
                   background: '#2678f3',
                   color: '#fff',
-                  fontWeight: 600,
-                  fontSize: 12,
-                  borderRadius: 7,
-                  padding: '4px 9px',
+                  fontWeight: 500,
+                  fontSize: 11.3,
+                  borderRadius: 6,
+                  padding: '4px 7px',
                   border: 'none',
                   cursor: 'pointer',
-                  minWidth: 62,
+                  minWidth: 65,
                   textAlign: 'center'
                 }}
               >
@@ -163,14 +166,14 @@ const MarketSellCategory = () => {
         </div>
       ))}
 
-      {/* Модалка */}
+      {/* Модальное окно (подробнее) */}
       {modalOffer && (
         <div
           onClick={() => setModalOffer(null)}
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(0,0,0,0.78)',
+            background: 'rgba(0,0,0,0.83)',
             zIndex: 1000,
             display: 'flex',
             alignItems: 'center',
@@ -180,13 +183,13 @@ const MarketSellCategory = () => {
           <div
             onClick={e => e.stopPropagation()}
             style={{
-              background: '#17181c',
-              borderRadius: 17,
-              padding: 20,
+              background: '#18191d',
+              borderRadius: 14,
+              padding: 18,
               color: '#fff',
-              maxWidth: 370,
-              width: '92%',
-              minHeight: 220,
+              maxWidth: 330,
+              width: '94%',
+              minHeight: 160,
               position: 'relative',
               textAlign: 'center',
               boxShadow: '0 8px 32px #000a'
@@ -196,91 +199,36 @@ const MarketSellCategory = () => {
               onClick={() => setModalOffer(null)}
               style={{
                 position: 'absolute',
-                top: 10,
-                right: 15,
+                top: 8,
+                right: 12,
                 color: '#aaa',
-                fontSize: 24,
+                fontSize: 22,
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer'
               }}
             >×</button>
-            {/* Галерея */}
-            {modalOffer.gallery && modalOffer.gallery.length > 1 ? (
-              <div style={{ position: 'relative', marginBottom: 13 }}>
-                <img
-                  src={modalOffer.gallery[photoIdx]}
-                  alt={`Фото ${photoIdx + 1}`}
-                  style={{
-                    width: '100%',
-                    height: 144,
-                    objectFit: 'cover',
-                    borderRadius: 11,
-                    background: '#23232a'
-                  }}
-                />
-                {photoIdx > 0 && (
-                  <button
-                    onClick={() => setPhotoIdx(photoIdx - 1)}
-                    style={{
-                      position: 'absolute',
-                      left: 4,
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      background: '#000a',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: '50%',
-                      width: 28,
-                      height: 28,
-                      cursor: 'pointer',
-                      fontSize: 18,
-                    }}
-                  >‹</button>
-                )}
-                {photoIdx < modalOffer.gallery.length - 1 && (
-                  <button
-                    onClick={() => setPhotoIdx(photoIdx + 1)}
-                    style={{
-                      position: 'absolute',
-                      right: 4,
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      background: '#000a',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: '50%',
-                      width: 28,
-                      height: 28,
-                      cursor: 'pointer',
-                      fontSize: 18,
-                    }}
-                  >›</button>
-                )}
-              </div>
-            ) : (
-              <img
-                src={modalOffer.img}
-                alt={modalOffer.title}
-                style={{
-                  width: '100%',
-                  height: 144,
-                  objectFit: 'cover',
-                  borderRadius: 11,
-                  marginBottom: 13,
-                  background: '#23232a'
-                }}
-              />
-            )}
-
-            <div style={{ fontWeight: 700, fontSize: 17, marginBottom: 6 }}>{modalOffer.title}</div>
-            <div style={{ color: '#37e08a', fontWeight: 700, marginBottom: 5, fontSize: 16 }}>Цена: {modalOffer.price}</div>
-            <div style={{ color: '#aaa', fontSize: 14, marginBottom: 2 }}>Компания: {modalOffer.company}</div>
-            <div style={{ color: '#ccc', fontSize: 14, marginBottom: 6 }}>{modalOffer.desc}</div>
-            <div style={{ color: '#fff', fontSize: 13, marginBottom: 3 }}>Регион: {modalOffer.region}</div>
-            <div style={{ color: '#fff', fontSize: 13, marginBottom: 3 }}>Объем: {modalOffer.volume}</div>
-            <div style={{ color: '#fff', fontSize: 13, marginBottom: 3 }}>Документы: {modalOffer.docs}</div>
-            <div style={{ color: '#37a0e0', fontSize: 14, marginBottom: 3 }}>
+            <img
+              src={modalOffer.img}
+              alt={modalOffer.title}
+              style={{
+                width: '100%',
+                height: 110,
+                objectFit: 'cover',
+                borderRadius: 9,
+                marginBottom: 10,
+                background: '#23232a'
+              }}
+            />
+            <div style={{ fontWeight: 700, fontSize: 13.5, marginBottom: 5 }}>{modalOffer.title}</div>
+            <div style={{ color: '#37e08a', fontWeight: 700, marginBottom: 3, fontSize: 13 }}>Цена: {modalOffer.price}</div>
+            <div style={{ color: '#aaa', fontSize: 11.7, marginBottom: 2 }}>Компания: {modalOffer.company}</div>
+            <div style={{ color: '#ccc', fontSize: 11.5, marginBottom: 4 }}>Производитель: {modalOffer.manufacturer}</div>
+            <div style={{ color: '#ccc', fontSize: 11.5, marginBottom: 5 }}>{modalOffer.desc}</div>
+            <div style={{ color: '#fff', fontSize: 11, marginBottom: 2 }}>Регион: {modalOffer.region}</div>
+            <div style={{ color: '#fff', fontSize: 11, marginBottom: 2 }}>Объем: {modalOffer.volume}</div>
+            <div style={{ color: '#fff', fontSize: 11, marginBottom: 2 }}>Документы: {modalOffer.docs}</div>
+            <div style={{ color: '#37a0e0', fontSize: 12, marginBottom: 2 }}>
               <a href={`tel:${modalOffer.phone.replace(/\s+/g, '')}`} style={{ color: '#37a0e0', textDecoration: 'none' }}>{modalOffer.phone}</a>
             </div>
           </div>

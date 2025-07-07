@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom'; // добавь импорт
 
 const categories = [
   {
@@ -30,9 +31,7 @@ const categories = [
 const CARD_SIZE = 185;
 
 const MarketSell = () => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
-
-  // ...остальная логика с объявлениями
+  const navigate = useNavigate(); // подключаем роутинг
 
   return (
     <div style={{
@@ -64,7 +63,7 @@ const MarketSell = () => {
         {categories.map((cat, idx) => (
           <div
             key={cat.key}
-            onClick={() => setSelectedCategory(cat.key)}
+            onClick={() => navigate(`/market/sell/${cat.key}`)} // !!! ЗДЕСЬ ПРАВИЛЬНО !!!
             style={{
               borderRadius: 17,
               background: '#1d1c21',

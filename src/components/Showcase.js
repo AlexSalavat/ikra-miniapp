@@ -42,19 +42,19 @@ export default function Showcase() {
       <h1 style={{
         color: '#fff',
         fontWeight: 700,
-        fontSize: 23,
+        fontSize: 21,
         marginBottom: 13,
         marginTop: 2,
-        letterSpacing: 0.15
+        letterSpacing: 0.13
       }}>
         Витрина
       </h1>
       <div style={{
         width: '100%',
-        maxWidth: 480,
+        maxWidth: 410,
         display: 'grid',
         gridTemplateColumns: `repeat(2, ${CARD_SIZE}px)`,
-        gap: 18,
+        gap: 15,
         justifyContent: 'center',
       }}>
         {items.map((item, idx) => (
@@ -62,7 +62,7 @@ export default function Showcase() {
             key={idx}
             href={item.link}
             style={{
-              borderRadius: 20,
+              borderRadius: 17,
               background: '#1d1c21',
               overflow: 'hidden',
               width: CARD_SIZE,
@@ -88,7 +88,7 @@ export default function Showcase() {
             />
             <div style={{
               width: '100%',
-              padding: '7px 10px 8px 11px',
+              padding: '8px 11px 8px 11px',
               background: '#19191d',
               minHeight: 0,
               display: 'flex',
@@ -96,16 +96,16 @@ export default function Showcase() {
               justifyContent: 'center',
               alignItems: 'flex-start',
               flexGrow: 1,
-              borderBottomLeftRadius: 20,
-              borderBottomRightRadius: 20
+              borderBottomLeftRadius: 17,
+              borderBottomRightRadius: 17
             }}>
               <span style={{
                 fontWeight: 700,
                 color: '#fff',
-                fontSize: 13.3,
-                marginBottom: 2,
-                lineHeight: '1.17',
-                maxHeight: 36,
+                fontSize: 12.2,
+                marginBottom: 1,
+                lineHeight: '1.13',
+                maxHeight: 32,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 display: '-webkit-box',
@@ -118,9 +118,9 @@ export default function Showcase() {
               <span style={{
                 fontWeight: 400,
                 color: '#b5b5b5',
-                fontSize: 10.1,
-                lineHeight: '1.16',
-                maxHeight: 30,
+                fontSize: 9.3,
+                lineHeight: '1.13',
+                maxHeight: 24,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 display: '-webkit-box',

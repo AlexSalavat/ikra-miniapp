@@ -1,163 +1,80 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const categories = ['Икра', 'Краб', 'Рыба', 'Морепродукты'];
-
-const offers = [
-  {
-    id: 1,
-    category: 'Икра',
-    title: 'Ищу: Икра лососевая 10 кг',
-    region: 'Мурманск',
-    desc: 'Интересует свежая икра для ресторана. Готов забрать в ближайшие 2 дня.',
-    contact: '+7 900 123-45-67',
-    details: 'Требуется поставка свежей икры высокого качества, оплата наличными при получении. Готов сотрудничать на постоянной основе.',
-  },
-  {
-    id: 2,
-    category: 'Краб',
-    title: 'Ищу: Краб живой, опт',
-    region: 'Владивосток',
-    desc: 'Постоянные объемы, рассмотрю предложения.',
-    contact: '+7 911 456-78-90',
-    details: 'Интересует живой краб с доставкой в любой регион РФ. Оплата по договоренности.',
-  },
-  // Добавляй остальные объявления!
+const categories = [
+  { title: 'Икра', description: 'Красная, чёрная, фасованная', image: '/images/cav.webp' },
+  { title: 'Краб', description: 'Живой, мороженый, фаланги', image: '/images/krab.webp' },
+  { title: 'Рыба', description: 'Лосось, треска, палтус и другие', image: '/images/fish.webp' },
+  { title: 'Морепродукты', description: 'Креветки, гребешки, кальмары и пр.', image: '/images/mor.webp' },
 ];
 
-const MarketBuy = () => {
-  const [selected, setSelected] = useState(categories[0]);
-  const [modalOffer, setModalOffer] = useState(null);
+const CARD_SIZE = 158;
 
-  const filtered = offers.filter(o => o.category === selected);
-
-  return (
-    <div style={{ padding: '20px', background: '#000', minHeight: '100vh' }}>
-      <h1 style={{ color: '#fff', marginBottom: '18px' }}>На охоте за уловом</h1>
-      <div
-        style={{
-          display: 'flex',
-          gap: '12px',
-          marginBottom: '24px',
-          flexWrap: 'nowrap',
-          overflowX: 'auto',
-          scrollbarWidth: 'none',
-        }}
-      >
-        {categories.map(cat => (
-          <button
-            key={cat}
-            onClick={() => setSelected(cat)}
+const MarketBuy = () => (
+  <div style={{ padding: 18, background: '#000', minHeight: '100vh' }}>
+    <h1 style={{ color: '#fff', marginBottom: 10, fontWeight: 700, fontSize: 19 }}>Запросить улов</h1>
+    <p style={{ color: '#ccc', fontSize: 13 }}>Выберите, что вы ищете:</p>
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: `repeat(2, ${CARD_SIZE}px)`,
+      gap: 15,
+      maxWidth: CARD_SIZE * 2 + 15,
+      margin: '0 auto',
+      marginTop: 16,
+      justifyContent: 'center'
+    }}>
+      {categories.map((item, index) => (
+        <div key={index} style={{
+          width: CARD_SIZE,
+          height: CARD_SIZE,
+          border: '1px solid #23232a',
+          borderRadius: 16,
+          overflow: 'hidden',
+          background: '#18181c',
+          boxShadow: '0 2px 13px #0002',
+          position: 'relative',
+          cursor: 'pointer'
+        }}>
+          <img
+            src={item.image}
+            alt={item.title}
             style={{
-              background: selected === cat ? '#34e0a1' : '#18181A',
-              color: selected === cat ? '#18181A' : '#fff',
-              border: selected === cat ? '2px solid #34e0a1' : '1px solid #23232a',
-              borderRadius: '14px',
-              padding: '8px 20px',
-              fontWeight: 600,
-              fontSize: 16,
-              cursor: 'pointer',
-              outline: 'none',
-              transition: 'all 0.16s',
-              whiteSpace: 'nowrap',
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              zIndex: 1
             }}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-      {/* Список объявлений по категории */}
-      <div>
-        {filtered.length === 0 && (
-          <div style={{ color: '#888', textAlign: 'center', marginTop: 40, fontSize: 15 }}>
-            Нет объявлений в этой категории.
-          </div>
-        )}
-        {filtered.map(offer => (
-          <div
-            key={offer.id}
-            style={{
-              border: '1px solid #222',
-              borderRadius: '12px',
-              background: '#191920',
-              padding: '15px',
-              marginBottom: '16px',
-              color: '#fff'
-            }}
-          >
-            <div style={{ fontWeight: 700, marginBottom: 3 }}>{offer.title}</div>
-            <div style={{ color: '#34e0a1', fontWeight: 600, marginBottom: 2 }}>{offer.region}</div>
-            <div style={{ color: '#ccc', fontSize: 14, marginBottom: 5 }}>{offer.desc}</div>
-            <div style={{ color: '#888', fontSize: 13 }}>
-              Контакт: <a href={`tel:${offer.contact.replace(/\s+/g, '')}`} style={{ color: '#37a0e0' }}>{offer.contact}</a>
-            </div>
-            <button
-              style={{
-                marginTop: 8,
-                background: '#222',
-                color: '#34e0a1',
-                border: '1px solid #34e0a1',
-                borderRadius: 9,
-                padding: '6px 22px',
-                fontWeight: 600,
-                fontSize: 15,
-                cursor: 'pointer'
-              }}
-              onClick={() => setModalOffer(offer)}
-            >
-              Подробнее
-            </button>
-          </div>
-        ))}
-      </div>
-      {/* Модальное окно */}
-      {modalOffer && (
-        <div
-          onClick={() => setModalOffer(null)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.75)',
-            zIndex: 999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <div
-            onClick={e => e.stopPropagation()}
-            style={{
-              background: '#191920',
-              borderRadius: 16,
-              padding: 24,
-              color: '#fff',
-              maxWidth: 370,
-              width: '92%',
-              boxShadow: '0 8px 32px #000b'
-            }}
-          >
-            <button
-              onClick={() => setModalOffer(null)}
-              style={{
-                position: 'absolute',
-                top: 10,
-                right: 18,
-                color: '#aaa',
-                fontSize: 23,
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer'
-              }}
-            >×</button>
-            <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 7 }}>{modalOffer.title}</div>
-            <div style={{ color: '#34e0a1', fontWeight: 600, marginBottom: 7 }}>{modalOffer.region}</div>
-            <div style={{ color: '#ccc', fontSize: 15, marginBottom: 10 }}>{modalOffer.desc}</div>
-            <div style={{ color: '#fff', fontSize: 15, marginBottom: 14 }}>{modalOffer.details}</div>
-            <div style={{ color: '#aaa', fontSize: 14 }}>Контакт: <a href={`tel:${modalOffer.contact.replace(/\s+/g, '')}`} style={{ color: '#37a0e0' }}>{modalOffer.contact}</a></div>
+            onError={e => { e.target.src = '/images/no-image.webp'; }}
+          />
+          <div style={{
+            position: 'absolute',
+            left: 0, right: 0, bottom: 0,
+            background: 'rgba(18,18,18,0.82)',
+            color: '#fff',
+            padding: '11px 9px 8px 9px',
+            zIndex: 2,
+            textAlign: 'left'
+          }}>
+            <div style={{
+              fontWeight: 700,
+              fontSize: 12,
+              marginBottom: 2,
+              lineHeight: 1.14,
+              wordBreak: 'break-word'
+            }}>{item.title}</div>
+            <div style={{
+              color: '#ccc',
+              fontSize: 10.5,
+              lineHeight: 1.13
+            }}>{item.description}</div>
           </div>
         </div>
-      )}
+      ))}
     </div>
-  );
-};
+  </div>
+);
 
 export default MarketBuy;

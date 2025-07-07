@@ -8,7 +8,7 @@ const newsSections = [
     image: '/images/new.webp',
   },
   {
-    emoji: '🧾',
+    emoji: '🍣',
     title: 'Икорные войны',
     description: 'Анализ, сравнение рынков, интересные факты',
     image: '/images/war.webp',
@@ -27,86 +27,86 @@ const newsSections = [
   },
 ];
 
-const CARD_SIZE = 194;
-
 const News = () => (
   <div style={{
-    padding: 20,
     background: '#000',
     minHeight: '100vh',
-    maxWidth: 820,
-    margin: '0 auto'
+    padding: '16px 0 80px 0',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   }}>
     <h1 style={{
       color: '#fff',
-      fontSize: 22,
+      fontSize: 25,
       fontWeight: 700,
-      marginBottom: 17,
-      textAlign: 'center'
+      marginBottom: 16,
+      marginTop: 8,
+      letterSpacing: 0.2
     }}>
       Новости и события
     </h1>
-
     <div style={{
+      width: '100%',
+      maxWidth: 420,
       display: 'grid',
-      gridTemplateColumns: `repeat(2, minmax(${CARD_SIZE}px, 1fr))`,
-      gap: 22,
-      justifyContent: 'center',
-      alignItems: 'center',
+      gridTemplateColumns: '1fr 1fr',
+      gap: 14,
+      padding: '0 10px',
     }}>
       {newsSections.map((item, idx) => (
         <div key={idx} style={{
-          background: '#18181a',
+          background: '#191920',
           borderRadius: 19,
-          boxShadow: '0 1.5px 7px #0003',
           overflow: 'hidden',
+          boxShadow: '0 2px 10px #0003',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'stretch',
-          minHeight: CARD_SIZE,
-          aspectRatio: '1/1',
-          border: '1.2px solid #23232a',
+          minHeight: 156,
         }}>
-          <img
-            src={item.image}
-            alt={item.title}
-            style={{
-              width: '100%',
-              height: CARD_SIZE * 0.56,
-              objectFit: 'cover',
-              display: 'block',
-              borderTopLeftRadius: 19,
-              borderTopRightRadius: 19,
-            }}
-            onError={e => { e.target.src = '/images/no-image.webp'; }}
-          />
+          <div style={{ flex: 1, minHeight: 0 }}>
+            <img
+              src={item.image}
+              alt={item.title}
+              style={{
+                width: '100%',
+                height: 76,
+                objectFit: 'cover',
+                display: 'block'
+              }}
+              onError={e => { e.target.src = '/images/no-image.webp'; }}
+            />
+          </div>
           <div style={{
-            padding: '13px 13px 12px 15px',
-            color: '#fff',
-            flexGrow: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            minHeight: 0,
+            padding: '8px 10px 8px 11px',
+            background: '#181820',
+            minHeight: 0
           }}>
             <div style={{
-              fontSize: 14.3,
               fontWeight: 700,
-              marginBottom: 4,
-              textOverflow: 'ellipsis',
+              fontSize: 14.2,
+              color: '#fff',
               whiteSpace: 'nowrap',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              marginBottom: 2,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 4
             }}>
-              {item.emoji} {item.title}
+              <span style={{fontSize:16}}>{item.emoji}</span>
+              {item.title}
             </div>
             <div style={{
-              fontSize: 11.5,
-              color: '#ccc',
-              lineHeight: 1.48,
+              fontWeight: 400,
+              color: '#bababa',
+              fontSize: 11.6,
+              minHeight: 28,
+              lineHeight: 1.22,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               display: '-webkit-box',
-              WebkitLineClamp: 3,
+              WebkitLineClamp: 2,
               WebkitBoxOrient: 'vertical'
             }}>
               {item.description}

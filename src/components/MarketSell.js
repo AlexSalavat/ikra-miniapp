@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 const categories = [
   {
@@ -54,51 +54,67 @@ const MarketSell = ({ onCategorySelect }) => {
               }
             }}
             style={{
-              borderRadius: '18px',
+              borderRadius: '17px',
               backgroundColor: '#191920',
               color: '#fff',
               boxShadow: '0 1.5px 8px #2224',
               cursor: 'pointer',
               overflow: 'hidden',
               position: 'relative',
-              minHeight: 164,
+              minHeight: 180,
               aspectRatio: '1/1',
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'flex-end'
+              alignItems: 'stretch'
             }}
           >
-            <img
-              src={cat.image}
-              alt={cat.title}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                flexGrow: 1,
-                minHeight: 0
-              }}
-              onError={e => { e.target.src = '/images/no-image.webp'; }}
-            />
-            <div
-              style={{
-                background: 'rgba(12,12,14,0.96)',
-                width: '100%',
-                padding: '7px 8px 6px 12px',
-                position: 'absolute',
-                left: 0,
-                bottom: 0,
-                fontSize: 12,
+            {/* Фото — строго сверху, не перекрывает текст */}
+            <div style={{
+              width: '100%',
+              height: '70%',
+              flexShrink: 0,
+              flexGrow: 0,
+              position: 'relative',
+              background: '#23232a'
+            }}>
+              <img
+                src={cat.image}
+                alt={cat.title}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block'
+                }}
+                onError={e => { e.target.src = '/images/no-image.webp'; }}
+              />
+            </div>
+            {/* Текст — только под фото */}
+            <div style={{
+              width: '100%',
+              padding: '10px 9px 9px 13px',
+              background: '#191920',
+              boxSizing: 'border-box',
+              flexGrow: 1
+            }}>
+              <div style={{
                 fontWeight: 700,
-                borderBottomLeftRadius: 18,
-                borderBottomRightRadius: 18,
-                boxSizing: 'border-box'
-              }}
-            >
-              <div style={{ fontWeight: 700, fontSize: 13 }}>{cat.title}</div>
-              <div style={{ fontWeight: 400, color: '#c9c9c9', fontSize: 10, marginTop: 1 }}>
-                {cat.description}
-              </div>
+                fontSize: 13.7,
+                color: '#fff',
+                marginBottom: 2,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}>{cat.title}</div>
+              <div style={{
+                fontWeight: 400,
+                color: '#c9c9c9',
+                fontSize: 11.2,
+                marginTop: 1,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}>{cat.description}</div>
             </div>
           </div>
         ))}

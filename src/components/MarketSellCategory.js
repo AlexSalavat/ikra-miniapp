@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
+// Пример объявлений (можно расширять)
 const offers = [
   {
     id: 1,
@@ -20,6 +21,7 @@ const offers = [
     docs: 'Ветдокументы, декларация, сертификат происхождения',
     region: 'Камчатка',
   },
+  // Добавь другие объявления!
 ];
 
 const categoriesMap = {
@@ -55,12 +57,12 @@ const MarketSellCategory = () => {
       >
         ← К категориям
       </button>
-      <h1 style={{ color: '#fff', marginBottom: 13, fontSize: '1.12rem' }}>
+      <h1 style={{ color: '#fff', marginBottom: 13, fontSize: '1.11rem' }}>
         Объявления: {categoriesMap[category] || category}
       </h1>
 
       {filtered.length === 0 && (
-        <div style={{ color: '#888', textAlign: 'center', marginTop: 48, fontSize: 17 }}>
+        <div style={{ color: '#888', textAlign: 'center', marginTop: 48, fontSize: 16 }}>
           Нет объявлений в этой категории.
         </div>
       )}
@@ -75,18 +77,17 @@ const MarketSellCategory = () => {
             borderRadius: 17,
             boxShadow: '0 2px 14px 0 #000a',
             marginBottom: 18,
-            padding: 14,
-            gap: 16,
+            padding: 13,
+            gap: 13,
             border: '1.2px solid #222'
           }}
         >
-          {/* БОЛЬШОЕ фото */}
           <div
             style={{
               flexShrink: 0,
-              width: 108,
-              height: 108,
-              borderRadius: 14,
+              width: 120,
+              height: 120,
+              borderRadius: 13,
               background: '#23232a',
               overflow: 'hidden',
               display: 'flex',
@@ -105,38 +106,36 @@ const MarketSellCategory = () => {
               onError={e => { e.target.src = '/images/no-image.webp'; }}
             />
           </div>
-          {/* Основная инфо */}
           <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div style={{
               fontWeight: 700,
               color: '#fff',
-              fontSize: 16,
-              lineHeight: 1.21,
+              fontSize: 14,
+              lineHeight: 1.18,
               marginBottom: 2
             }}>
               {offer.title}
             </div>
-            <div style={{ color: '#bdbdbd', fontSize: 13, marginBottom: 2 }}>
+            <div style={{ color: '#bdbdbd', fontSize: 12, marginBottom: 2 }}>
               Компания: <span style={{ color: '#fff' }}>{offer.company}</span>
             </div>
-            <div style={{ color: '#bdbdbd', fontSize: 13, marginBottom: 6 }}>
+            <div style={{ color: '#bdbdbd', fontSize: 12, marginBottom: 4 }}>
               Склад: <span style={{ color: '#fff' }}>{offer.sklad}</span>
             </div>
-            {/* Кнопки под текстом */}
-            <div style={{ display: 'flex', gap: 9, marginTop: 7 }}>
+            <div style={{ display: 'flex', gap: 7, marginTop: 4 }}>
               <a
                 href={`tel:${offer.phone.replace(/\s+/g, '')}`}
                 style={{
                   background: '#29bf5b',
                   color: '#fff',
                   fontWeight: 600,
-                  fontSize: 13,
+                  fontSize: 12,
                   borderRadius: 7,
-                  padding: '5px 12px',
+                  padding: '4px 9px',
                   border: 'none',
                   cursor: 'pointer',
                   textDecoration: 'none',
-                  minWidth: 78,
+                  minWidth: 62,
                   textAlign: 'center'
                 }}
               >
@@ -148,12 +147,12 @@ const MarketSellCategory = () => {
                   background: '#2678f3',
                   color: '#fff',
                   fontWeight: 600,
-                  fontSize: 13,
+                  fontSize: 12,
                   borderRadius: 7,
-                  padding: '5px 12px',
+                  padding: '4px 9px',
                   border: 'none',
                   cursor: 'pointer',
-                  minWidth: 78,
+                  minWidth: 62,
                   textAlign: 'center'
                 }}
               >
@@ -164,7 +163,7 @@ const MarketSellCategory = () => {
         </div>
       ))}
 
-      {/* Модальное окно */}
+      {/* Модалка */}
       {modalOffer && (
         <div
           onClick={() => setModalOffer(null)}
@@ -206,7 +205,7 @@ const MarketSellCategory = () => {
                 cursor: 'pointer'
               }}
             >×</button>
-            {/* Галерея фото */}
+            {/* Галерея */}
             {modalOffer.gallery && modalOffer.gallery.length > 1 ? (
               <div style={{ position: 'relative', marginBottom: 13 }}>
                 <img

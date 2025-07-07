@@ -1,80 +1,89 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const categories = [
-  { title: 'Икра', description: 'Красная, чёрная, фасованная', image: '/images/cav.webp' },
-  { title: 'Краб', description: 'Живой, мороженый, фаланги', image: '/images/krab.webp' },
-  { title: 'Рыба', description: 'Лосось, треска, палтус и другие', image: '/images/fish.webp' },
-  { title: 'Морепродукты', description: 'Креветки, гребешки, кальмары и пр.', image: '/images/mor.webp' },
+const categories = ['Икра', 'Краб', 'Рыба', 'Морепродукты'];
+
+// Это заявки покупателей, которые хотят купить товар
+const requests = [
+  {
+    id: 1,
+    category: 'Икра',
+    title: 'Ищу икру красную оптом',
+    desc: 'Закупаем свежую красную икру, фасованную и на развес. Москва, регионы, самовывоз возможен.',
+    contact: '@buyer_ikra',
+    region: 'Москва',
+  },
+  {
+    id: 2,
+    category: 'Краб',
+    title: 'Нужен живой краб',
+    desc: 'Интересует живой камчатский краб, объём от 50 кг. Работаем по договору.',
+    contact: '+7 999 123-45-67',
+    region: 'Владивосток',
+  },
+  // Добавь свои заявки по аналогии!
 ];
 
-const CARD_SIZE = 158;
+const MarketBuy = () => {
+  const [selected, setSelected] = useState('Икра');
+  const filtered = requests.filter((r) => r.category === selected);
 
-const MarketBuy = () => (
-  <div style={{ padding: 18, background: '#000', minHeight: '100vh' }}>
-    <h1 style={{ color: '#fff', marginBottom: 10, fontWeight: 700, fontSize: 19 }}>Запросить улов</h1>
-    <p style={{ color: '#ccc', fontSize: 13 }}>Выберите, что вы ищете:</p>
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: `repeat(2, ${CARD_SIZE}px)`,
-      gap: 15,
-      maxWidth: CARD_SIZE * 2 + 15,
-      margin: '0 auto',
-      marginTop: 16,
-      justifyContent: 'center'
-    }}>
-      {categories.map((item, index) => (
-        <div key={index} style={{
-          width: CARD_SIZE,
-          height: CARD_SIZE,
-          border: '1px solid #23232a',
-          borderRadius: 16,
-          overflow: 'hidden',
-          background: '#18181c',
-          boxShadow: '0 2px 13px #0002',
-          position: 'relative',
-          cursor: 'pointer'
-        }}>
-          <img
-            src={item.image}
-            alt={item.title}
+  return (
+    <div style={{ padding: '18px 8px 80px 8px', background: '#000', minHeight: '100vh' }}>
+      <h1 style={{ color: '#fff', fontWeight: 700, fontSize: 21, marginBottom: 9 }}>Запросить улов</h1>
+      <div style={{ display: 'flex', gap: 9, marginBottom: 15, justifyContent: 'center', flexWrap: 'wrap' }}>
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setSelected(cat)}
             style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              display: 'block',
-              position: 'absolute',
-              left: 0,
-              top: 0,
-              zIndex: 1
+              padding: '6px 17px',
+              borderRadius: 14,
+              fontWeight: 600,
+              fontSize: 14,
+              background: selected === cat ? '#34e0a1' : '#19191c',
+              color: selected === cat ? '#222' : '#fff',
+              border: 'none',
+              cursor: 'pointer',
+              boxShadow: selected === cat ? '0 2px 10px #30e0a122' : 'none',
+              marginBottom: 5
             }}
-            onError={e => { e.target.src = '/images/no-image.webp'; }}
-          />
-          <div style={{
-            position: 'absolute',
-            left: 0, right: 0, bottom: 0,
-            background: 'rgba(18,18,18,0.82)',
-            color: '#fff',
-            padding: '11px 9px 8px 9px',
-            zIndex: 2,
-            textAlign: 'left'
-          }}>
-            <div style={{
-              fontWeight: 700,
-              fontSize: 12,
-              marginBottom: 2,
-              lineHeight: 1.14,
-              wordBreak: 'break-word'
-            }}>{item.title}</div>
-            <div style={{
-              color: '#ccc',
-              fontSize: 10.5,
-              lineHeight: 1.13
-            }}>{item.description}</div>
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+        {filtered.length === 0 && (
+          <div style={{ color: '#777', textAlign: 'center', marginTop: 48 }}>
+            Нет запросов в этой категории.
           </div>
-        </div>
-      ))}
+        )}
+        {filtered.map(req => (
+          <div
+            key={req.id}
+            style={{
+              borderRadius: 16,
+              background: '#17171c',
+              padding: '13px 14px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 4,
+              boxShadow: '0 2px 10px #0001',
+              color: '#fff',
+              fontSize: 15,
+            }}
+          >
+            <div style={{ fontWeight: 700, fontSize: 15 }}>{req.title}</div>
+            <div style={{ color: '#b8ffec', fontSize: 14, marginBottom: 2 }}>{req.region}</div>
+            <div style={{ color: '#eee', fontSize: 14, marginBottom: 2 }}>{req.desc}</div>
+            <div style={{ color: '#62afff', fontSize: 14 }}>
+              Контакт: {req.contact}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default MarketBuy;

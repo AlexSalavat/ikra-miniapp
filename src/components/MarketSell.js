@@ -1,5 +1,4 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 
 const categories = [
   {
@@ -28,97 +27,83 @@ const categories = [
   },
 ];
 
-const CARD_SIZE = 164; // px
+const MarketSell = ({ onCategorySelect }) => {
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
-const MarketSell = () => {
-  const navigate = useNavigate();
+  // Если нужна только навигация через react-router, этот проп не нужен
+  // и нужно вместо onCategorySelect использовать navigate(`/market/sell/${cat.key}`)
 
   return (
-    <div style={{ padding: 18, background: '#000', minHeight: '100vh' }}>
-      <h1 style={{ color: '#fff', marginBottom: 10, fontSize: 20, fontWeight: 700 }}>
-        Борт полный — забирай!
-      </h1>
-      <p style={{ color: '#bbb', marginBottom: 12, fontSize: 14 }}>
+    <div style={{ padding: '18px 0 80px 0', background: '#000', minHeight: '100vh' }}>
+      <h1 style={{ color: '#fff', fontWeight: 700, fontSize: 22, marginLeft: 18, marginBottom: 8 }}>Борт полный — забирай!</h1>
+      <p style={{ color: '#ccc', marginLeft: 18, fontSize: 15, marginBottom: 18 }}>
         Выберите категорию для просмотра объявлений:
       </p>
-
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: `repeat(2, ${CARD_SIZE}px)`,
-        gap: 16,
-        maxWidth: CARD_SIZE * 2 + 16,
-        margin: '0 auto',
-        marginTop: 22,
-        justifyContent: 'center'
-      }}>
-        {categories.map((item) => (
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: 16,
+          justifyContent: 'center',
+          padding: '0 18px',
+        }}
+      >
+        {categories.map((cat) => (
           <div
-            key={item.key}
-            onClick={() => navigate(`/market/sell/${item.key}`)}
+            key={cat.key}
+            onClick={() => {
+              if (onCategorySelect) {
+                onCategorySelect(cat.key);
+              } else {
+                window.location.href = `/market/sell/${cat.key}`; // Если нет роутера
+              }
+            }}
             style={{
-              width: CARD_SIZE,
-              height: CARD_SIZE,
-              border: '1.2px solid #23232a',
-              borderRadius: 17,
-              backgroundColor: '#19191d',
+              borderRadius: '19px',
+              backgroundColor: '#191920',
               color: '#fff',
+              boxShadow: '0 1.5px 8px #2224',
               cursor: 'pointer',
-              boxShadow: '0 2px 13px #0004',
               overflow: 'hidden',
+              position: 'relative',
               display: 'flex',
               flexDirection: 'column',
+              justifyContent: 'flex-end',
               alignItems: 'stretch',
-              transition: 'box-shadow .15s'
+              minHeight: 158,
+              aspectRatio: '1/1',
             }}
           >
-            {/* Фиксированная высота для фото */}
-            <div style={{
-              width: '100%',
-              height: 112,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: '#23232a'
-            }}>
-              <img
-                src={item.image}
-                alt={item.title}
-                style={{
-                  maxWidth: '100%',
-                  maxHeight: '100%',
-                  objectFit: 'contain',
-                  display: 'block',
-                }}
-                onError={e => { e.target.src = '/images/no-image.webp'; }}
-              />
-            </div>
-            {/* Текстовый блок всегда виден */}
-            <div style={{
-              flex: 'none',
-              padding: '7px 6px 8px 6px',
-              textAlign: 'center',
-              background: '#19191d',
-              minHeight: 39,
-              boxSizing: 'border-box'
-            }}>
-              <div style={{
-                fontWeight: 700,
+            <img
+              src={cat.image}
+              alt={cat.title}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                flexGrow: 1,
+              }}
+              onError={e => { e.target.src = '/images/no-image.webp'; }}
+            />
+            <div
+              style={{
+                background: 'rgba(12,12,14,0.97)',
+                width: '100%',
+                padding: '8px 8px 7px 11px',
+                position: 'absolute',
+                left: 0,
+                bottom: 0,
                 fontSize: 13,
-                marginBottom: 1,
-                lineHeight: 1.13,
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}>{item.title}</div>
-              <div style={{
-                color: '#bdbdbd',
-                fontSize: 11,
-                minHeight: 13,
-                lineHeight: 1.18,
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}>{item.description}</div>
+                fontWeight: 700,
+                borderBottomLeftRadius: 19,
+                borderBottomRightRadius: 19,
+                boxSizing: 'border-box'
+              }}
+            >
+              <div style={{ fontWeight: 700, fontSize: 14 }}>{cat.title}</div>
+              <div style={{ fontWeight: 400, color: '#c9c9c9', fontSize: 11, marginTop: 1 }}>
+                {cat.description}
+              </div>
             </div>
           </div>
         ))}

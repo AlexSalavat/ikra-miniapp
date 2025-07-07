@@ -1,35 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const categories = [
   {
+    key: 'икра',
     title: 'Икра',
     description: 'Красная, чёрная, фасованная',
     image: '/images/cav.webp',
-    link: '/market/sell/икра',
   },
   {
+    key: 'краб',
     title: 'Краб',
     description: 'Живой, мороженый, фаланги',
     image: '/images/krab.webp',
-    link: '/market/sell/краб',
   },
   {
+    key: 'рыба',
     title: 'Рыба',
     description: 'Лосось, треска, палтус и другие',
     image: '/images/fish.webp',
-    link: '/market/sell/рыба',
   },
   {
+    key: 'морепродукты',
     title: 'Морепродукты',
     description: 'Креветки, гребешки, кальмары и пр.',
     image: '/images/mor.webp',
-    link: '/market/sell/морепродукты',
   },
 ];
 
-const CARD_SIZE = 160;
+const CARD_SIZE = 185;
 
-export default function MarketSell() {
+const MarketSell = () => {
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  // ...остальная логика с объявлениями
+
   return (
     <div style={{
       background: '#000',
@@ -42,27 +46,27 @@ export default function MarketSell() {
       <h1 style={{
         color: '#fff',
         fontWeight: 700,
-        fontSize: 22,
+        fontSize: 21,
         marginBottom: 13,
         marginTop: 2,
-        letterSpacing: 0.15
+        letterSpacing: 0.13
       }}>
         Борт полный — забирай!
       </h1>
       <div style={{
         width: '100%',
-        maxWidth: 420,
+        maxWidth: 410,
         display: 'grid',
         gridTemplateColumns: `repeat(2, ${CARD_SIZE}px)`,
         gap: 15,
         justifyContent: 'center',
       }}>
-        {categories.map((item, idx) => (
-          <a
-            key={idx}
-            href={item.link}
+        {categories.map((cat, idx) => (
+          <div
+            key={cat.key}
+            onClick={() => setSelectedCategory(cat.key)}
             style={{
-              borderRadius: 18,
+              borderRadius: 17,
               background: '#1d1c21',
               overflow: 'hidden',
               width: CARD_SIZE,
@@ -70,16 +74,16 @@ export default function MarketSell() {
               display: 'flex',
               flexDirection: 'column',
               boxShadow: '0 2px 10px #16141a44',
-              textDecoration: 'none',
+              cursor: 'pointer',
               position: 'relative'
             }}
           >
             <img
-              src={item.image}
-              alt={item.title}
+              src={cat.image}
+              alt={cat.title}
               style={{
                 width: '100%',
-                height: '76%',
+                height: '74%',
                 objectFit: 'cover',
                 background: '#23232a',
                 display: 'block'
@@ -88,7 +92,7 @@ export default function MarketSell() {
             />
             <div style={{
               width: '100%',
-              padding: '6px 10px 6px 11px',
+              padding: '8px 11px 8px 11px',
               background: '#19191d',
               minHeight: 0,
               display: 'flex',
@@ -96,36 +100,46 @@ export default function MarketSell() {
               justifyContent: 'center',
               alignItems: 'flex-start',
               flexGrow: 1,
-              borderBottomLeftRadius: 18,
-              borderBottomRightRadius: 18
+              borderBottomLeftRadius: 17,
+              borderBottomRightRadius: 17
             }}>
               <span style={{
                 fontWeight: 700,
                 color: '#fff',
-                fontSize: 13.5,
+                fontSize: 12.2,
                 marginBottom: 1,
-                whiteSpace: 'nowrap',
+                lineHeight: '1.13',
+                maxHeight: 32,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
-                lineHeight: 1.13
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                whiteSpace: 'normal'
               }}>
-                {item.title}
+                {cat.title}
               </span>
               <span style={{
                 fontWeight: 400,
                 color: '#b5b5b5',
-                fontSize: 10.7,
-                lineHeight: 1.14,
-                whiteSpace: 'nowrap',
+                fontSize: 9.3,
+                lineHeight: '1.13',
+                maxHeight: 24,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                whiteSpace: 'normal'
               }}>
-                {item.description}
+                {cat.description}
               </span>
             </div>
-          </a>
+          </div>
         ))}
       </div>
     </div>
   );
-}
+};
+
+export default MarketSell;

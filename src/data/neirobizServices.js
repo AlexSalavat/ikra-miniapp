@@ -1,3 +1,5 @@
+// src/data/neirobizServices.js
+
 const neirobizServices = [
   {
     id: 'bots',
@@ -15,7 +17,7 @@ const neirobizServices = [
     id: 'video',
     title: 'AI-видеоконтент',
     description: 'Видеоролики с нейросетями — генерация, монтаж, озвучка, оптимизация для Telegram и соцсетей.',
-    image: '/images/neirobiz.webp'
+    image: '/images/neirobiz-video.webp'
   },
   {
     id: 'design',

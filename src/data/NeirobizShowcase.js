@@ -1,43 +1,148 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import neirobizServices from '../data/neirobizServices';
+import services from '../data/neirobiz'; // тут путь поправь если у тебя отличается
+
+const CARD_SIZE = 185; // стиль карточек как в marketsell
+const CARD_RADIUS = 19;
 
 const NeirobizShowcase = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-black min-h-screen text-white px-3 pt-6 pb-20 max-w-lg mx-auto">
-      {/* Заголовок и описание */}
-      <div className="mb-5 text-center">
-        <h1 className="text-2xl font-bold mb-2">NeiroBiz</h1>
-        <div className="text-lg mb-1 font-semibold">AI-сервисы и генерация упаковки</div>
-        <p className="text-zinc-300 text-sm mb-3">
-          Автоматизируйте бизнес с помощью нейросетей, ботов, дизайна и аналитики.
-          <br />
-          <span className="font-medium text-yellow-300">Оформите заявку — получайте результат быстрее конкурентов!</span>
-        </p>
+    <div
+      style={{
+        background: '#000',
+        minHeight: '100vh',
+        padding: '26px 0 80px 0',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}
+    >
+      <div style={{ maxWidth: 790, width: '100%', marginBottom: 18 }}>
+        <h1 style={{
+          color: '#fff',
+          fontWeight: 700,
+          fontSize: 22,
+          marginLeft: 18,
+          marginBottom: 6,
+          letterSpacing: 0.14
+        }}>NeiroBiz</h1>
+        <div style={{
+          color: '#b5e0fe',
+          fontSize: 15.2,
+          marginLeft: 18,
+          marginBottom: 6,
+          fontWeight: 500
+        }}>AI-сервисы и генерация упаковки</div>
+        <div style={{
+          color: '#ccc',
+          fontSize: 13,
+          marginLeft: 18,
+          marginBottom: 8,
+          maxWidth: 420
+        }}>
+          Автоматизируйте бизнес с помощью нейросетей, ботов, дизайна и аналитики.<br />
+          <span style={{ color: '#43c57a', fontWeight: 600 }}>
+            Оформите заявку — получите результат быстрее конкурентов!
+          </span>
+        </div>
       </div>
-
-      {/* Витрина услуг */}
-      <div className="grid grid-cols-1 gap-4">
-        {neirobizServices.map(service => (
-          <div
-            key={service.id}
-            className="bg-zinc-900 rounded-xl shadow flex items-center gap-4 px-4 py-3 hover:bg-zinc-800 transition"
-          >
-            <div className="text-3xl">{service.icon}</div>
-            <div className="flex-1 min-w-0">
-              <div className="font-bold text-base mb-1">{service.title}</div>
-              <div className="text-zinc-400 text-xs mb-2">{service.short}</div>
-              <button
-                onClick={() => navigate(`/neirobiz/service/${service.id}`)}
-                className="px-4 py-1 bg-blue-600 rounded-lg text-white text-xs font-semibold hover:bg-blue-700"
-              >
-                Подробнее
-              </button>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: 15,
+          width: '100%',
+          maxWidth: 790,
+          justifyContent: 'center',
+          padding: '0 18px'
+        }}
+      >
+        {neirobizServices.map((svc, idx) => {
+          const full = services.find(s =>
+            s.id.replace(/-/g, '').includes(svc.id.replace(/-/g, '')) ||
+            svc.id.replace(/-/g, '').includes(s.id.replace(/-/g, ''))
+          ) || {};
+          return (
+            <div
+              key={svc.id}
+              style={{
+                borderRadius: CARD_RADIUS,
+                backgroundColor: '#191920',
+                color: '#fff',
+                boxShadow: '0 1.5px 8px #2224',
+                cursor: 'pointer',
+                overflow: 'hidden',
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'stretch',
+                minHeight: CARD_SIZE,
+                aspectRatio: '1/1',
+                maxWidth: CARD_SIZE,
+                minWidth: 0,
+                transition: 'box-shadow .14s'
+              }}
+              onClick={() => navigate(`/neirobiz/service/${svc.id}`)}
+            >
+              <img
+                src={svc.image}
+                alt={svc.title}
+                style={{
+                  width: '100%',
+                  height: '67%',
+                  objectFit: 'cover',
+                  borderTopLeftRadius: CARD_RADIUS,
+                  borderTopRightRadius: CARD_RADIUS,
+                  background: '#222',
+                  flexShrink: 0,
+                  display: 'block'
+                }}
+                onError={e => { e.target.src = '/images/no-image.webp'; }}
+              />
+              <div style={{
+                padding: '10px 10px 11px 13px',
+                background: '#141417',
+                borderBottomLeftRadius: CARD_RADIUS,
+                borderBottomRightRadius: CARD_RADIUS,
+                minHeight: 54,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center'
+              }}>
+                <div style={{
+                  fontWeight: 700,
+                  fontSize: 13.2,
+                  marginBottom: 1,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 7
+                }}>
+                  <span style={{ fontSize: 17 }}>{full.icon}</span>
+                  {svc.title}
+                </div>
+                <div style={{
+                  color: '#b7e0db',
+                  fontWeight: 400,
+                  fontSize: 10.2,
+                  lineHeight: 1.21,
+                  whiteSpace: 'normal',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  marginTop: 2,
+                  maxHeight: 30
+                }}>
+                  {full.short || svc.description}
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   );

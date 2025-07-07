@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const categories = [
   { key: 'икра', label: 'Икра' },
@@ -22,15 +23,32 @@ const offers = [
     description: 'Интересуют предложения по крабу.',
     contact: '@krab_zakup',
   },
-  // Добавь больше по необходимости
+  // Добавь другие объявления по категориям!
 ];
 
 const MarketBuy = () => {
   const [selected, setSelected] = useState('икра');
+  const navigate = useNavigate();
   const filtered = offers.filter(o => o.category === selected);
 
   return (
     <div style={{ padding: 16, background: '#000', minHeight: '100vh' }}>
+      <button
+        onClick={() => navigate('/market')}
+        style={{
+          marginBottom: 16,
+          padding: '7px 18px',
+          borderRadius: 10,
+          background: '#23232a',
+          color: '#fff',
+          border: 'none',
+          fontWeight: 600,
+          fontSize: 15,
+          cursor: 'pointer'
+        }}
+      >
+        ← К Маркету
+      </button>
       <h1 style={{ color: '#fff', fontSize: 20, fontWeight: 700, marginBottom: 8 }}>На охоте за уловом</h1>
       <div style={{
         display: 'flex',

@@ -27,7 +27,7 @@ const categories = [
   },
 ];
 
-const MarketSell = ({ onCategorySelect }) => {
+const MarketSell = () => {
   return (
     <div style={{ padding: '18px 0 80px 0', background: '#000', minHeight: '100vh' }}>
       <h1 style={{ color: '#fff', fontWeight: 700, fontSize: 22, marginLeft: 18, marginBottom: 8 }}>Борт полный — забирай!</h1>
@@ -46,13 +46,7 @@ const MarketSell = ({ onCategorySelect }) => {
         {categories.map((cat) => (
           <div
             key={cat.key}
-            onClick={() => {
-              if (onCategorySelect) {
-                onCategorySelect(cat.key);
-              } else {
-                window.location.href = `/market/sell/${cat.key}`;
-              }
-            }}
+            onClick={() => window.location.href = `/market/sell/${cat.key}`}
             style={{
               borderRadius: '17px',
               backgroundColor: '#191920',
@@ -68,14 +62,12 @@ const MarketSell = ({ onCategorySelect }) => {
               alignItems: 'stretch'
             }}
           >
-            {/* Фото — строго сверху, не перекрывает текст */}
+            {/* Фото сверху */}
             <div style={{
               width: '100%',
               height: '70%',
-              flexShrink: 0,
-              flexGrow: 0,
-              position: 'relative',
-              background: '#23232a'
+              background: '#23232a',
+              overflow: 'hidden'
             }}>
               <img
                 src={cat.image}
@@ -89,7 +81,7 @@ const MarketSell = ({ onCategorySelect }) => {
                 onError={e => { e.target.src = '/images/no-image.webp'; }}
               />
             </div>
-            {/* Текст — только под фото */}
+            {/* Текст под фото */}
             <div style={{
               width: '100%',
               padding: '10px 9px 9px 13px',

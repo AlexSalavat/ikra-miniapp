@@ -8,10 +8,11 @@ import SupplierDetail from './components/SupplierDetail';
 import CompanyProfile from './components/CompanyProfile';
 import Market from './components/Market';
 import MarketSell from './components/MarketSell';
+import MarketSellCategory from './components/MarketSellCategory'; // Импортируем компонент для категории
 import MarketBuy from './components/MarketBuy';
 import BottomNav from './components/BottomNav';
 import NeirobizScreen from './components/NeirobizScreen';
-import News from './components/News'; // Добавили импорт
+import News from './components/News';
 
 function App() {
   return (
@@ -24,10 +25,11 @@ function App() {
           <Route path="/supplier/:id" element={<SupplierDetail />} />
           <Route path="/market" element={<Market />} />
           <Route path="/market/sell" element={<MarketSell />} />
+          <Route path="/market/sell/:category" element={<MarketSellCategory />} /> {/* ВАЖНО */}
           <Route path="/market/buy" element={<MarketBuy />} />
           <Route path="/profile" element={<div style={{ padding: '20px', color: '#fff' }}>Профиль</div>} />
           <Route path="/neirobiz" element={<NeirobizScreen />} />
-          <Route path="/news" element={<News />} /> {/* Новый маршрут */}
+          <Route path="/news" element={<News />} />
         </Routes>
       </div>
       <BottomNav />

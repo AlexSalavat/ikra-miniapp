@@ -1,83 +1,85 @@
 import React, { useState } from 'react';
 
-const categories = ['Икра', 'Краб', 'Рыба', 'Морепродукты'];
+const categories = [
+  { key: 'икра', label: 'Икра' },
+  { key: 'краб', label: 'Краб' },
+  { key: 'рыба', label: 'Рыба' },
+  { key: 'морепродукты', label: 'Морепродукты' }
+];
 
-// Это заявки покупателей, которые хотят купить товар
-const requests = [
+const offers = [
   {
     id: 1,
-    category: 'Икра',
-    title: 'Ищу икру красную оптом',
-    desc: 'Закупаем свежую красную икру, фасованную и на развес. Москва, регионы, самовывоз возможен.',
-    contact: '@buyer_ikra',
-    region: 'Москва',
+    category: 'икра',
+    title: 'Ищу икру',
+    description: 'Закупаем красную икру, регулярные объёмы.',
+    contact: '@ikra_buyer',
   },
   {
     id: 2,
-    category: 'Краб',
-    title: 'Нужен живой краб',
-    desc: 'Интересует живой камчатский краб, объём от 50 кг. Работаем по договору.',
-    contact: '+7 999 123-45-67',
-    region: 'Владивосток',
+    category: 'краб',
+    title: 'Требуется краб',
+    description: 'Интересуют предложения по крабу.',
+    contact: '@krab_zakup',
   },
-  // Добавь свои заявки по аналогии!
+  // Добавь больше по необходимости
 ];
 
 const MarketBuy = () => {
-  const [selected, setSelected] = useState('Икра');
-  const filtered = requests.filter((r) => r.category === selected);
+  const [selected, setSelected] = useState('икра');
+  const filtered = offers.filter(o => o.category === selected);
 
   return (
-    <div style={{ padding: '18px 8px 80px 8px', background: '#000', minHeight: '100vh' }}>
-      <h1 style={{ color: '#fff', fontWeight: 700, fontSize: 21, marginBottom: 9 }}>Запросить улов</h1>
-      <div style={{ display: 'flex', gap: 9, marginBottom: 15, justifyContent: 'center', flexWrap: 'wrap' }}>
-        {categories.map((cat) => (
+    <div style={{ padding: 16, background: '#000', minHeight: '100vh' }}>
+      <h1 style={{ color: '#fff', fontSize: 20, fontWeight: 700, marginBottom: 8 }}>На охоте за уловом</h1>
+      <div style={{
+        display: 'flex',
+        gap: 7,
+        marginBottom: 18,
+        justifyContent: 'center',
+        flexWrap: 'wrap'
+      }}>
+        {categories.map(cat => (
           <button
-            key={cat}
-            onClick={() => setSelected(cat)}
+            key={cat.key}
+            onClick={() => setSelected(cat.key)}
             style={{
-              padding: '6px 17px',
-              borderRadius: 14,
-              fontWeight: 600,
-              fontSize: 14,
-              background: selected === cat ? '#34e0a1' : '#19191c',
-              color: selected === cat ? '#222' : '#fff',
+              padding: '6px 13px',
+              fontSize: 13,
+              fontWeight: 700,
+              background: selected === cat.key ? '#34e0a1' : '#1e1e22',
+              color: selected === cat.key ? '#181818' : '#fff',
               border: 'none',
+              borderRadius: 8,
               cursor: 'pointer',
-              boxShadow: selected === cat ? '0 2px 10px #30e0a122' : 'none',
-              marginBottom: 5
+              boxShadow: selected === cat.key ? '0 2px 7px #2af1a155' : 'none',
+              letterSpacing: '-0.2px'
             }}
           >
-            {cat}
+            {cat.label}
           </button>
         ))}
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {filtered.length === 0 && (
-          <div style={{ color: '#777', textAlign: 'center', marginTop: 48 }}>
-            Нет запросов в этой категории.
-          </div>
+          <div style={{ color: '#888', textAlign: 'center', marginTop: 32 }}>Нет объявлений по выбранной категории.</div>
         )}
-        {filtered.map(req => (
-          <div
-            key={req.id}
-            style={{
-              borderRadius: 16,
-              background: '#17171c',
-              padding: '13px 14px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 4,
-              boxShadow: '0 2px 10px #0001',
-              color: '#fff',
-              fontSize: 15,
-            }}
-          >
-            <div style={{ fontWeight: 700, fontSize: 15 }}>{req.title}</div>
-            <div style={{ color: '#b8ffec', fontSize: 14, marginBottom: 2 }}>{req.region}</div>
-            <div style={{ color: '#eee', fontSize: 14, marginBottom: 2 }}>{req.desc}</div>
-            <div style={{ color: '#62afff', fontSize: 14 }}>
-              Контакт: {req.contact}
+        {filtered.map(offer => (
+          <div key={offer.id} style={{
+            background: '#191920',
+            borderRadius: 12,
+            padding: '12px 14px',
+            boxShadow: '0 1px 7px #0002'
+          }}>
+            <div style={{ fontWeight: 700, color: '#fff', fontSize: 15, marginBottom: 3 }}>
+              {offer.title}
+            </div>
+            <div style={{ color: '#bbb', fontSize: 13, marginBottom: 2 }}>
+              {offer.description}
+            </div>
+            <div style={{ color: '#37a0e0', fontSize: 13 }}>
+              Контакт: {offer.contact}
             </div>
           </div>
         ))}

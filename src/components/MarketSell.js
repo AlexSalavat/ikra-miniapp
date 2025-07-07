@@ -28,11 +28,6 @@ const categories = [
 ];
 
 const MarketSell = ({ onCategorySelect }) => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
-
-  // Если нужна только навигация через react-router, этот проп не нужен
-  // и нужно вместо onCategorySelect использовать navigate(`/market/sell/${cat.key}`)
-
   return (
     <div style={{ padding: '18px 0 80px 0', background: '#000', minHeight: '100vh' }}>
       <h1 style={{ color: '#fff', fontWeight: 700, fontSize: 22, marginLeft: 18, marginBottom: 8 }}>Борт полный — забирай!</h1>
@@ -55,23 +50,22 @@ const MarketSell = ({ onCategorySelect }) => {
               if (onCategorySelect) {
                 onCategorySelect(cat.key);
               } else {
-                window.location.href = `/market/sell/${cat.key}`; // Если нет роутера
+                window.location.href = `/market/sell/${cat.key}`;
               }
             }}
             style={{
-              borderRadius: '19px',
+              borderRadius: '18px',
               backgroundColor: '#191920',
               color: '#fff',
               boxShadow: '0 1.5px 8px #2224',
               cursor: 'pointer',
               overflow: 'hidden',
               position: 'relative',
+              minHeight: 164,
+              aspectRatio: '1/1',
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'flex-end',
-              alignItems: 'stretch',
-              minHeight: 158,
-              aspectRatio: '1/1',
+              justifyContent: 'flex-end'
             }}
           >
             <img
@@ -82,26 +76,27 @@ const MarketSell = ({ onCategorySelect }) => {
                 height: '100%',
                 objectFit: 'cover',
                 flexGrow: 1,
+                minHeight: 0
               }}
               onError={e => { e.target.src = '/images/no-image.webp'; }}
             />
             <div
               style={{
-                background: 'rgba(12,12,14,0.97)',
+                background: 'rgba(12,12,14,0.96)',
                 width: '100%',
-                padding: '8px 8px 7px 11px',
+                padding: '7px 8px 6px 12px',
                 position: 'absolute',
                 left: 0,
                 bottom: 0,
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: 700,
-                borderBottomLeftRadius: 19,
-                borderBottomRightRadius: 19,
+                borderBottomLeftRadius: 18,
+                borderBottomRightRadius: 18,
                 boxSizing: 'border-box'
               }}
             >
-              <div style={{ fontWeight: 700, fontSize: 14 }}>{cat.title}</div>
-              <div style={{ fontWeight: 400, color: '#c9c9c9', fontSize: 11, marginTop: 1 }}>
+              <div style={{ fontWeight: 700, fontSize: 13 }}>{cat.title}</div>
+              <div style={{ fontWeight: 400, color: '#c9c9c9', fontSize: 10, marginTop: 1 }}>
                 {cat.description}
               </div>
             </div>

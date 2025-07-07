@@ -27,7 +27,7 @@ const items = [
   },
 ];
 
-const CARD_SIZE = 160;
+const CARD_SIZE = 185; // Было 160
 
 export default function Showcase() {
   return (
@@ -51,10 +51,10 @@ export default function Showcase() {
       </h1>
       <div style={{
         width: '100%',
-        maxWidth: 420,
+        maxWidth: 480, // Чуть шире из-за увеличения
         display: 'grid',
         gridTemplateColumns: `repeat(2, ${CARD_SIZE}px)`,
-        gap: 15,
+        gap: 18,
         justifyContent: 'center',
       }}>
         {items.map((item, idx) => (
@@ -62,7 +62,7 @@ export default function Showcase() {
             key={idx}
             href={item.link}
             style={{
-              borderRadius: 18,
+              borderRadius: 20,
               background: '#1d1c21',
               overflow: 'hidden',
               width: CARD_SIZE,
@@ -88,7 +88,7 @@ export default function Showcase() {
             />
             <div style={{
               width: '100%',
-              padding: '6px 10px 6px 11px',
+              padding: '9px 12px 9px 13px',
               background: '#19191d',
               minHeight: 0,
               display: 'flex',
@@ -96,13 +96,13 @@ export default function Showcase() {
               justifyContent: 'center',
               alignItems: 'flex-start',
               flexGrow: 1,
-              borderBottomLeftRadius: 18,
-              borderBottomRightRadius: 18
+              borderBottomLeftRadius: 20,
+              borderBottomRightRadius: 20
             }}>
               <span style={{
                 fontWeight: 700,
                 color: '#fff',
-                fontSize: 13.5,
+                fontSize: 15,
                 marginBottom: 1,
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
@@ -114,7 +114,7 @@ export default function Showcase() {
               <span style={{
                 fontWeight: 400,
                 color: '#b5b5b5',
-                fontSize: 10.7,
+                fontSize: 11.7,
                 lineHeight: 1.14,
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',

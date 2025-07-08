@@ -13,8 +13,11 @@ import MarketBuy from './components/MarketBuy';
 import BottomNav from './components/BottomNav';
 import NeirobizScreen from './components/NeirobizScreen';
 import News from './components/News';
+
 import LogisticsShowcase from './components/LogisticsShowcase';
-import ProductionShowcase from './components/ProductionShowcase'; // <-- добавили импорт
+import ProductionShowcase from './components/ProductionShowcase';
+import TopProducers from './components/TopProducers';
+import ProducerDetail from './components/ProducerDetail';
 
 function App() {
   return (
@@ -33,7 +36,9 @@ function App() {
           <Route path="/neirobiz" element={<NeirobizScreen />} />
           <Route path="/news" element={<News />} />
           <Route path="/logistics" element={<LogisticsShowcase />} />
-          <Route path="/production" element={<ProductionShowcase />} /> {/* <-- добавили маршрут */}
+          <Route path="/production" element={<ProductionShowcase />} />
+          <Route path="/top-producers" element={<TopProducers />} />
+          <Route path="/top-producers/:id" element={<ProducerDetail />} />
         </Routes>
       </div>
       <BottomNav />

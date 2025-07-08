@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const newsSections = [
   {
@@ -26,6 +27,7 @@ const newsSections = [
 const CARD_SIZE = 185;
 
 const News = () => {
+  const navigate = useNavigate();
   return (
     <div style={{
       background: '#000',
@@ -56,6 +58,9 @@ const News = () => {
         {newsSections.map((item, idx) => (
           <div
             key={idx}
+            onClick={() => {
+              if (idx === 2) navigate('/top-producers');
+            }}
             style={{
               borderRadius: 17,
               background: '#1d1c21',
@@ -66,7 +71,9 @@ const News = () => {
               flexDirection: 'column',
               boxShadow: '0 2px 10px #16141a44',
               textDecoration: 'none',
-              position: 'relative'
+              position: 'relative',
+              cursor: idx === 2 ? 'pointer' : 'default',
+              opacity: idx === 2 ? 1 : 1
             }}
           >
             <img

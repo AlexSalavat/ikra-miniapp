@@ -8,11 +8,13 @@ import SupplierDetail from './components/SupplierDetail';
 import CompanyProfile from './components/CompanyProfile';
 import Market from './components/Market';
 import MarketSell from './components/MarketSell';
-import MarketSellCategory from './components/MarketSellCategory'; // Импортируем компонент для категории
+import MarketSellCategory from './components/MarketSellCategory';
 import MarketBuy from './components/MarketBuy';
 import BottomNav from './components/BottomNav';
 import NeirobizScreen from './components/NeirobizScreen';
 import News from './components/News';
+import LogisticsShowcase from './components/LogisticsShowcase';
+import ProductionShowcase from './components/ProductionShowcase'; // <-- добавили импорт
 
 function App() {
   return (
@@ -25,11 +27,13 @@ function App() {
           <Route path="/supplier/:id" element={<SupplierDetail />} />
           <Route path="/market" element={<Market />} />
           <Route path="/market/sell" element={<MarketSell />} />
-          <Route path="/market/sell/:category" element={<MarketSellCategory />} /> {/* ВАЖНО */}
+          <Route path="/market/sell/:category" element={<MarketSellCategory />} />
           <Route path="/market/buy" element={<MarketBuy />} />
           <Route path="/profile" element={<div style={{ padding: '20px', color: '#fff' }}>Профиль</div>} />
           <Route path="/neirobiz" element={<NeirobizScreen />} />
           <Route path="/news" element={<News />} />
+          <Route path="/logistics" element={<LogisticsShowcase />} />
+          <Route path="/production" element={<ProductionShowcase />} /> {/* <-- добавили маршрут */}
         </Routes>
       </div>
       <BottomNav />

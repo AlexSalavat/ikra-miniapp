@@ -9,7 +9,7 @@ const newsSections = [
   },
   {
     title: 'Икорные войны',
-    description: 'Аналитика, сравнения, закулисье',
+    description: 'Биржа цен, динамика, аналитика рынка',
     image: '/images/war.webp',
   },
   {
@@ -28,6 +28,14 @@ const CARD_SIZE = 185;
 
 const News = () => {
   const navigate = useNavigate();
+
+  const handleCardClick = (idx) => {
+    if (idx === 0) navigate("/news/coast");
+    if (idx === 1) navigate("/caviar-war"); // икорные войны
+    if (idx === 2) navigate("/production"); // топ производители
+    // idx 3 — пока не реализован
+  };
+
   return (
     <div style={{
       background: '#000',
@@ -58,9 +66,7 @@ const News = () => {
         {newsSections.map((item, idx) => (
           <div
             key={idx}
-            onClick={() => {
-              if (idx === 2) navigate('/top-producers');
-            }}
+            onClick={() => handleCardClick(idx)}
             style={{
               borderRadius: 17,
               background: '#1d1c21',
@@ -72,8 +78,8 @@ const News = () => {
               boxShadow: '0 2px 10px #16141a44',
               textDecoration: 'none',
               position: 'relative',
-              cursor: idx === 2 ? 'pointer' : 'default',
-              opacity: idx === 2 ? 1 : 1
+              cursor: 'pointer',
+              opacity: 1
             }}
           >
             <img

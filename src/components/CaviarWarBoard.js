@@ -1,150 +1,136 @@
 import React, { useState } from "react";
 
+const REGIONS = ["Камчатка", "Сахалин", "Хабаровск", "Магадан"];
+
+// Примерные данные (в реале у тебя всё в data/*.js)
 const DATA = [
-  // ...твой массив, как есть...
+  { region: "Камчатка", category: "Нерка", startPrice: 7500, price: 7650, date: "2025-07-10" },
+  { region: "Камчатка", category: "Горбуша", startPrice: 6800, price: 7000, date: "2025-07-10" },
+  { region: "Камчатка", category: "Кета", startPrice: 6900, price: 7100, date: "2025-07-10" },
+  { region: "Сахалин", category: "Горбуша", startPrice: 6700, price: 6550, date: "2025-07-10" },
+  { region: "Сахалин", category: "Кета", startPrice: 6850, price: 6900, date: "2025-07-10" },
+  { region: "Хабаровск", category: "Кета", startPrice: 6800, price: 6950, date: "2025-07-10" },
+  { region: "Магадан", category: "Горбуша", startPrice: 6700, price: 6600, date: "2025-07-10" },
 ];
 
-const ORIGINS = ["Камчатка", "Сахалин", "Хабаровск"];
-
-const Arrow = ({ up }) => (
-  <span style={{ fontSize: 15, fontWeight: 900, marginLeft: 2, color: up ? "#22e472" : "#e03c3c" }}>
-    {up ? "▲" : "▼"}
-  </span>
-);
-
-const BoardCell = ({ value, prev, rub }) => {
-  let color = "#fff";
-  let arrow = null;
-  if (prev !== undefined) {
-    if (value > prev) {
-      color = "#22e472";
-      arrow = <Arrow up />;
-    } else if (value < prev) {
-      color = "#e03c3c";
-      arrow = <Arrow up={false} />;
-    } else {
-      color = "#cfcfcf";
-    }
-  }
+function Dynamics({ price, startPrice }) {
+  const diff = price - startPrice;
+  let color = "#bababa", arrow = "—", sign = "";
+  if (diff > 0) { color = "#23df81"; arrow = "▲"; sign = "+"; }
+  else if (diff < 0) { color = "#f55757"; arrow = "▼"; sign = ""; }
   return (
-    <span style={{
-      color,
-      fontWeight: 600,
-      fontSize: 14,
-      letterSpacing: 0.06,
-      display: 'flex',
-      alignItems: 'center',
-      gap: 2,
-      whiteSpace: 'nowrap'
-    }}>
-      {value}{rub && <span style={{ fontSize: 11, marginLeft: 2 }}>₽</span>}{arrow}
+    <span style={{ fontWeight: 700, color, fontSize: 13.5, display: "inline-flex", alignItems: "center", gap: 2, justifyContent: 'flex-end' }}>
+      {sign}{diff !== 0 ? Math.abs(diff) : 0}₽<span style={{ fontSize: 12, marginLeft: 2 }}>{arrow}</span>
     </span>
   );
-};
+}
 
-const CaviarWarBoard = () => {
-  const [origin, setOrigin] = useState('Камчатка');
-  const filterData = DATA.filter(row => row.origin === origin);
+export default function CaviarWarBoard() {
+  const [region, setRegion] = useState(REGIONS[0]);
+  const filtered = DATA.filter(row => row.region === region);
 
   return (
     <div style={{
-      background: '#000',
-      minHeight: '100vh',
-      padding: '18px 0 70px 0',
-      display: 'flex', flexDirection: 'column', alignItems: 'center',
+      background: "#000",
+      minHeight: "100vh",
+      padding: "18px 0 60px 0",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
     }}>
       <button
         onClick={() => window.history.back()}
         style={{
-          alignSelf: 'flex-start',
+          alignSelf: "flex-start",
           marginLeft: 12,
-          marginBottom: 9,
-          padding: '6px 13px',
-          borderRadius: 10,
-          background: '#23232a',
-          color: '#fff',
-          border: 'none',
+          marginBottom: 7,
+          padding: "5px 12px",
+          borderRadius: 9,
+          background: "#23232a",
+          color: "#fff",
+          border: "none",
           fontWeight: 500,
-          fontSize: 13,
-          cursor: 'pointer'
+          fontSize: 12.5,
+          cursor: "pointer"
         }}
       >← Назад</button>
-      <h1 style={{
-        color: '#fff', fontWeight: 800, fontSize: 20, letterSpacing: 0.08, marginBottom: 11
-      }}>Икорные войны</h1>
-      <div style={{ display: 'flex', gap: 7, marginBottom: 12 }}>
-        {ORIGINS.map(o => (
+      <div style={{ fontWeight: 900, fontSize: 18, color: "#fff", marginBottom: 11, letterSpacing: "0.05em" }}>Икорные войны</div>
+      {/* Фильтр в одну строку, компактнее */}
+      <div style={{ display: "flex", gap: 5, marginBottom: 13, width: '100%', justifyContent: 'center', flexWrap: 'nowrap' }}>
+        {REGIONS.map(r => (
           <button
-            key={o}
+            key={r}
             style={{
-              background: 'none',
-              color: origin === o ? '#37e08a' : '#cfcfcf',
-              border: `2px solid ${origin === o ? '#37e08a' : '#333'}`,
-              borderRadius: 9,
-              padding: '4.5px 13px',
+              background: region === r ? "#23232a" : "none",
+              color: region === r ? "#20d978" : "#bababa",
+              border: `1.3px solid ${region === r ? "#20d978" : "#23232a"}`,
+              borderRadius: 7,
+              padding: '4px 10px',
               fontWeight: 700,
-              fontSize: 13,
-              cursor: 'pointer',
-              transition: 'border .15s'
+              fontSize: 12.2,
+              cursor: "pointer",
+              minWidth: 70,
+              transition: "border .12s, color .16s, background .18s"
             }}
-            onClick={() => setOrigin(o)}
-          >{o}</button>
+            onClick={() => setRegion(r)}
+          >{r}</button>
         ))}
       </div>
       <div style={{
-        width: '100%',
-        maxWidth: 420,
-        minWidth: 320,
-        background: '#151518',
-        borderRadius: 15,
-        boxShadow: '0 2px 17px #1a1c1f50',
-        overflow: 'hidden',
-        padding: '2px 0 9px 0'
+        width: "100%",
+        maxWidth: 400,
+        minWidth: 240,
+        background: "#16171b",
+        borderRadius: 10,
+        boxShadow: "0 2px 10px #18191c45",
+        overflow: "hidden",
+        padding: "0 0 4px 0"
       }}>
         {/* Шапка таблицы */}
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 0.95fr 1.25fr 1.25fr 1fr',
-          padding: '6px 10px',
-          fontWeight: 800,
-          color: '#e4e4e4',
-          fontSize: 12.5,
-          background: '#1e2025',
-          borderBottom: '1.3px solid #26262c',
-          textAlign: 'left',
+          display: "grid",
+          gridTemplateColumns: "1.12fr 1fr 0.92fr 1fr",
+          padding: "6px 8px 5px 9px",
+          fontWeight: 700,
+          color: "#e4e4e4",
+          fontSize: 12.2,
+          background: "#1a1a20",
+          borderBottom: "1.1px solid #242427",
+          textAlign: "left",
         }}>
-          <span style={{paddingLeft:2}}>Происх.</span>
-          <span>Вид</span>
-          <span>У производителя</span>
-          <span>В Москве</span>
-          <span style={{textAlign:'right', paddingRight:2}}>Дата</span>
+          <span>Категория</span>
+          <span style={{textAlign:'right'}}>Цена</span>
+          <span style={{textAlign:'right'}}>Дата</span>
+          <span style={{textAlign:'right'}}>Динамика</span>
         </div>
         {/* Данные */}
-        {filterData.map((row, idx) => (
+        {filtered.length === 0 && (
+          <div style={{ color: '#888', fontSize: 12, textAlign: 'center', padding: '12px 0' }}>Нет данных</div>
+        )}
+        {filtered.map((row, idx) => (
           <div key={idx} style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 0.95fr 1.25fr 1.25fr 1fr',
-            padding: '7px 10px',
+            display: "grid",
+            gridTemplateColumns: "1.12fr 1fr 0.92fr 1fr",
+            padding: "8px 8px 7px 9px",
             fontWeight: 500,
-            fontSize: 13.2,
-            color: '#fff',
-            alignItems: 'center',
-            borderBottom: idx === filterData.length - 1 ? 'none' : '1px solid #1a1a1f',
-            textAlign: 'left',
+            fontSize: 12.9,
+            color: "#fff",
+            alignItems: "center",
+            borderBottom: idx === filtered.length - 1 ? "none" : "1px solid #1b1c1f",
+            textAlign: "left",
+            minHeight: 28,
+            letterSpacing: '-0.2px'
           }}>
-            <span style={{ fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.origin}</span>
-            <span style={{ fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.kind}</span>
-            <BoardCell value={row.producerPrice} prev={row.prevProducerPrice} rub />
-            <BoardCell value={row.moscowPrice} prev={row.prevMoscowPrice} rub />
-            <span style={{ fontWeight: 400, fontSize: 11.7, color: '#cfcfcf', justifySelf: 'end' }}>{row.date}</span>
+            <span style={{ fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{row.category}</span>
+            <span style={{ fontWeight: 700, textAlign: 'right', letterSpacing: '-0.3px' }}>{row.price}₽</span>
+            <span style={{ color: '#bebec7', fontSize: 12, textAlign: 'right', fontWeight: 600 }}>{row.date.slice(5).split('-').reverse().join('.')}</span>
+            <span style={{ textAlign: 'right' }}><Dynamics price={row.price} startPrice={row.startPrice} /></span>
           </div>
         ))}
       </div>
-      <div style={{ color: '#aaa', fontSize: 12, marginTop: 13, textAlign: 'center' }}>
-        Данные тестовые.<br />Позже подключим Google Sheets и график динамики цен!
+      <div style={{ color: "#888", fontSize: 11.2, marginTop: 10, textAlign: "center" }}>
+        Динамика — от стартовой цены сезона (01.07).
       </div>
     </div>
   );
-};
-
-export default CaviarWarBoard;
+}

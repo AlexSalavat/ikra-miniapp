@@ -36,14 +36,14 @@ const MarketBuy = () => {
       <button
         onClick={() => navigate('/market')}
         style={{
-          marginBottom: 16,
-          padding: '7px 18px',
+          marginBottom: 14,
+          padding: '6px 13px',
           borderRadius: 10,
           background: '#23232a',
           color: '#fff',
           border: 'none',
           fontWeight: 600,
-          fontSize: 15,
+          fontSize: 13,
           cursor: 'pointer'
         }}
       >
@@ -52,26 +52,27 @@ const MarketBuy = () => {
       <h1 style={{ color: '#fff', fontSize: 20, fontWeight: 700, marginBottom: 8 }}>На охоте за уловом</h1>
       <div style={{
         display: 'flex',
-        gap: 7,
-        marginBottom: 18,
+        gap: 5,
+        marginBottom: 13,
+        width: '100%',
         justifyContent: 'center',
-        flexWrap: 'wrap'
+        flexWrap: 'nowrap'
       }}>
         {categories.map(cat => (
           <button
             key={cat.key}
             onClick={() => setSelected(cat.key)}
             style={{
-              padding: '6px 13px',
-              fontSize: 13,
+              background: selected === cat.key ? "#23232a" : "none",
+              color: selected === cat.key ? "#20d978" : "#bababa",
+              border: `1.3px solid ${selected === cat.key ? "#20d978" : "#23232a"}`,
+              borderRadius: 7,
+              padding: '4px 10px',
               fontWeight: 700,
-              background: selected === cat.key ? '#34e0a1' : '#1e1e22',
-              color: selected === cat.key ? '#181818' : '#fff',
-              border: 'none',
-              borderRadius: 8,
-              cursor: 'pointer',
-              boxShadow: selected === cat.key ? '0 2px 7px #2af1a155' : 'none',
-              letterSpacing: '-0.2px'
+              fontSize: 12.2,
+              minWidth: 70,
+              cursor: "pointer",
+              transition: "border .12s, color .16s, background .18s"
             }}
           >
             {cat.label}

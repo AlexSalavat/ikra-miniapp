@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import producers from '../data/producers';
 
-const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск'];
+// Теперь 4 региона:
+const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
 const CARDS_PER_PAGE = 10;
 const CARDS_PER_ROW = 2;
-const CARD_SIZE = 154;
-const CARD_GAP = 13;
+const CARD_GAP = 15;
 
 const TopProducers = () => {
   const [filter, setFilter] = useState(REGIONS[0]);
@@ -38,29 +38,37 @@ const TopProducers = () => {
           cursor: 'pointer'
         }}
       >← Назад</button>
-      {/* Фильтр */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 15 }}>
+      {/* Новый стиль фильтра — 4 региона */}
+      <div style={{
+        display: 'flex',
+        gap: 5,
+        marginBottom: 13,
+        width: '100%',
+        justifyContent: 'center',
+        flexWrap: 'nowrap'
+      }}>
         {REGIONS.map(region => (
           <button
             key={region}
             onClick={() => setFilter(region)}
             style={{
-              background: 'none',
-              color: filter === region ? '#37e08a' : '#fff',
-              border: `2px solid ${filter === region ? '#37e08a' : '#333'}`,
-              borderRadius: 8,
+              background: filter === region ? "#23232a" : "none",
+              color: filter === region ? "#20d978" : "#bababa",
+              border: `1.3px solid ${filter === region ? "#20d978" : "#23232a"}`,
+              borderRadius: 7,
+              padding: '4px 10px',
               fontWeight: 700,
-              fontSize: 14,
-              padding: '5px 17px',
-              cursor: 'pointer',
-              transition: 'border .15s'
+              fontSize: 12.2,
+              minWidth: 70,
+              cursor: "pointer",
+              transition: "border .12s, color .16s, background .18s"
             }}
           >{region}</button>
         ))}
       </div>
       <div style={{
         display: 'grid',
-        gridTemplateColumns: `repeat(${CARDS_PER_ROW}, ${CARD_SIZE}px)`,
+        gridTemplateColumns: `repeat(${CARDS_PER_ROW}, 1fr)`,
         gap: CARD_GAP,
         justifyContent: 'center',
         marginBottom: 12
@@ -69,17 +77,17 @@ const TopProducers = () => {
           <div
             key={card.id}
             style={{
-              width: CARD_SIZE,
-              height: CARD_SIZE,
+              background: '#16181e',
               borderRadius: 19,
               overflow: 'hidden',
-              background: '#16181e',
-              boxShadow: '0 2px 12px 0 #0007',
-              cursor: card.isPlaceholder ? 'default' : 'pointer',
-              position: 'relative',
+              minHeight: 135,
               display: 'flex',
               alignItems: 'flex-end',
-              aspectRatio: '1 / 1'
+              position: 'relative',
+              boxShadow: '0 3px 16px 0 #0005',
+              cursor: card.isPlaceholder ? 'default' : 'pointer',
+              aspectRatio: '1.28/1',
+              justifyContent: 'center'
             }}
           >
             {card.logo ? (

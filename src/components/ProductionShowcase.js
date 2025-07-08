@@ -3,8 +3,6 @@ import production from '../data/production';
 
 const CARDS_PER_PAGE = 10;
 const CARDS_PER_ROW = 2;
-const CARD_SIZE = 154;
-const CARD_GAP = 13;
 
 const ProductionShowcase = () => {
   const [page, setPage] = useState(0);
@@ -19,13 +17,6 @@ const ProductionShowcase = () => {
     <div style={{
       background: '#000', minHeight: '100vh', padding: 12
     }}>
-      <div style={{
-        color: '#fff',
-        fontWeight: 700,
-        fontSize: 21,
-        margin: '12px 0 10px 6px',
-        letterSpacing: '0.03em'
-      }}>Производство</div>
       <button
         onClick={() => window.history.back()}
         style={{
@@ -41,28 +32,35 @@ const ProductionShowcase = () => {
         }}
       >← Назад</button>
       <div style={{
+        color: '#fff',
+        fontWeight: 700,
+        fontSize: 21,
+        margin: '8px 0 16px 8px'
+      }}>
+        Производство
+      </div>
+      <div style={{
         display: 'grid',
-        gridTemplateColumns: `repeat(${CARDS_PER_ROW}, ${CARD_SIZE}px)`,
-        gap: CARD_GAP,
-        justifyContent: 'center',
-        marginBottom: 12
+        gridTemplateColumns: `repeat(${CARDS_PER_ROW}, 1fr)`,
+        gap: 15,
+        marginBottom: 18
       }}>
         {current.map(card => (
           <div key={card.id}
             style={{
-              width: CARD_SIZE,
-              height: CARD_SIZE,
+              background: '#16181e',
               borderRadius: 19,
               overflow: 'hidden',
-              background: '#16181e',
-              boxShadow: '0 2px 12px 0 #0007',
-              cursor: 'pointer',
-              position: 'relative',
+              minHeight: 135,
               display: 'flex',
               alignItems: 'flex-end',
-              aspectRatio: '1 / 1',
+              position: 'relative',
+              boxShadow: '0 3px 16px 0 #0005',
+              cursor: 'pointer',
+              aspectRatio: '1.28/1',
               justifyContent: 'center'
             }}>
+            {/* Лого-заглушка */}
             <div style={{
               position: 'absolute',
               top: 0, left: 0, width: '100%', height: '100%',
@@ -85,6 +83,7 @@ const ProductionShowcase = () => {
                 Лого<br />в разработке
               </span>
             </div>
+            {/* Градиент с названием */}
             <div style={{
               width: '100%',
               position: 'absolute',

@@ -13,10 +13,13 @@ import MarketBuy from './components/MarketBuy';
 import BottomNav from './components/BottomNav';
 import NeirobizScreen from './components/NeirobizScreen';
 import News from './components/News';
-import LogisticsShowcase from './components/LogisticsShowcase';
-import ProductionShowcase from './components/ProductionShowcase';
+
+// Новое:
 import NewsCoast from './components/NewsCoast';
 import CaviarWarBoard from './components/CaviarWarBoard';
+import TopProducers from './components/TopProducers';
+import LogisticsShowcase from './components/LogisticsShowcase';
+import ProductionShowcase from './components/ProductionShowcase';
 
 function App() {
   return (
@@ -34,10 +37,13 @@ function App() {
           <Route path="/profile" element={<div style={{ padding: '20px', color: '#fff' }}>Профиль</div>} />
           <Route path="/neirobiz" element={<NeirobizScreen />} />
           <Route path="/news" element={<News />} />
+          {/* Новое */}
           <Route path="/news/coast" element={<NewsCoast />} />
+          <Route path="/news/ikra-wars" element={<CaviarWarBoard />} />
+          <Route path="/news/top-producers" element={<TopProducers />} />
+          {/* Важно! Восстанавливаем маршруты */}
           <Route path="/logistics" element={<LogisticsShowcase />} />
           <Route path="/production" element={<ProductionShowcase />} />
-          <Route path="/caviar-war" element={<CaviarWarBoard />} /> {/* Биржа икорных цен */}
         </Routes>
       </div>
       <BottomNav />

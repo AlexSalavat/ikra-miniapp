@@ -3,6 +3,8 @@ import production from '../data/production';
 
 const CARDS_PER_PAGE = 10;
 const CARDS_PER_ROW = 2;
+const CARD_SIZE = 154;
+const CARD_GAP = 13;
 
 const ProductionShowcase = () => {
   const [page, setPage] = useState(0);
@@ -15,30 +17,52 @@ const ProductionShowcase = () => {
 
   return (
     <div style={{
-      padding: 16, background: '#000', minHeight: '100vh'
+      background: '#000', minHeight: '100vh', padding: 12
     }}>
       <div style={{
+        color: '#fff',
+        fontWeight: 700,
+        fontSize: 21,
+        margin: '12px 0 10px 6px',
+        letterSpacing: '0.03em'
+      }}>Производство</div>
+      <button
+        onClick={() => window.history.back()}
+        style={{
+          marginBottom: 12,
+          padding: '6px 13px',
+          borderRadius: 10,
+          background: '#23232a',
+          color: '#fff',
+          border: 'none',
+          fontWeight: 500,
+          fontSize: 13,
+          cursor: 'pointer'
+        }}
+      >← Назад</button>
+      <div style={{
         display: 'grid',
-        gridTemplateColumns: `repeat(${CARDS_PER_ROW}, 1fr)`,
-        gap: 15,
-        marginBottom: 18
+        gridTemplateColumns: `repeat(${CARDS_PER_ROW}, ${CARD_SIZE}px)`,
+        gap: CARD_GAP,
+        justifyContent: 'center',
+        marginBottom: 12
       }}>
         {current.map(card => (
           <div key={card.id}
             style={{
-              background: '#16181e',
+              width: CARD_SIZE,
+              height: CARD_SIZE,
               borderRadius: 19,
               overflow: 'hidden',
-              minHeight: 135,
+              background: '#16181e',
+              boxShadow: '0 2px 12px 0 #0007',
+              cursor: 'pointer',
+              position: 'relative',
               display: 'flex',
               alignItems: 'flex-end',
-              position: 'relative',
-              boxShadow: '0 3px 16px 0 #0005',
-              cursor: 'pointer',
-              aspectRatio: '1.28/1',
+              aspectRatio: '1 / 1',
               justifyContent: 'center'
             }}>
-            {/* Лого-заглушка */}
             <div style={{
               position: 'absolute',
               top: 0, left: 0, width: '100%', height: '100%',
@@ -61,7 +85,6 @@ const ProductionShowcase = () => {
                 Лого<br />в разработке
               </span>
             </div>
-            {/* Градиент с названием */}
             <div style={{
               width: '100%',
               position: 'absolute',
@@ -91,14 +114,13 @@ const ProductionShowcase = () => {
           </div>
         ))}
       </div>
-      {/* Пагинация */}
       {pages.length > 1 && (
         <div style={{
           display: 'flex',
           justifyContent: 'center',
-          gap: 17,
+          gap: 12,
           alignItems: 'center',
-          marginTop: 15
+          marginTop: 6
         }}>
           <button
             disabled={page === 0}
@@ -107,11 +129,11 @@ const ProductionShowcase = () => {
               background: 'none',
               color: page === 0 ? '#666' : '#fff',
               border: 'none',
-              fontSize: 30,
+              fontSize: 23,
               cursor: page === 0 ? 'default' : 'pointer'
             }}
           >&#8592;</button>
-          <span style={{ color: '#ccc', fontSize: 16 }}>
+          <span style={{ color: '#ccc', fontSize: 14 }}>
             {page + 1} / {pages.length}
           </span>
           <button
@@ -121,7 +143,7 @@ const ProductionShowcase = () => {
               background: 'none',
               color: page === pages.length - 1 ? '#666' : '#fff',
               border: 'none',
-              fontSize: 30,
+              fontSize: 23,
               cursor: page === pages.length - 1 ? 'default' : 'pointer'
             }}
           >&#8594;</button>

@@ -18,9 +18,23 @@ const LogisticsShowcase = () => {
     <div style={{
       padding: 16, background: '#000', minHeight: '100vh'
     }}>
+      <button
+        onClick={() => window.history.back()}
+        style={{
+          marginBottom: 12,
+          padding: '6px 13px',
+          borderRadius: 10,
+          background: '#23232a',
+          color: '#fff',
+          border: 'none',
+          fontWeight: 500,
+          fontSize: 13,
+          cursor: 'pointer'
+        }}
+      >← Назад</button>
       <h2 style={{
         color: '#fff', fontWeight: 600,
-        fontSize: 21, margin: '12px 0 18px 6px'
+        fontSize: 21, margin: '0 0 18px 6px'
       }}>
         Логистика ДВ
       </h2>

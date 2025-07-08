@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import producers from '../data/producers';
 
 const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск'];
 const CARDS_PER_PAGE = 10;
 const CARDS_PER_ROW = 2;
-
-const CARD_SIZE = 155; // ширина и высота как у логистики/производства
-const CARD_GAP = 12;   // зазор между карточками
+const CARD_SIZE = 154;
+const CARD_GAP = 13;
 
 const TopProducers = () => {
   const [filter, setFilter] = useState(REGIONS[0]);
   const [page, setPage] = useState(0);
-  const navigate = useNavigate();
 
   const filtered = producers.filter(p => p.region === filter);
   const pages = [];
@@ -41,40 +38,36 @@ const TopProducers = () => {
           cursor: 'pointer'
         }}
       >← Назад</button>
-
       {/* Фильтр */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 17 }}>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 15 }}>
         {REGIONS.map(region => (
           <button
             key={region}
             onClick={() => setFilter(region)}
             style={{
-              background: filter === region ? '#37e08a' : '#16181e',
-              color: filter === region ? '#18181d' : '#fff',
-              border: 'none',
+              background: 'none',
+              color: filter === region ? '#37e08a' : '#fff',
+              border: `2px solid ${filter === region ? '#37e08a' : '#333'}`,
               borderRadius: 8,
               fontWeight: 700,
-              fontSize: 15,
-              padding: '7px 19px',
+              fontSize: 14,
+              padding: '5px 17px',
               cursor: 'pointer',
-              transition: 'background .18s'
+              transition: 'border .15s'
             }}
           >{region}</button>
         ))}
       </div>
-
-      {/* Сетка карточек */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: `repeat(${CARDS_PER_ROW}, ${CARD_SIZE}px)`,
         gap: CARD_GAP,
         justifyContent: 'center',
-        marginBottom: 14
+        marginBottom: 12
       }}>
         {current.map(card => (
           <div
             key={card.id}
-            onClick={() => !card.isPlaceholder && navigate(`/top-producers/${card.id}`)}
             style={{
               width: CARD_SIZE,
               height: CARD_SIZE,
@@ -86,11 +79,9 @@ const TopProducers = () => {
               position: 'relative',
               display: 'flex',
               alignItems: 'flex-end',
-              transition: 'box-shadow .13s',
-              aspectRatio: '1 / 1',
+              aspectRatio: '1 / 1'
             }}
           >
-            {/* Картинка или плейсхолдер */}
             {card.logo ? (
               <img
                 src={card.logo}
@@ -124,7 +115,7 @@ const TopProducers = () => {
                 <span style={{
                   color: '#bdbdbd',
                   fontWeight: 600,
-                  fontSize: card.isPlaceholder ? 15 : 15,
+                  fontSize: 15,
                   textAlign: 'center',
                   opacity: 0.87,
                   lineHeight: 1.15,
@@ -134,8 +125,6 @@ const TopProducers = () => {
                 </span>
               </div>
             )}
-
-            {/* Плашка с названием */}
             <div style={{
               position: 'absolute',
               left: 0,
@@ -166,8 +155,6 @@ const TopProducers = () => {
           </div>
         ))}
       </div>
-
-      {/* Пагинация */}
       {pages.length > 1 && (
         <div style={{
           display: 'flex',

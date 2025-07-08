@@ -1,41 +1,35 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const newsSections = [
   {
     title: 'Новости побережья',
     description: 'Свежие события, вылов, прогнозы, изменения на рынке',
     image: '/images/new.webp',
+    link: '/news/coast'
   },
   {
     title: 'Икорные войны',
-    description: 'Биржа цен, динамика, аналитика рынка',
+    description: 'Аналитика, сравнения, закулисье',
     image: '/images/war.webp',
+    link: '/news/ikra-wars'
   },
   {
     title: 'ТОП-10 производителей',
     description: 'Рейтинги, динамика и доверие рынка',
     image: '/images/pk.webp',
+    link: '/news/top-producers'
   },
   {
     title: 'Фото и видео',
     description: 'Stories c рейсов, портов, заводов',
     image: '/images/photo.webp',
+    link: '#' // пока не реализовано
   },
 ];
 
 const CARD_SIZE = 185;
 
 const News = () => {
-  const navigate = useNavigate();
-
-  const handleCardClick = (idx) => {
-    if (idx === 0) navigate("/news/coast");
-    if (idx === 1) navigate("/caviar-war"); // икорные войны
-    if (idx === 2) navigate("/production"); // топ производители
-    // idx 3 — пока не реализован
-  };
-
   return (
     <div style={{
       background: '#000',
@@ -64,9 +58,9 @@ const News = () => {
         justifyContent: 'center',
       }}>
         {newsSections.map((item, idx) => (
-          <div
+          <a
+            href={item.link}
             key={idx}
-            onClick={() => handleCardClick(idx)}
             style={{
               borderRadius: 17,
               background: '#1d1c21',
@@ -77,9 +71,7 @@ const News = () => {
               flexDirection: 'column',
               boxShadow: '0 2px 10px #16141a44',
               textDecoration: 'none',
-              position: 'relative',
-              cursor: 'pointer',
-              opacity: 1
+              position: 'relative'
             }}
           >
             <img
@@ -139,7 +131,7 @@ const News = () => {
                 {item.description}
               </span>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </div>

@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import ImageGallery from './ImageGallery';
 
 const offers = [
   {
     id: 1,
     category: 'икра',
     img: '/images/more-i-sol-1.webp',
-    gallery: ['/images/more-i-sol-1.webp'],
+    gallery: [
+      '/images/more-i-sol-1.webp',
+      // Можешь добавить ещё webp-картинки:
+      // '/images/more-i-sol-2.webp',
+      // '/images/more-i-sol-3.webp',
+    ],
     title: 'Красная икра (горбуша) — 100 кг',
     company: 'ООО "Море и Соль"',
     manufacturer: 'Корякморепродукт',
@@ -31,7 +37,6 @@ const MarketSellCategory = () => {
   const { category } = useParams();
   const navigate = useNavigate();
   const [modalOffer, setModalOffer] = useState(null);
-  const [photoIdx, setPhotoIdx] = useState(0);
 
   const filtered = offers.filter(o => o.category === category);
 
@@ -78,7 +83,7 @@ const MarketSellCategory = () => {
             border: '1.1px solid #222'
           }}
         >
-          {/* Фото */}
+          {/* Фото (мини-превью) */}
           <div
             style={{
               flexShrink: 0,
@@ -93,7 +98,7 @@ const MarketSellCategory = () => {
             }}
           >
             <img
-              src={offer.img}
+              src={offer.gallery?.[0] || offer.img}
               alt={offer.title}
               style={{
                 width: '100%',
@@ -145,7 +150,7 @@ const MarketSellCategory = () => {
                 Позвонить
               </a>
               <button
-                onClick={() => { setModalOffer(offer); setPhotoIdx(0); }}
+                onClick={() => setModalOffer(offer)}
                 style={{
                   background: '#2678f3',
                   color: '#fff',
@@ -208,18 +213,10 @@ const MarketSellCategory = () => {
                 cursor: 'pointer'
               }}
             >×</button>
-            <img
-              src={modalOffer.img}
-              alt={modalOffer.title}
-              style={{
-                width: '100%',
-                height: 110,
-                objectFit: 'cover',
-                borderRadius: 9,
-                marginBottom: 10,
-                background: '#23232a'
-              }}
-            />
+
+            {/* Галерея фото */}
+            <ImageGallery images={modalOffer.gallery} />
+
             <div style={{ fontWeight: 700, fontSize: 13.5, marginBottom: 5 }}>{modalOffer.title}</div>
             <div style={{ color: '#37e08a', fontWeight: 700, marginBottom: 3, fontSize: 13 }}>Цена: {modalOffer.price}</div>
             <div style={{ color: '#aaa', fontSize: 11.7, marginBottom: 2 }}>Компания: {modalOffer.company}</div>

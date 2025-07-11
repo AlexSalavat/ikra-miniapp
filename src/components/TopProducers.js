@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import producers from '../data/producers';
 
-// Теперь 4 региона:
 const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
 const CARDS_PER_PAGE = 10;
 const CARDS_PER_ROW = 2;
@@ -11,191 +10,116 @@ const TopProducers = () => {
   const [filter, setFilter] = useState(REGIONS[0]);
   const [page, setPage] = useState(0);
 
-  const filtered = producers.filter(p => p.region === filter);
-  const pages = [];
-  for (let i = 0; i < filtered.length; i += CARDS_PER_PAGE) {
-    pages.push(filtered.slice(i, i + CARDS_PER_PAGE));
-  }
-  const current = pages[page] || [];
+  const filteredPages = useMemo(() => {
+    const filtered = producers.filter(p => p.region === filter);
+    return Array.from({ length: Math.ceil(filtered.length / CARDS_PER_PAGE) }, (_, i) =>
+      filtered.slice(i * CARDS_PER_PAGE, (i + 1) * CARDS_PER_PAGE)
+    );
+  }, [filter]);
 
-  React.useEffect(() => { setPage(0); }, [filter]);
+  const currentCards = filteredPages[page] || [];
+
+  useEffect(() => {
+    setPage(0);
+  }, [filter]);
+
+  const buttonStyle = (active) => ({
+    background: active ? '#23232a' : 'none',
+    color: active ? '#20d978' : '#bababa',
+    border: `1.3px solid ${active ? '#20d978' : '#23232a'}`,
+    borderRadius: 7,
+    padding: '4px 10px',
+    fontWeight: 700,
+    fontSize: 12.2,
+    minWidth: 70,
+    cursor: 'pointer',
+    transition: 'border .12s, color .16s, background .18s'
+  });
 
   return (
-    <div style={{
-      background: '#000', minHeight: '100vh', padding: 12
-    }}>
+    <div className="bg-black min-h-screen p-3">
       <button
         onClick={() => window.history.back()}
-        style={{
-          marginBottom: 12,
-          padding: '6px 13px',
-          borderRadius: 10,
-          background: '#23232a',
-          color: '#fff',
-          border: 'none',
-          fontWeight: 500,
-          fontSize: 13,
-          cursor: 'pointer'
-        }}
+        className="mb-3 py-1.5 px-3.5 rounded-lg bg-[#23232a] text-white font-medium text-sm cursor-pointer"
       >← Назад</button>
-      {/* Новый стиль фильтра — 4 региона */}
-      <div style={{
-        display: 'flex',
-        gap: 5,
-        marginBottom: 13,
-        width: '100%',
-        justifyContent: 'center',
-        flexWrap: 'nowrap'
-      }}>
+
+      <div className="flex gap-1 justify-center mb-3 overflow-auto">
         {REGIONS.map(region => (
           <button
             key={region}
             onClick={() => setFilter(region)}
-            style={{
-              background: filter === region ? "#23232a" : "none",
-              color: filter === region ? "#20d978" : "#bababa",
-              border: `1.3px solid ${filter === region ? "#20d978" : "#23232a"}`,
-              borderRadius: 7,
-              padding: '4px 10px',
-              fontWeight: 700,
-              fontSize: 12.2,
-              minWidth: 70,
-              cursor: "pointer",
-              transition: "border .12s, color .16s, background .18s"
-            }}
-          >{region}</button>
+            style={buttonStyle(filter === region)}
+          >
+            {region}
+          </button>
         ))}
       </div>
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: `repeat(${CARDS_PER_ROW}, 1fr)`,
-        gap: CARD_GAP,
-        justifyContent: 'center',
-        marginBottom: 12
-      }}>
-        {current.map(card => (
+
+      <div
+        className="grid"
+        style={{
+          gridTemplateColumns: `repeat(${CARDS_PER_ROW}, 1fr)`,
+          gap: CARD_GAP,
+          marginBottom: 12
+        }}
+      >
+        {currentCards.map(card => (
           <div
             key={card.id}
-            style={{
-              background: '#16181e',
-              borderRadius: 19,
-              overflow: 'hidden',
-              minHeight: 135,
-              display: 'flex',
-              alignItems: 'flex-end',
-              position: 'relative',
-              boxShadow: '0 3px 16px 0 #0005',
-              cursor: card.isPlaceholder ? 'default' : 'pointer',
-              aspectRatio: '1.28/1',
-              justifyContent: 'center'
-            }}
+            className="relative bg-[#16181e] rounded-[19px] overflow-hidden flex items-end justify-center cursor-pointer shadow-lg aspect-[1.28/1]"
           >
             {card.logo ? (
               <img
                 src={card.logo}
                 alt={card.name}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  position: 'absolute',
-                  left: 0,
-                  top: 0,
-                  zIndex: 1
-                }}
-                onError={e => { e.target.src = '/images/no-logo.webp'; }}
+                className="absolute inset-0 w-full h-full object-cover z-10"
+                onError={(e) => (e.target.src = '/images/no-logo.webp')}
               />
             ) : (
-              <div style={{
-                width: '100%',
-                height: '100%',
-                background: card.isPlaceholder
-                  ? 'linear-gradient(135deg,#262632 60%,#23232a 100%)'
-                  : 'linear-gradient(135deg,#363646 60%,#23232a 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'absolute',
-                left: 0,
-                top: 0,
-                zIndex: 1
-              }}>
-                <span style={{
-                  color: '#bdbdbd',
-                  fontWeight: 600,
-                  fontSize: 15,
-                  textAlign: 'center',
-                  opacity: 0.87,
-                  lineHeight: 1.15,
-                  whiteSpace: 'pre-line'
-                }}>
+              <div
+                className={`absolute inset-0 flex items-center justify-center z-10 ${
+                  card.isPlaceholder
+                    ? 'bg-gradient-to-br from-[#262632] to-[#23232a]'
+                    : 'bg-gradient-to-br from-[#363646] to-[#23232a]'
+                }`}
+              >
+                <span className="text-[#bdbdbd] font-semibold text-[15px] text-center opacity-90 whitespace-pre-line leading-snug">
                   {card.isPlaceholder ? 'Место\nсвободно' : 'Лого\nв разработке'}
                 </span>
               </div>
             )}
-            <div style={{
-              position: 'absolute',
-              left: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: 2,
-              background: 'linear-gradient(0deg,rgba(18,18,23,0.96) 92%,rgba(25,25,29,0.08) 100%)',
-              minHeight: 36,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '0 9px 5px 9px'
-            }}>
-              <span style={{
-                color: '#fff',
-                fontWeight: 700,
-                fontSize: 13.5,
-                letterSpacing: '-0.18px',
-                width: '100%',
-                textShadow: '0 1px 4px #000a',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap'
-              }}>
+            <div className="absolute bottom-0 inset-x-0 z-20 bg-gradient-to-t from-[#121217f5] via-transparent flex items-center justify-center px-2 pb-1">
+              <span className="text-white font-bold text-sm truncate w-full text-center drop-shadow-md">
                 {card.name}
               </span>
             </div>
           </div>
         ))}
       </div>
-      {pages.length > 1 && (
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: 12,
-          alignItems: 'center',
-          marginTop: 6
-        }}>
+
+      {filteredPages.length > 1 && (
+        <div className="flex justify-center gap-3 items-center mt-1.5">
           <button
             disabled={page === 0}
-            onClick={() => setPage(p => p - 1)}
-            style={{
-              background: 'none',
-              color: page === 0 ? '#666' : '#fff',
-              border: 'none',
-              fontSize: 23,
-              cursor: page === 0 ? 'default' : 'pointer'
-            }}
-          >&#8592;</button>
-          <span style={{ color: '#ccc', fontSize: 14 }}>
-            {page + 1} / {pages.length}
+            onClick={() => setPage((p) => p - 1)}
+            className={`text-2xl bg-transparent border-none ${
+              page === 0 ? 'text-[#666]' : 'text-white cursor-pointer'
+            }`}
+          >
+            ←
+          </button>
+          <span className="text-[#ccc] text-sm">
+            {page + 1} / {filteredPages.length}
           </span>
           <button
-            disabled={page === pages.length - 1}
-            onClick={() => setPage(p => p + 1)}
-            style={{
-              background: 'none',
-              color: page === pages.length - 1 ? '#666' : '#fff',
-              border: 'none',
-              fontSize: 23,
-              cursor: page === pages.length - 1 ? 'default' : 'pointer'
-            }}
-          >&#8594;</button>
+            disabled={page === filteredPages.length - 1}
+            onClick={() => setPage((p) => p + 1)}
+            className={`text-2xl bg-transparent border-none ${
+              page === filteredPages.length - 1 ? 'text-[#666]' : 'text-white cursor-pointer'
+            }`}
+          >
+            →
+          </button>
         </div>
       )}
     </div>

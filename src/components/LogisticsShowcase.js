@@ -1,5 +1,3 @@
-// src/components/LogisticsShowcase.js
-
 import React, { useState } from 'react';
 import logistics from '../data/logistics';
 
@@ -54,6 +52,55 @@ const nameTextStyle = {
   whiteSpace: 'nowrap'
 };
 
+function PhotoSlider({ images = [] }) {
+  const [idx, setIdx] = useState(0);
+  if (!images.length) return null;
+  const prev = () => setIdx(i => (i === 0 ? images.length - 1 : i - 1));
+  const next = () => setIdx(i => (i === images.length - 1 ? 0 : i + 1));
+  return (
+    <div style={{
+      position: 'relative',
+      width: '100%',
+      aspectRatio: '1/1',
+      background: '#16181e',
+      marginBottom: 15,
+      overflow: 'hidden',
+      borderRadius: 0
+    }}>
+      <img
+        src={images[idx]}
+        alt={`Фото ${idx + 1}`}
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          borderRadius: 0,
+          display: 'block'
+        }}
+      />
+      {images.length > 1 && (
+        <>
+          <button onClick={prev} style={{
+            position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)',
+            background: 'rgba(25,25,30,0.7)', color: '#fff', border: 'none',
+            fontSize: 23, borderRadius: 50, width: 32, height: 32, cursor: 'pointer', opacity: 0.7
+          }}>&#8592;</button>
+          <button onClick={next} style={{
+            position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)',
+            background: 'rgba(25,25,30,0.7)', color: '#fff', border: 'none',
+            fontSize: 23, borderRadius: 50, width: 32, height: 32, cursor: 'pointer', opacity: 0.7
+          }}>&#8594;</button>
+          <div style={{
+            position: 'absolute', bottom: 10, left: 0, right: 0, textAlign: 'center', fontSize: 13, color: '#ccc'
+          }}>
+            {idx + 1} / {images.length}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 const LogisticsShowcase = () => {
   const [page, setPage] = useState(0);
   const [modal, setModal] = useState(null);
@@ -98,7 +145,6 @@ const LogisticsShowcase = () => {
             onClick={() => setModal(card)}
             style={cardStyle}
           >
-            {/* Фото/логотип — строго на весь квадрат */}
             <div style={logoBoxStyle}>
               {card.logo ? (
                 <img
@@ -130,7 +176,6 @@ const LogisticsShowcase = () => {
                 </span>
               )}
             </div>
-            {/* Название снизу */}
             <div style={nameBoxStyle}>
               <span style={nameTextStyle}>
                 {card.name}
@@ -139,7 +184,6 @@ const LogisticsShowcase = () => {
           </div>
         ))}
       </div>
-      {/* Пагинация */}
       {pages.length > 1 && (
         <div style={{
           display: 'flex',
@@ -175,7 +219,6 @@ const LogisticsShowcase = () => {
           >&#8594;</button>
         </div>
       )}
-      {/* Модалка профиля */}
       {modal && (
         <div style={{
           position: 'fixed',
@@ -192,12 +235,13 @@ const LogisticsShowcase = () => {
             style={{
               background: '#23232a',
               borderRadius: 16,
-              padding: '32px 18px 23px 18px',
+              padding: '23px 0 18px 0',
               boxShadow: '0 8px 32px #000a',
-              maxWidth: 340,
-              width: '92vw',
+              maxWidth: 350,
+              width: '93vw',
               color: '#fff',
-              position: 'relative'
+              position: 'relative',
+              overflow: 'hidden'
             }}
             onClick={e => e.stopPropagation()}
           >
@@ -211,45 +255,51 @@ const LogisticsShowcase = () => {
               }}
               aria-label="Закрыть"
             >×</button>
-            {modal.logo && (
-              <img
-                src={modal.logo}
-                alt={modal.name}
-                style={{
-                  width: '90%',
-                  height: 110,
-                  objectFit: 'cover',
-                  borderRadius: 10,
-                  margin: '0 auto 12px auto',
-                  display: 'block'
-                }}
-              />
-            )}
-            <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 10 }}>{modal.name}</div>
-            <div style={{ fontSize: 14, marginBottom: 7, color: '#e3e3e6' }}>{modal.description}</div>
-            <div style={{ fontSize: 13, marginBottom: 7 }}>{modal.address}</div>
-            {modal.contacts && (
-              <div style={{ fontSize: 13.5, color: '#37e0b0', marginBottom: 3 }}>
-                {modal.contacts.phone}<br />
-                {modal.contacts.phone2 && <>{modal.contacts.phone2}<br /></>}
-                {modal.contacts.dispatcher && <>Диспетчерская: {modal.contacts.dispatcher}<br /></>}
-                {modal.contacts.email && <>Email: {modal.contacts.email}<br /></>}
-                {modal.contacts.telegram && <>Telegram: {modal.contacts.telegram}</>}
+            {/* Фото-слайдер или просто фото/лого */}
+            {modal.gallery && modal.gallery.length > 0 ? (
+              <PhotoSlider images={modal.gallery} />
+            ) : modal.logo ? (
+              <div style={{
+                width: '100%',
+                aspectRatio: '1 / 1',
+                background: '#16181e',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 13
+              }}>
+                <img
+                  src={modal.logo}
+                  alt={modal.name}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    borderRadius: 0,
+                    display: 'block'
+                  }}
+                />
               </div>
-            )}
-            {modal.mapLink && (
-              <a href={modal.mapLink} target="_blank" rel="noopener noreferrer" style={{
-                color: '#27a0e0', textDecoration: 'underline', fontSize: 13, marginBottom: 8, display: 'inline-block'
-              }}>Открыть на карте</a>
-            )}
-            {/* Галерея */}
-            {modal.gallery && modal.gallery.length > 0 && (
-              <div style={{ display: 'flex', gap: 5, marginTop: 10 }}>
-                {modal.gallery.map((src, i) => (
-                  <img key={i} src={src} alt={`Фото ${i + 1}`} style={{ height: 54, borderRadius: 6 }} />
-                ))}
-              </div>
-            )}
+            ) : null}
+            <div style={{ padding: '0 20px' }}>
+              <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 10 }}>{modal.name}</div>
+              <div style={{ fontSize: 14, marginBottom: 7, color: '#e3e3e6' }}>{modal.description}</div>
+              <div style={{ fontSize: 13, marginBottom: 7 }}>{modal.address}</div>
+              {modal.contacts && (
+                <div style={{ fontSize: 13.5, color: '#37e0b0', marginBottom: 3 }}>
+                  {modal.contacts.phone}<br />
+                  {modal.contacts.phone2 && <>{modal.contacts.phone2}<br /></>}
+                  {modal.contacts.dispatcher && <>Диспетчерская: {modal.contacts.dispatcher}<br /></>}
+                  {modal.contacts.email && <>Email: {modal.contacts.email}<br /></>}
+                  {modal.contacts.telegram && <>Telegram: {modal.contacts.telegram}</>}
+                </div>
+              )}
+              {modal.mapLink && (
+                <a href={modal.mapLink} target="_blank" rel="noopener noreferrer" style={{
+                  color: '#27a0e0', textDecoration: 'underline', fontSize: 13, marginBottom: 8, display: 'inline-block'
+                }}>Открыть на карте</a>
+              )}
+            </div>
           </div>
         </div>
       )}

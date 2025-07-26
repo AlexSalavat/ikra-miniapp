@@ -1,14 +1,17 @@
+// /src/components/TopProducers.js
 import React, { useState, useEffect, useMemo } from 'react';
 import producers from '../data/producers';
+import CompanyProfileModal from './CompanyProfileModal';
 
 const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
 const CARDS_PER_PAGE = 10;
 const CARDS_PER_ROW = 2;
 const CARD_GAP = 15;
 
-const TopProducers = () => {
+export default function TopProducers() {
   const [filter, setFilter] = useState(REGIONS[0]);
   const [page, setPage] = useState(0);
+  const [selectedCard, setSelectedCard] = useState(null);
 
   const filteredPages = useMemo(() => {
     const filtered = producers.filter(p => p.region === filter);
@@ -42,7 +45,6 @@ const TopProducers = () => {
         onClick={() => window.history.back()}
         className="mb-3 py-1.5 px-3.5 rounded-lg bg-[#23232a] text-white font-medium text-sm cursor-pointer"
       >← Назад</button>
-
       <div className="flex gap-1 justify-center mb-3 overflow-auto">
         {REGIONS.map(region => (
           <button
@@ -54,7 +56,6 @@ const TopProducers = () => {
           </button>
         ))}
       </div>
-
       <div
         className="grid"
         style={{
@@ -67,13 +68,14 @@ const TopProducers = () => {
           <div
             key={card.id}
             className="relative bg-[#16181e] rounded-[19px] overflow-hidden flex items-end justify-center cursor-pointer shadow-lg aspect-[1.28/1]"
+            onClick={() => !card.isPlaceholder && setSelectedCard(card)}
           >
             {card.logo ? (
               <img
                 src={card.logo}
                 alt={card.name}
                 className="absolute inset-0 w-full h-full object-cover z-10"
-                onError={(e) => (e.target.src = '/images/no-logo.webp')}
+                onError={e => { e.target.src = '/images/no-logo.webp'; }}
               />
             ) : (
               <div
@@ -96,34 +98,30 @@ const TopProducers = () => {
           </div>
         ))}
       </div>
-
       {filteredPages.length > 1 && (
         <div className="flex justify-center gap-3 items-center mt-1.5">
           <button
             disabled={page === 0}
             onClick={() => setPage((p) => p - 1)}
-            className={`text-2xl bg-transparent border-none ${
-              page === 0 ? 'text-[#666]' : 'text-white cursor-pointer'
-            }`}
-          >
-            ←
-          </button>
+            className={`text-2xl bg-transparent border-none ${page === 0 ? 'text-[#666]' : 'text-white cursor-pointer'}`}
+          >←</button>
           <span className="text-[#ccc] text-sm">
             {page + 1} / {filteredPages.length}
           </span>
           <button
             disabled={page === filteredPages.length - 1}
             onClick={() => setPage((p) => p + 1)}
-            className={`text-2xl bg-transparent border-none ${
-              page === filteredPages.length - 1 ? 'text-[#666]' : 'text-white cursor-pointer'
-            }`}
-          >
-            →
-          </button>
+            className={`text-2xl bg-transparent border-none ${page === filteredPages.length - 1 ? 'text-[#666]' : 'text-white cursor-pointer'}`}
+          >→</button>
         </div>
+      )}
+      {/* Модальное окно профиля */}
+      {selectedCard && (
+        <CompanyProfileModal
+          company={selectedCard}
+          onClose={() => setSelectedCard(null)}
+        />
       )}
     </div>
   );
-};
-
-export default TopProducers;
+}

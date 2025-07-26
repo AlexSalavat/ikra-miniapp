@@ -1,52 +1,59 @@
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+// src/components/BottomNav.js
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const navItems = [
-  { label: 'Витрина', path: '/catalog', emoji: '🧊' },
-  { label: 'Новости', path: '/news', emoji: '📡' },
-  { label: 'Маркет', path: '/market', emoji: '🎯' },
-  { label: 'Профиль', path: '/profile', emoji: '👤' },
+  {
+    to: "/",
+    label: "Главная",
+    icon: (
+      <svg width="28" height="28" fill="none"><path d="M4 14L14 5L24 14V23A1 1 0 0123 24H5A1 1 0 014 23V14Z" stroke="#FFD700" strokeWidth="2" /></svg>
+    ),
+  },
+  {
+    to: "/catalog",
+    label: "Витрина",
+    icon: (
+      <svg width="28" height="28" fill="none"><rect x="4" y="6" width="20" height="16" rx="3" stroke="#FFD700" strokeWidth="2" /><rect x="8" y="10" width="4" height="8" rx="1" fill="#FFD700" /></svg>
+    ),
+  },
+  {
+    to: "/news",
+    label: "Новости",
+    icon: (
+      <svg width="28" height="28" fill="none"><rect x="4" y="6" width="20" height="16" rx="3" stroke="#FFD700" strokeWidth="2" /><path d="M8 10H20" stroke="#FFD700" strokeWidth="2" /><path d="M8 14H20" stroke="#FFD700" strokeWidth="2" /></svg>
+    ),
+  },
+  {
+    to: "/profile",
+    label: "Профиль",
+    icon: (
+      <svg width="28" height="28" fill="none"><circle cx="14" cy="14" r="13" stroke="#FFD700" strokeWidth="2" /><circle cx="14" cy="11" r="4" fill="#FFD700" /><ellipse cx="14" cy="21" rx="6" ry="3" fill="#FFD700" opacity="0.7" /></svg>
+    ),
+  },
 ];
 
-const BottomNav = () => {
+function BottomNav() {
   const location = useLocation();
-  const navigate = useNavigate();
 
   return (
-    <div style={{
-  position: 'fixed',
-  bottom: '10px', // приподняли на 10px
-  left: '50%',
-  transform: 'translateX(-50%)',
-  width: '90%',
-  height: '60px',
-  background: '#fff',
-  display: 'flex',
-  justifyContent: 'space-around',
-  alignItems: 'center',
-  borderRadius: '16px',
-  border: '1px solid #ddd',
-  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-  zIndex: 999
-}}>
-
-      {navItems.map(item => (
-        <div
-          key={item.path}
-          onClick={() => navigate(item.path)}
-          style={{
-            textAlign: 'center',
-            fontSize: '0.75rem',
-            color: location.pathname.startsWith(item.path) ? '#000' : '#888',
-            cursor: 'pointer'
-          }}
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-neutral-900 border-t border-yellow-800 flex justify-around items-center h-16 shadow-xl">
+      {navItems.map((item) => (
+        <Link
+          key={item.to}
+          to={item.to}
+          className={`flex flex-col items-center px-2 pt-1 ${
+            location.pathname === item.to
+              ? "text-yellow-400 font-bold"
+              : "text-yellow-300 opacity-80"
+          }`}
         >
-          <div style={{ fontSize: '1.2rem' }}>{item.emoji}</div>
-          {item.label}
-        </div>
+          {item.icon}
+          <span className="text-xs mt-1">{item.label}</span>
+        </Link>
       ))}
-    </div>
+    </nav>
   );
-};
+}
 
 export default BottomNav;

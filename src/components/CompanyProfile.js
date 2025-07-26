@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import partners from '../data/partners';
 import PartnersList from './PartnersList';
 
 const CERT_COLORS = {
@@ -155,7 +154,9 @@ const CompanyProfile = ({ company }) => {
       )}
 
       {/* Партнеры */}
-      <PartnersList partners={partners} showAll={showAllPartners} onToggleAll={() => setShowAllPartners(!showAllPartners)} />
+      {company.partners && company.partners.length > 0 && (
+        <PartnersList partners={company.partners} showAll={showAllPartners} onToggleAll={() => setShowAllPartners(!showAllPartners)} />
+      )}
 
       {/* Адрес и кнопки */}
       <div className="mb-2 text-base text-zinc-300 mt-5">

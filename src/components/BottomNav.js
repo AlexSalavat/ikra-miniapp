@@ -1,4 +1,3 @@
-// src/components/BottomNav.js
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -25,7 +24,7 @@ const navItems = [
     ),
   },
   {
-    to: "/market/sell/ikra", // по умолчанию в икорный маркет
+    to: "/market",
     label: "Маркет",
     icon: (
       <svg width="28" height="28" fill="none">

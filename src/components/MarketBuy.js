@@ -1,110 +1,41 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// src/components/MarketBuy.js
+import React, { useState } from "react";
 
-const categories = [
-  { key: 'икра', label: 'Икра' },
-  { key: 'краб', label: 'Краб' },
-  { key: 'рыба', label: 'Рыба' },
-  { key: 'морепродукты', label: 'Морепродукты' }
-];
-
-const offers = [
+const exampleBuy = [
   {
-    id: 1,
-    category: 'икра',
-    title: 'Ищу икру',
-    description: 'Закупаем красную икру, регулярные объёмы.',
-    contact: '@ikra_buyer',
+    id: 101,
+    title: "Куплю свежую икру лососевых",
+    quantity: "100-300 кг",
+    desc: "Ищу надёжного поставщика, Самовывоз Владивосток.",
+    contact: "@buyer_fish"
   },
   {
-    id: 2,
-    category: 'краб',
-    title: 'Требуется краб',
-    description: 'Интересуют предложения по крабу.',
-    contact: '@krab_zakup',
+    id: 102,
+    title: "Ищу оптом краба, живого/варёного",
+    quantity: "до 1 тонны",
+    desc: "Постоянный контракт, рассмотрю предложения.",
+    contact: "+7 999 888-77-66"
   },
-  // Добавь другие объявления по категориям!
 ];
 
-const MarketBuy = () => {
-  const [selected, setSelected] = useState('икра');
-  const navigate = useNavigate();
-  const filtered = offers.filter(o => o.category === selected);
+function MarketBuy() {
+  const [items] = useState(exampleBuy);
 
   return (
-    <div style={{ padding: 16, background: '#000', minHeight: '100vh' }}>
-      <button
-        onClick={() => navigate('/market')}
-        style={{
-          marginBottom: 14,
-          padding: '6px 13px',
-          borderRadius: 10,
-          background: '#23232a',
-          color: '#fff',
-          border: 'none',
-          fontWeight: 600,
-          fontSize: 13,
-          cursor: 'pointer'
-        }}
-      >
-        ← К Маркету
-      </button>
-      <h1 style={{ color: '#fff', fontSize: 20, fontWeight: 700, marginBottom: 8 }}>На охоте за уловом</h1>
-      <div style={{
-        display: 'flex',
-        gap: 5,
-        marginBottom: 13,
-        width: '100%',
-        justifyContent: 'center',
-        flexWrap: 'nowrap'
-      }}>
-        {categories.map(cat => (
-          <button
-            key={cat.key}
-            onClick={() => setSelected(cat.key)}
-            style={{
-              background: selected === cat.key ? "#23232a" : "none",
-              color: selected === cat.key ? "#20d978" : "#bababa",
-              border: `1.3px solid ${selected === cat.key ? "#20d978" : "#23232a"}`,
-              borderRadius: 7,
-              padding: '4px 10px',
-              fontWeight: 700,
-              fontSize: 12.2,
-              minWidth: 70,
-              cursor: "pointer",
-              transition: "border .12s, color .16s, background .18s"
-            }}
-          >
-            {cat.label}
-          </button>
-        ))}
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        {filtered.length === 0 && (
-          <div style={{ color: '#888', textAlign: 'center', marginTop: 32 }}>Нет объявлений по выбранной категории.</div>
-        )}
-        {filtered.map(offer => (
-          <div key={offer.id} style={{
-            background: '#191920',
-            borderRadius: 12,
-            padding: '12px 14px',
-            boxShadow: '0 1px 7px #0002'
-          }}>
-            <div style={{ fontWeight: 700, color: '#fff', fontSize: 15, marginBottom: 3 }}>
-              {offer.title}
-            </div>
-            <div style={{ color: '#bbb', fontSize: 13, marginBottom: 2 }}>
-              {offer.description}
-            </div>
-            <div style={{ color: '#37a0e0', fontSize: 13 }}>
-              Контакт: {offer.contact}
-            </div>
+    <div className="max-w-2xl mx-auto p-3">
+      <h2 className="text-xl font-bold text-blue-400 mb-4">На охоте за уловом — ищу товар</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {items.map((item) => (
+          <div key={item.id} className="bg-neutral-900 rounded-2xl p-4 border border-blue-700 shadow hover:bg-blue-950 transition">
+            <h3 className="font-bold text-blue-200 mb-1">{item.title}</h3>
+            <div className="text-blue-400 font-semibold mb-1">{item.quantity}</div>
+            <p className="text-gray-300 text-sm mb-2">{item.desc}</p>
+            <div className="text-sm text-blue-300">Контакты: {item.contact}</div>
           </div>
         ))}
       </div>
     </div>
   );
-};
+}
 
 export default MarketBuy;

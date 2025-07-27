@@ -12,7 +12,7 @@ function Catalog() {
   const start = (page - 1) * ITEMS_PER_PAGE;
   const currentSuppliers = suppliers.slice(start, start + ITEMS_PER_PAGE);
 
-  // Генерируем пустышки ("Место свободно")
+  // Пустышки
   const cards = [
     ...currentSuppliers,
     ...Array.from(
@@ -35,15 +35,17 @@ function Catalog() {
           <div
             key={supplier.id || idx}
             className={`${styles.card} ${supplier.empty ? styles.empty : ""}`}
+            title={supplier.name}
           >
-            <div className={styles.logoWrap}>
+            <div className={styles.imgBox}>
               <img
                 src={supplier.logo || "/images/no-image.webp"}
                 alt={supplier.name}
                 className={styles.logo}
               />
+              <div className={styles.gradient} />
+              <span className={styles.name}>{supplier.name}</span>
             </div>
-            <div className={styles.name}>{supplier.name}</div>
           </div>
         ))}
       </div>

@@ -3,8 +3,6 @@ import logistics from "../data/logistics";
 import { useNavigate } from "react-router-dom";
 
 const FILTERS = ["Камчатка", "Владивосток", "Сахалин", "Хабаровск"];
-const CARD_SIZE = 150;
-const GAP = 1;
 
 function getRegionShort(address = "") {
   if (address.toLowerCase().includes("камчат")) return "Камчатка";
@@ -19,7 +17,7 @@ export default function LogisticsShowcase() {
   const navigate = useNavigate();
   const filtered = logistics.filter(item => getRegionShort(item.address) === region);
 
-  // Формируем сетку: до 10 карточек, заполняем "место свободно"
+  // до 10 карточек, добиваем пустыми для ровной сетки
   const cards = [
     ...filtered.map(s => ({ ...s, isPlaceholder: false })),
     ...Array(10 - filtered.length).fill(0).map((_, i) => ({
@@ -56,11 +54,10 @@ export default function LogisticsShowcase() {
       {/* Компактный фильтр */}
       <div style={{
         display: "flex",
-        gap: 5,
-        marginBottom: 13,
+        gap: 4,
+        marginBottom: 11,
         width: "100%",
-        justifyContent: "center",
-        flexWrap: "nowrap"
+        justifyContent: "center"
       }}>
         {FILTERS.map(f => (
           <button
@@ -69,17 +66,16 @@ export default function LogisticsShowcase() {
               background: region === f ? "#23232a" : "none",
               color: region === f ? "#20d978" : "#bababa",
               border: `1.2px solid ${region === f ? "#20d978" : "#23232a"}`,
-              borderRadius: 8,
-              padding: "2.5px 8px",
+              borderRadius: 7,
+              padding: "2.3px 7px",
               fontWeight: 700,
-              fontSize: 12,
-              minWidth: 50,
-              maxWidth: 70,
+              fontSize: 12.2,
+              minWidth: 46,
+              maxWidth: 65,
               cursor: "pointer",
               whiteSpace: "nowrap",
               overflow: "hidden",
-              textOverflow: "ellipsis",
-              transition: "border .13s, color .13s, background .13s"
+              textOverflow: "ellipsis"
             }}
             onClick={() => setRegion(f)}
           >{f}</button>
@@ -88,11 +84,10 @@ export default function LogisticsShowcase() {
 
       <div style={{
         width: "100%",
-        maxWidth: 350,
+        maxWidth: 360, // максимально широко на мобиле, чтобы квадраты!
         display: "grid",
-        gridTemplateColumns: `repeat(2, 1fr)`,
-        gap: `${GAP}px`,
-        padding: "0 0px"
+        gridTemplateColumns: "1fr 1fr",
+        gap: 0 // без зазоров!
       }}>
         {cards.map((card, idx) => (
           <div key={card.id}
@@ -101,19 +96,25 @@ export default function LogisticsShowcase() {
               flexDirection: "column",
               alignItems: "center",
               userSelect: "none",
-            }}
-          >
-            <div style={{
-              width: CARD_SIZE,
-              height: CARD_SIZE,
+              width: "100%",
+              aspectRatio: "1 / 1", // квадраты!
               background: card.isPlaceholder ? "#23232b" : "#191a1d",
               borderRadius: 19,
               overflow: "hidden",
-              border: "1px solid #23232b",
+              border: "1.5px solid #19191c",
+              justifyContent: "flex-end",
+              margin: 0,
+              position: "relative"
+            }}
+          >
+            <div style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              marginBottom: 2
+              justifyContent: "center"
             }}>
               {card.isPlaceholder ? (
                 <span style={{
@@ -140,12 +141,18 @@ export default function LogisticsShowcase() {
               )}
             </div>
             <div style={{
+              width: "100%",
+              background: "rgba(0,0,0,0.65)",
               textAlign: "center",
               fontWeight: 600,
               color: "#fff",
               fontSize: 13,
-              minHeight: 17,
-              maxWidth: CARD_SIZE + 10,
+              position: "absolute",
+              left: 0,
+              bottom: 0,
+              padding: "4px 0 2px 0",
+              borderBottomLeftRadius: 19,
+              borderBottomRightRadius: 19,
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap"

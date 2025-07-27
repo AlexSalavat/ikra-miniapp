@@ -3,9 +3,7 @@ import logistics from "../data/logistics";
 import { useNavigate } from "react-router-dom";
 
 const FILTERS = ["Камчатка", "Владивосток", "Сахалин", "Хабаровск"];
-
-// Карточки как в Производстве: чуть меньше  (примерно 142px x 142px)
-const CARD_SIZE = 142; // выстави как тебе нравится
+const CARD_SIZE = 146; // сделай размер как в производстве
 
 function getRegionShort(address = "") {
   if (address.toLowerCase().includes("камчат")) return "Камчатка";
@@ -20,7 +18,7 @@ export default function LogisticsShowcase() {
   const navigate = useNavigate();
   const filtered = logistics.filter(item => getRegionShort(item.address) === region);
 
-  // до 10 карточек (2x5)
+  // Делаем 2 ряда по 5 карточек (10 всего, с заглушками если не хватает)
   const cards = [
     ...filtered.map(s => ({ ...s, isPlaceholder: false })),
     ...Array(10 - filtered.length).fill(0).map((_, i) => ({
@@ -31,6 +29,7 @@ export default function LogisticsShowcase() {
 
   return (
     <div className="bg-black min-h-screen pb-20 pt-2 flex flex-col items-center">
+      {/* Назад */}
       <button
         onClick={() => navigate(-1)}
         style={{
@@ -54,7 +53,7 @@ export default function LogisticsShowcase() {
         Назад
       </button>
 
-      {/* Фильтр — компактный */}
+      {/* Фильтр */}
       <div style={{
         display: "flex",
         gap: 4,
@@ -88,7 +87,7 @@ export default function LogisticsShowcase() {
       {/* Сетка карточек */}
       <div style={{
         width: "100%",
-        maxWidth: 2 * CARD_SIZE + 12, // два в ряд + зазор минимальный
+        maxWidth: 2 * CARD_SIZE + 16, // два в ряд + чуть-чуть отступов по краям
         display: "grid",
         gridTemplateColumns: `repeat(2, ${CARD_SIZE}px)`,
         gap: 7,
@@ -98,27 +97,21 @@ export default function LogisticsShowcase() {
           <div
             key={card.id}
             style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              margin: 0,
+            }}
+          >
+            {/* Карточка — только картинка */}
+            <div style={{
               width: CARD_SIZE,
               height: CARD_SIZE,
               background: card.isPlaceholder ? "#23232b" : "#191a1d",
               borderRadius: 17,
               overflow: "hidden",
-              border: "1.3px solid #18191c",
-              margin: 0,
-              position: "relative",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              boxShadow: "0 2px 10px #16141a22"
-            }}
-          >
-            {/* Фото/лого или заглушка */}
-            <div style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
+              border: "1.2px solid #18191c",
+              marginBottom: 5, // минимальный отступ до текста
               display: "flex",
               alignItems: "center",
               justifyContent: "center"
@@ -147,21 +140,14 @@ export default function LogisticsShowcase() {
                 />
               )}
             </div>
-            {/* Название компании */}
+            {/* Текст — только под карточкой */}
             {!card.isPlaceholder && (
               <div style={{
                 width: "100%",
-                background: "rgba(0,0,0,0.67)",
                 textAlign: "center",
                 fontWeight: 600,
                 color: "#fff",
-                fontSize: 13,
-                position: "absolute",
-                left: 0,
-                bottom: 0,
-                padding: "4.5px 0 2.5px 0",
-                borderBottomLeftRadius: 17,
-                borderBottomRightRadius: 17,
+                fontSize: 13.2,
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
                 overflow: "hidden"

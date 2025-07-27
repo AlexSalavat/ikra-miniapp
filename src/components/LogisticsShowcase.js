@@ -1,35 +1,17 @@
-import React, { useState } from "react";
-import logistics from "../data/logistics";
+import React from "react";
+import data from "../data/production"; // или logistics
 import { useNavigate } from "react-router-dom";
 
-const FILTERS = ["Камчатка", "Владивосток", "Сахалин", "Хабаровск"];
-const CARD_SIZE = 146; // сделай размер как в производстве
+const CARDS_PER_ROW = 2;
+const GAP = 4; // минимальный зазор
+const CARD_SIZE = `calc((100vw - 32px - ${GAP}px) / 2)`; // адаптивно!
 
-function getRegionShort(address = "") {
-  if (address.toLowerCase().includes("камчат")) return "Камчатка";
-  if (address.toLowerCase().includes("сахалин")) return "Сахалин";
-  if (address.toLowerCase().includes("владивосток")) return "Владивосток";
-  if (address.toLowerCase().includes("хабаровск")) return "Хабаровск";
-  return "";
-}
-
-export default function LogisticsShowcase() {
-  const [region, setRegion] = useState(FILTERS[0]);
+export default function ProductionShowcase() {
   const navigate = useNavigate();
-  const filtered = logistics.filter(item => getRegionShort(item.address) === region);
-
-  // Делаем 2 ряда по 5 карточек (10 всего, с заглушками если не хватает)
-  const cards = [
-    ...filtered.map(s => ({ ...s, isPlaceholder: false })),
-    ...Array(10 - filtered.length).fill(0).map((_, i) => ({
-      isPlaceholder: true,
-      id: "empty-" + (i + 1)
-    }))
-  ].slice(0, 10);
+  // тут можно data.slice(0, 10) если нужно ровно 10 штук, иначе отрисуй все
 
   return (
     <div className="bg-black min-h-screen pb-20 pt-2 flex flex-col items-center">
-      {/* Назад */}
       <button
         onClick={() => navigate(-1)}
         style={{
@@ -53,108 +35,85 @@ export default function LogisticsShowcase() {
         Назад
       </button>
 
-      {/* Фильтр */}
-      <div style={{
-        display: "flex",
-        gap: 4,
-        marginBottom: 11,
-        width: "100%",
-        justifyContent: "center"
-      }}>
-        {FILTERS.map(f => (
-          <button
-            key={f}
-            style={{
-              background: region === f ? "#23232a" : "none",
-              color: region === f ? "#20d978" : "#bababa",
-              border: `1.2px solid ${region === f ? "#20d978" : "#23232a"}`,
-              borderRadius: 7,
-              padding: "2.2px 8px",
-              fontWeight: 700,
-              fontSize: 12,
-              minWidth: 46,
-              maxWidth: 78,
-              cursor: "pointer",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis"
-            }}
-            onClick={() => setRegion(f)}
-          >{f}</button>
-        ))}
-      </div>
-
-      {/* Сетка карточек */}
       <div style={{
         width: "100%",
-        maxWidth: 2 * CARD_SIZE + 16, // два в ряд + чуть-чуть отступов по краям
+        maxWidth: 2 * 172 + GAP + 18, // по ширине экрана с запасом
         display: "grid",
-        gridTemplateColumns: `repeat(2, ${CARD_SIZE}px)`,
-        gap: 7,
-        justifyContent: "center"
+        gridTemplateColumns: `repeat(${CARDS_PER_ROW}, minmax(0, 1fr))`,
+        gap: GAP,
+        justifyContent: "center",
+        padding: "0 12px"
       }}>
-        {cards.map((card, idx) => (
-          <div
-            key={card.id}
+        {data.map((item, idx) => (
+          <div key={item.id || idx}
             style={{
+              background: "#23232b",
+              borderRadius: 18,
+              width: "100%",
+              aspectRatio: "1 / 1",
+              minHeight: 0,
+              minWidth: 0,
+              overflow: "hidden",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              margin: 0,
-            }}
-          >
-            {/* Карточка — только картинка */}
+              justifyContent: "flex-end",
+              position: "relative"
+            }}>
+            {/* Фото/лого */}
             <div style={{
-              width: CARD_SIZE,
-              height: CARD_SIZE,
-              background: card.isPlaceholder ? "#23232b" : "#191a1d",
-              borderRadius: 17,
-              overflow: "hidden",
-              border: "1.2px solid #18191c",
-              marginBottom: 5, // минимальный отступ до текста
+              width: "100%",
+              height: "70%",
               display: "flex",
               alignItems: "center",
               justifyContent: "center"
             }}>
-              {card.isPlaceholder ? (
-                <span style={{
-                  color: "#aaa",
-                  fontSize: 15,
-                  fontWeight: 600,
-                  textAlign: "center",
-                  lineHeight: "18px",
-                  whiteSpace: "pre-line"
-                }}>Место{"\n"}свободно</span>
-              ) : (
-                <img
-                  src={card.logo || "/images/no-logo.webp"}
-                  alt={card.name}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    background: "#191a1d",
-                    display: "block"
-                  }}
-                  onError={e => { e.target.src = "/images/no-logo.webp"; }}
-                />
-              )}
+              {item.logo
+                ? <img
+                    src={item.logo}
+                    alt={item.name}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      background: "#191a1d"
+                    }}
+                    onError={e => { e.target.src = "/images/no-logo.webp"; }}
+                  />
+                : <span style={{
+                    color: "#bababa",
+                    fontSize: 16,
+                    fontWeight: 600,
+                    textAlign: "center",
+                    width: "100%"
+                  }}>{item.placeholder || "Лого в разработке"}</span>
+              }
             </div>
-            {/* Текст — только под карточкой */}
-            {!card.isPlaceholder && (
+            {/* Название под карточкой */}
+            <div style={{
+              width: "100%",
+              minHeight: 38,
+              background: "none",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              marginTop: 0,
+              paddingBottom: 4
+            }}>
               <div style={{
-                width: "100%",
-                textAlign: "center",
-                fontWeight: 600,
                 color: "#fff",
-                fontSize: 13.2,
+                fontWeight: 700,
+                fontSize: 15.3,
+                textAlign: "center",
+                width: "100%",
+                overflow: "hidden",
                 textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                overflow: "hidden"
+                whiteSpace: "nowrap"
               }}>
-                {card.name}
+                {item.name}
               </div>
-            )}
+            </div>
           </div>
         ))}
       </div>

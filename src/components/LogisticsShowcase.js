@@ -1,23 +1,30 @@
 import React, { useState } from "react";
 import logistics from "../data/logistics";
 
-const CITIES = ["Камчатка", "Владивосток", "Сахалин", "Хабаровск"];
+const FILTERS = [
+  { label: "Камчатка", keys: ["Камчатка", "Камчатский"] },
+  { label: "Владивосток", keys: ["Владивосток"] },
+  { label: "Сахалин", keys: ["Сахалин"] },
+  { label: "Хабаровск", keys: ["Хабаровск"] },
+];
 const CARDS_PER_ROW = 2;
-const GAP = 6; // очень маленький зазор
+const GAP = 6;
 const CARD_SIZE = `calc((100vw - 28px - ${GAP}px) / 2)`;
 
-function filterByCity(item, city) {
-  if (!city) return true;
-  // поиск по подстроке (мягко)
-  return (item.address && item.address.toLowerCase().includes(city.toLowerCase()))
-    || (item.name && item.name.toLowerCase().includes(city.toLowerCase()));
+function isMatchByKeys(item, keys) {
+  if (!keys || keys.length === 0) return true;
+  const addr = (item.address || "") + " " + (item.name || "");
+  return keys.some(key => addr.toLowerCase().includes(key.toLowerCase()));
 }
 
 export default function LogisticsShowcase() {
-  const [city, setCity] = useState(CITIES[0]);
-  // Фильтруем по выбранному городу
-  const filtered = logistics.filter(item => filterByCity(item, city));
-  // Заполняем свободные места до 10 карточек
+  const [filter, setFilter] = useState(FILTERS[0].label);
+
+  // Найти ключи для фильтра
+  const activeKeys = FILTERS.find(f => f.label === filter)?.keys || [];
+
+  // Отфильтровать по городу/региону
+  const filtered = logistics.filter(item => isMatchByKeys(item, activeKeys));
   const cards = filtered.concat(Array(Math.max(0, 10 - filtered.length)).fill({ isEmpty: true }));
 
   return (
@@ -45,35 +52,38 @@ export default function LogisticsShowcase() {
         </svg>
         Назад
       </button>
-      {/* Фильтр города */}
+      {/* Фильтр — всегда в одну строку, прокручиваем если не влезает */}
       <div style={{
         display: "flex",
         gap: 6,
         marginBottom: 9,
-        justifyContent: "center",
-        width: "100%",
-        paddingLeft: 6,
+        width: "100vw",
+        maxWidth: "100vw",
+        overflowX: "auto",
+        whiteSpace: "nowrap",
+        paddingLeft: 10,
         paddingRight: 6,
-        flexWrap: "wrap"
+        scrollbarWidth: "none",
+        msOverflowStyle: "none"
       }}>
-        {CITIES.map(c => (
+        {FILTERS.map(f => (
           <button
-            key={c}
-            onClick={() => setCity(c)}
+            key={f.label}
+            onClick={() => setFilter(f.label)}
             style={{
-              background: city === c ? "#0a1918" : "none",
-              color: city === c ? "#23df81" : "#d3d3d7",
-              border: `1.3px solid ${city === c ? "#22b978" : "#20222b"}`,
+              background: filter === f.label ? "#0a1918" : "none",
+              color: filter === f.label ? "#23df81" : "#d3d3d7",
+              border: `1.3px solid ${filter === f.label ? "#22b978" : "#20222b"}`,
               borderRadius: 9,
               fontWeight: 600,
               fontSize: 13.4,
-              minWidth: 77,
-              padding: "4.5px 11px",
+              minWidth: 87,
+              padding: "4.5px 13px",
               cursor: "pointer",
               outline: "none"
             }}
           >
-            {c}
+            {f.label}
           </button>
         ))}
       </div>

@@ -1,18 +1,23 @@
+// src/components/LogisticsShowcase.js
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import logistics from "../data/logistics";
 
 const CARDS_COUNT = 10;
-const CARD_SIZE = 138;  // Подгони под свой экран, увеличь если надо
+const CARD_SIZE = 120;
 
 export default function LogisticsShowcase() {
   const navigate = useNavigate();
 
   const cards = [
-    ...logistics.map(l => ({ ...l, isPlaceholder: false })),
+    ...logistics.map(c => ({ ...c, isPlaceholder: false })),
     ...Array(CARDS_COUNT - logistics.length).fill(0).map((_, i) => ({
       isPlaceholder: true,
-      id: "empty-" + (i + 1)
+      id: "empty-" + (i + 1),
+      name: "Место свободно",
+      region: "",
+      logo: ""
     }))
   ].slice(0, CARDS_COUNT);
 
@@ -42,27 +47,31 @@ export default function LogisticsShowcase() {
       </button>
       <div style={{
         width: "100%",
-        maxWidth: 440,
+        maxWidth: 430,
         display: "grid",
         gridTemplateColumns: "repeat(2, 1fr)",
-        gap: 4,
+        gap: "0px",
+        rowGap: "0px",
         padding: "0 4px"
       }}>
         {cards.map((card, idx) => (
-          <div key={card.id} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <div key={card.id} style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            marginBottom: 0,
+            marginTop: 0
+          }}>
             <div
               style={{
-                background: card.isPlaceholder ? "#25252b" : "#16181e",
+                background: card.isPlaceholder ? "#25252b" : "#16181c",
                 borderRadius: 17,
-                boxShadow: "0 2px 10px #18171c15",
+                boxShadow: "0 2px 10px #19171c16",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                cursor: card.isPlaceholder ? "default" : "pointer",
                 height: CARD_SIZE,
                 width: CARD_SIZE,
-                marginBottom: 2,
-                marginTop: 2,
                 border: card.isPlaceholder ? "none" : "1.2px solid #23242d",
                 overflow: "hidden",
                 padding: 0
@@ -71,25 +80,29 @@ export default function LogisticsShowcase() {
               {card.isPlaceholder ? (
                 <span style={{
                   color: "#aaa",
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: 600,
                   textAlign: "center",
                   lineHeight: "17px",
                   whiteSpace: "pre-line"
                 }}>Место{"\n"}свободно</span>
               ) : (
-                <img
-                  src={card.logo || "/images/no-logo.webp"}
-                  alt={card.name}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "contain",
-                    background: "transparent",
-                    display: "block"
-                  }}
-                  onError={e => { e.target.src = "/images/no-logo.webp"; }}
-                />
+                card.logo ? (
+                  <img
+                    src={card.logo}
+                    alt={card.name}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "contain", // objectFit: "cover" если фото квадратное
+                      background: "transparent",
+                      display: "block"
+                    }}
+                    onError={e => { e.target.src = "/images/no-logo.webp"; }}
+                  />
+                ) : (
+                  <span style={{ color: "#2690fc", fontSize: 21 }}>?</span>
+                )
               )}
             </div>
             {/* Текст под карточкой */}
@@ -99,20 +112,20 @@ export default function LogisticsShowcase() {
                   textAlign: "center",
                   fontWeight: 600,
                   color: "#fff",
-                  fontSize: 13.2,
+                  fontSize: 13.3,
                   letterSpacing: 0.01,
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
-                  maxWidth: CARD_SIZE + 10,
+                  maxWidth: CARD_SIZE + 8,
                   marginBottom: 1,
-                  marginTop: -1
+                  marginTop: 2
                 }}>
                   {card.name}
                 </div>
                 <div style={{
-                  color: "#13ffc4",
-                  fontSize: 10.3,
+                  color: "#18f8a9",
+                  fontSize: 10.2,
                   fontWeight: 500,
                   marginBottom: 1,
                   textAlign: "center"

@@ -1,9 +1,11 @@
+// src/components/Catalog.js
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import suppliers from "../data/suppliers";
 
 const CARDS_COUNT = 18;
-const CARD_SIZE = 114; // твой текущий размер
+const CARD_SIZE = 110;
 
 export default function Catalog() {
   const navigate = useNavigate();
@@ -46,11 +48,18 @@ export default function Catalog() {
         maxWidth: 430,
         display: "grid",
         gridTemplateColumns: "repeat(3, 1fr)",
-        gap: 3,
+        gap: "0px",
+        rowGap: "0px",
         padding: "0 4px"
       }}>
         {cards.map((card, idx) => (
-          <div key={card.id} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <div key={card.id} style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            marginBottom: 0,
+            marginTop: 0
+          }}>
             <div
               onClick={() => !card.isPlaceholder && navigate(`/supplier/${card.id}`)}
               onMouseDown={() => setActiveIdx(idx)}
@@ -62,7 +71,7 @@ export default function Catalog() {
                 background: card.isPlaceholder
                   ? "#25252b"
                   : (activeIdx === idx
-                    ? "linear-gradient(100deg, #25f7d0 15%, #297fff 85%)"
+                    ? "radial-gradient(circle at 50% 60%, #2196f3 60%, #2678f350 100%, #16181c 100%)"
                     : "#15181c"),
                 borderRadius: 17,
                 boxShadow: "0 2px 10px #19171c16",
@@ -72,11 +81,9 @@ export default function Catalog() {
                 cursor: card.isPlaceholder ? "default" : "pointer",
                 height: CARD_SIZE,
                 width: CARD_SIZE,
-                marginBottom: 2,
-                marginTop: 2,
                 border: card.isPlaceholder ? "none" : "1.2px solid #23242d",
                 overflow: "hidden",
-                transition: "box-shadow .17s, background .18s",
+                transition: "box-shadow .17s, background .15s",
                 padding: 0
               }}
             >
@@ -94,8 +101,8 @@ export default function Catalog() {
                   src={card.logo || "/images/no-logo.webp"}
                   alt={card.name}
                   style={{
-                    width: "100%",
-                    height: "100%",
+                    width: "90%",
+                    height: "90%",
                     objectFit: "contain",
                     background: "transparent",
                     display: "block"
@@ -111,20 +118,20 @@ export default function Catalog() {
                   textAlign: "center",
                   fontWeight: 600,
                   color: "#fff",
-                  fontSize: 13.7,
+                  fontSize: 13.3,
                   letterSpacing: 0.01,
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   maxWidth: CARD_SIZE + 8,
                   marginBottom: 1,
-                  marginTop: -1
+                  marginTop: 2
                 }}>
                   {card.name}
                 </div>
                 <div style={{
                   color: "#13ffc4",
-                  fontSize: 10.3,
+                  fontSize: 10.2,
                   fontWeight: 500,
                   marginBottom: 1,
                   textAlign: "center"

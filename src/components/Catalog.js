@@ -12,7 +12,7 @@ function Catalog() {
   const start = (page - 1) * ITEMS_PER_PAGE;
   const currentSuppliers = suppliers.slice(start, start + ITEMS_PER_PAGE);
 
-  // Пустышки
+  // Генерируем пустышки ("Место свободно")
   const cards = [
     ...currentSuppliers,
     ...Array.from(

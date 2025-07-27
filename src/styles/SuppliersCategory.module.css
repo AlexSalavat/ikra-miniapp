@@ -78,11 +78,11 @@
   position: absolute;
   left: 0; right: 0; bottom: 0;
   z-index: 2;
-  font-size: 0.97rem;
-  font-weight: 600;
-  color: #fff;
+  font-size: 0.79rem;      /* Маленький размер текста */
+  font-weight: 500;        /* Мягкий, не жирный */
+  color: #e9ecf3cc;        /* Тонкий, чуть прозрачный */
   text-align: center;
-  padding: 7px 6px 7px 6px;
+  padding: 6px 4px 6px 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -90,7 +90,7 @@
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
   background: transparent;
-  box-shadow: 0 1px 6px #13192566;
+  box-shadow: 0 1px 4px #13192540;
   user-select: none;
 }
 .empty {

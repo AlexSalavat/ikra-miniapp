@@ -29,19 +29,19 @@ export default function Market() {
           color: "#fff",
           fontWeight: 600,
           fontSize: 21,
-          margin: "0 0 16px 0",
+          margin: "0 0 14px 0",
           letterSpacing: 0.13,
           textAlign: "center",
         }}>
           Объявления
         </h1>
-        <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 22 }}>
+        <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 17 }}>
           {CARDS.map((card, idx) => (
             <a
               key={card.key}
               href={card.link}
               style={{
-                borderRadius: 23,
+                borderRadius: 19,
                 background: "#18181e",
                 overflow: "hidden",
                 width: "100%",
@@ -53,7 +53,7 @@ export default function Market() {
             >
               <div style={{
                 width: "100%",
-                aspectRatio: "1.18/1",
+                aspectRatio: "1.8/1",
                 background: "#23232a",
                 position: "relative"
               }}>
@@ -70,23 +70,23 @@ export default function Market() {
                 />
               </div>
               <div style={{
-                background: "#18181d",
-                padding: "14px 8px 13px 8px",
+                background: "#19191d",
+                padding: "10px 7px 11px 7px",
                 textAlign: "center",
-                minHeight: 58,
+                minHeight: 46,
               }}>
                 <div style={{
                   fontWeight: 700,
                   color: "#fff",
-                  fontSize: 16.8,
+                  fontSize: 15.5,
                   marginBottom: 2,
-                  letterSpacing: 0.03,
+                  letterSpacing: 0.01,
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis"
                 }}>{card.title}</div>
                 <div style={{
-                  fontSize: 12.5,
+                  fontSize: 11.2,
                   color: "#b5b5b5",
                   whiteSpace: "nowrap",
                   overflow: "hidden",

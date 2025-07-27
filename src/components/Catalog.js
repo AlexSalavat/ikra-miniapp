@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import suppliers from "../data/suppliers";
 
 const CARDS_COUNT = 18;
-const CARD_SIZE = 110;
+const CARD_SIZE = 116; // Можешь чуть увеличить/уменьшить
+const HIGHLIGHT_COLOR = "#2196f3";
 
 export default function Catalog() {
   const navigate = useNavigate();
@@ -58,57 +59,75 @@ export default function Catalog() {
             flexDirection: "column",
             alignItems: "center",
             marginBottom: 0,
-            marginTop: 0
+            marginTop: 0,
+            userSelect: "none"
           }}>
-            <div
-              onClick={() => !card.isPlaceholder && navigate(`/supplier/${card.id}`)}
-              onMouseDown={() => setActiveIdx(idx)}
-              onMouseUp={() => setActiveIdx(null)}
-              onMouseLeave={() => setActiveIdx(null)}
-              onTouchStart={() => setActiveIdx(idx)}
-              onTouchEnd={() => setActiveIdx(null)}
-              style={{
-                background: card.isPlaceholder
-                  ? "#25252b"
-                  : (activeIdx === idx
-                    ? "radial-gradient(circle at 50% 60%, #2196f3 60%, #2678f350 100%, #16181c 100%)"
-                    : "#15181c"),
-                borderRadius: 17,
-                boxShadow: "0 2px 10px #19171c16",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: card.isPlaceholder ? "default" : "pointer",
-                height: CARD_SIZE,
-                width: CARD_SIZE,
-                border: card.isPlaceholder ? "none" : "1.2px solid #23242d",
-                overflow: "hidden",
-                transition: "box-shadow .17s, background .15s",
-                padding: 0
-              }}
-            >
-              {card.isPlaceholder ? (
-                <span style={{
-                  color: "#aaa",
-                  fontSize: 15,
-                  fontWeight: 600,
-                  textAlign: "center",
-                  lineHeight: "17px",
-                  whiteSpace: "pre-line"
-                }}>Место{"\n"}свободно</span>
-              ) : (
-                <img
-                  src={card.logo || "/images/no-logo.webp"}
-                  alt={card.name}
-                  style={{
-                    width: "90%",
-                    height: "90%",
-                    objectFit: "contain",
-                    background: "transparent",
-                    display: "block"
-                  }}
-                  onError={e => { e.target.src = "/images/no-logo.webp"; }}
-                />
+            <div style={{ position: "relative", width: CARD_SIZE, height: CARD_SIZE }}>
+              <div
+                onClick={() => !card.isPlaceholder && navigate(`/supplier/${card.id}`)}
+                onMouseDown={() => setActiveIdx(idx)}
+                onMouseUp={() => setActiveIdx(null)}
+                onMouseLeave={() => setActiveIdx(null)}
+                onTouchStart={() => setActiveIdx(idx)}
+                onTouchEnd={() => setActiveIdx(null)}
+                style={{
+                  background: card.isPlaceholder
+                    ? "#25252b"
+                    : "#181b20",
+                  borderRadius: 17,
+                  boxShadow: "0 2px 10px #19171c1c",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: card.isPlaceholder ? "default" : "pointer",
+                  height: CARD_SIZE,
+                  width: CARD_SIZE,
+                  border: card.isPlaceholder ? "none" : "1.2px solid #23242d",
+                  overflow: "hidden",
+                  transition: "box-shadow .17s, background .15s",
+                  padding: 0
+                }}
+              >
+                {card.isPlaceholder ? (
+                  <span style={{
+                    color: "#aaa",
+                    fontSize: 15,
+                    fontWeight: 600,
+                    textAlign: "center",
+                    lineHeight: "17px",
+                    whiteSpace: "pre-line"
+                  }}>Место{"\n"}свободно</span>
+                ) : (
+                  <img
+                    src={card.logo || "/images/no-logo.webp"}
+                    alt={card.name}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "contain",
+                      background: "transparent",
+                      display: "block"
+                    }}
+                    onError={e => { e.target.src = "/images/no-logo.webp"; }}
+                  />
+                )}
+              </div>
+              {/* Подсветка */}
+              {activeIdx === idx && !card.isPlaceholder && (
+                <div style={{
+                  position: "absolute",
+                  bottom: -6,
+                  left: "10%",
+                  width: "80%",
+                  height: 7,
+                  borderRadius: 7,
+                  background: `radial-gradient(circle, ${HIGHLIGHT_COLOR}77 70%, transparent 100%)`,
+                  filter: "blur(2.5px)",
+                  zIndex: 2,
+                  pointerEvents: "none",
+                  opacity: 1,
+                  transition: "opacity .13s"
+                }}/>
               )}
             </div>
             {/* Текст под карточкой */}
@@ -123,7 +142,7 @@ export default function Catalog() {
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
-                  maxWidth: CARD_SIZE + 8,
+                  maxWidth: CARD_SIZE + 10,
                   marginBottom: 1,
                   marginTop: 2
                 }}>

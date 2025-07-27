@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import suppliers from "../data/suppliers";
 
 const CARDS_COUNT = 18;
-const CARD_SIZE = 112;   // делай больше или меньше как тебе хочется
+const CARD_SIZE = 114;  // Можно подогнать до 120–125 для твоего экрана
 
 export default function Catalog() {
   const navigate = useNavigate();
+  const [activeIdx, setActiveIdx] = useState(null);
 
   const cards = [
     ...suppliers.map(s => ({ ...s, isPlaceholder: false })),
@@ -45,17 +46,26 @@ export default function Catalog() {
         maxWidth: 430,
         display: "grid",
         gridTemplateColumns: "repeat(3, 1fr)",
-        gap: 3,                        // МИНИМАЛЬНЫЙ gap!
+        gap: 3,
         padding: "0 4px"
       }}>
         {cards.map((card, idx) => (
           <div key={card.id} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <div
               onClick={() => !card.isPlaceholder && navigate(`/supplier/${card.id}`)}
+              onMouseDown={() => setActiveIdx(idx)}
+              onMouseUp={() => setActiveIdx(null)}
+              onMouseLeave={() => setActiveIdx(null)}
+              onTouchStart={() => setActiveIdx(idx)}
+              onTouchEnd={() => setActiveIdx(null)}
               style={{
-                background: card.isPlaceholder ? "#25252b" : "#1a1b1f",
+                background: card.isPlaceholder
+                  ? "#25252b"
+                  : (activeIdx === idx
+                    ? "linear-gradient(102deg,#19ffb177 10%,#2f83fc88 90%)"
+                    : "#15181c"),
                 borderRadius: 17,
-                boxShadow: "0 2px 10px #19171c22",
+                boxShadow: "0 2px 10px #19171c16",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -64,9 +74,10 @@ export default function Catalog() {
                 width: CARD_SIZE,
                 marginBottom: 2,
                 marginTop: 2,
-                border: card.isPlaceholder ? "none" : "1.3px solid #262637",
+                border: card.isPlaceholder ? "none" : "1.2px solid #23242d",
                 overflow: "hidden",
-                transition: "box-shadow .18s"
+                transition: "box-shadow .17s, background .17s",
+                padding: 0
               }}
             >
               {card.isPlaceholder ? (
@@ -83,17 +94,17 @@ export default function Catalog() {
                   src={card.logo || "/images/no-logo.webp"}
                   alt={card.name}
                   style={{
-                    width: "96%",
-                    height: "96%",
+                    width: "100%",
+                    height: "100%",
                     objectFit: "contain",
-                    display: "block",
-                    background: "transparent"
+                    background: "transparent",
+                    display: "block"
                   }}
                   onError={e => { e.target.src = "/images/no-logo.webp"; }}
                 />
               )}
             </div>
-            {/* Текст — только если есть компания */}
+            {/* Текст под карточкой */}
             {!card.isPlaceholder && (
               <>
                 <div style={{
@@ -105,14 +116,14 @@ export default function Catalog() {
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
-                  maxWidth: CARD_SIZE + 12,
+                  maxWidth: CARD_SIZE + 8,
                   marginBottom: 1,
                   marginTop: -1
                 }}>
                   {card.name}
                 </div>
                 <div style={{
-                  color: "#19ffb1",
+                  color: "#13ffc4",
                   fontSize: 10.3,
                   fontWeight: 500,
                   marginBottom: 1,

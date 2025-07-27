@@ -12,7 +12,7 @@ function Catalog() {
   const start = (page - 1) * ITEMS_PER_PAGE;
   const currentSuppliers = suppliers.slice(start, start + ITEMS_PER_PAGE);
 
-  // Заглушки для “Место свободно”
+  // Генерируем пустышки ("Место свободно")
   const cards = [
     ...currentSuppliers,
     ...Array.from(
@@ -21,8 +21,6 @@ function Catalog() {
         id: `placeholder-${i}`,
         name: "Место свободно",
         logo: "/images/no-image.webp",
-        region: "",
-        shortDescription: "",
         empty: true,
       })
     ),
@@ -38,20 +36,14 @@ function Catalog() {
             key={supplier.id || idx}
             className={`${styles.card} ${supplier.empty ? styles.empty : ""}`}
           >
-            <img
-              src={supplier.logo || "/images/no-image.webp"}
-              alt={supplier.name}
-              className={styles.logo}
-            />
-            <h3 className={styles.name}>{supplier.name}</h3>
-            <div className={styles.location}>
-              {supplier.region || supplier.city || ""}
+            <div className={styles.logoWrap}>
+              <img
+                src={supplier.logo || "/images/no-image.webp"}
+                alt={supplier.name}
+                className={styles.logo}
+              />
             </div>
-            {!supplier.empty && (
-              <div className={styles.descSmall}>
-                {(supplier.shortDescription || supplier.fullDescription || "").slice(0, 30)}
-              </div>
-            )}
+            <div className={styles.name}>{supplier.name}</div>
           </div>
         ))}
       </div>

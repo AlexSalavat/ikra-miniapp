@@ -1,0 +1,113 @@
+.catalogWrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 10px 40px 10px;
+}
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #3B82F6;
+  margin-bottom: 32px;
+  text-align: center;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.1rem;
+  margin-bottom: 38px;
+}
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.7rem;
+  }
+}
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.32rem;
+  }
+}
+.card {
+  background: #19203a;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px #12234518;
+  padding: 10px 2px 8px 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 110px;
+  transition: box-shadow 0.15s, background 0.15s;
+}
+.card:hover {
+  background: #22305b;
+  box-shadow: 0 4px 12px #3B82F644;
+}
+.logo {
+  width: 54px;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 6px;
+  margin-top: 3px;
+  background: #0f172a;
+  box-shadow: 0 2px 8px #3B82F644;
+}
+.name {
+  font-size: 0.99rem;
+  font-weight: 600;
+  color: #60A5FA;
+  text-align: center;
+  margin-bottom: 1px;
+  line-height: 1.08;
+}
+.location {
+  color: #b5c4d8;
+  font-size: 0.82rem;
+  text-align: center;
+  margin-bottom: 0;
+}
+.descSmall {
+  color: #8ca6c8;
+  font-size: 0.68rem;
+  margin-top: 3px;
+  text-align: center;
+  min-height: 13px;
+  line-height: 1.1;
+}
+.empty {
+  background: #232c42;
+  opacity: 0.74;
+  filter: grayscale(0.4);
+}
+.backBtn {
+  margin-bottom: 12px;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+.pageBtn {
+  border: none;
+  background: #192542;
+  color: #60A5FA;
+  font-size: 1rem;
+  border-radius: 8px;
+  padding: 6px 13px;
+  margin: 0 2px;
+  cursor: pointer;
+  transition: background 0.13s, color 0.13s;
+}
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.active {
+  background: #3B82F6;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 2px 8px #3B82F6a6;
+}

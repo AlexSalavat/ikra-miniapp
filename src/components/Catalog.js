@@ -1,22 +1,84 @@
-// src/components/Catalog.js
-import React from "react";
+import React, { useState } from "react";
 import suppliers from "../data/suppliers";
-import SupplierCard from "./SupplierCard";
-import { useNavigate } from "react-router-dom";
+import BackButton from "./BackButton";
+import styles from "../styles/SuppliersCategory.module.css";
+
+const ITEMS_PER_PAGE = 18;
 
 function Catalog() {
-  const navigate = useNavigate();
+  const [page, setPage] = useState(1);
+
+  const totalPages = Math.ceil(Math.max(suppliers.length, ITEMS_PER_PAGE) / ITEMS_PER_PAGE);
+  const start = (page - 1) * ITEMS_PER_PAGE;
+  const currentSuppliers = suppliers.slice(start, start + ITEMS_PER_PAGE);
+
+  // Заглушки для “Место свободно”
+  const cards = [
+    ...currentSuppliers,
+    ...Array.from(
+      { length: ITEMS_PER_PAGE - currentSuppliers.length },
+      (_, i) => ({
+        id: `placeholder-${i}`,
+        name: "Место свободно",
+        logo: "/images/no-image.webp",
+        region: "",
+        shortDescription: "",
+        empty: true,
+      })
+    ),
+  ];
+
   return (
-    <div className="max-w-5xl mx-auto mt-6 p-2">
-      <h2 className="text-2xl font-bold text-blue-400 mb-6 text-center">Поставщики</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {suppliers.map((supplier) => (
-          <SupplierCard
-            key={supplier.id}
-            supplier={supplier}
-            onClick={() => navigate(`/supplier/${supplier.id}`)}
-          />
+    <div className={styles.catalogWrap}>
+      <BackButton className={styles.backBtn} />
+      <h2 className={styles.title}>Поставщики</h2>
+      <div className={styles.grid}>
+        {cards.map((supplier, idx) => (
+          <div
+            key={supplier.id || idx}
+            className={`${styles.card} ${supplier.empty ? styles.empty : ""}`}
+          >
+            <img
+              src={supplier.logo || "/images/no-image.webp"}
+              alt={supplier.name}
+              className={styles.logo}
+            />
+            <h3 className={styles.name}>{supplier.name}</h3>
+            <div className={styles.location}>
+              {supplier.region || supplier.city || ""}
+            </div>
+            {!supplier.empty && (
+              <div className={styles.descSmall}>
+                {(supplier.shortDescription || supplier.fullDescription || "").slice(0, 30)}
+              </div>
+            )}
+          </div>
         ))}
+      </div>
+      <div className={styles.pagination}>
+        <button
+          className={styles.pageBtn}
+          onClick={() => setPage(page - 1)}
+          disabled={page === 1}
+        >
+          ←
+        </button>
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i + 1}
+            className={`${styles.pageBtn} ${page === i + 1 ? styles.active : ""}`}
+            onClick={() => setPage(i + 1)}
+          >
+            {i + 1}
+          </button>
+        ))}
+        <button
+          className={styles.pageBtn}
+          onClick={() => setPage(page + 1)}
+          disabled={page === totalPages}
+        >
+          →
+        </button>
       </div>
     </div>
   );

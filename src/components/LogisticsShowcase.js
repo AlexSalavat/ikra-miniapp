@@ -4,31 +4,24 @@ import React, { useState } from "react";
 import logistics from "../data/logistics";
 import { useNavigate } from "react-router-dom";
 
-const REGIONS = [
-  "Камчатский край",
-  "г. Владивосток",
-  "г. Южно-Сахалинск",
-  "г. Хабаровск"
-];
-
-// Поддержка альтернативных значений для фильтрации (если в data другие форматы)
-function matchRegion(region, filter) {
-  return region?.toLowerCase().includes(filter.toLowerCase()) ||
-    (filter === "Камчатка" && region?.toLowerCase().includes("камчат")) ||
-    (filter === "Сахалин" && region?.toLowerCase().includes("сахалин")) ||
-    (filter === "Владивосток" && region?.toLowerCase().includes("владивосток")) ||
-    (filter === "Хабаровск" && region?.toLowerCase().includes("хабаровск"));
-}
-
 const FILTERS = ["Камчатка", "Владивосток", "Сахалин", "Хабаровск"];
-const CARD_SIZE = 140;
+const CARD_SIZE = 136;
+
+function getRegionShort(address = "") {
+  if (address.toLowerCase().includes("камчат")) return "Камчатка";
+  if (address.toLowerCase().includes("сахалин")) return "Сахалин";
+  if (address.toLowerCase().includes("владивосток")) return "Владивосток";
+  if (address.toLowerCase().includes("хабаровск")) return "Хабаровск";
+  return "";
+}
 
 export default function LogisticsShowcase() {
   const [region, setRegion] = useState(FILTERS[0]);
   const navigate = useNavigate();
-  const filtered = logistics.filter((item) => matchRegion(item.address || item.region, region));
+  // Фильтруем по городу
+  const filtered = logistics.filter((item) => getRegionShort(item.address) === region);
 
-  // Пустышки для сетки (10 карточек)
+  // Делаем всегда 10 карточек (заполняем пустыми)
   const cards = [
     ...filtered.map(s => ({ ...s, isPlaceholder: false })),
     ...Array(10 - filtered.length).fill(0).map((_, i) => ({
@@ -39,6 +32,7 @@ export default function LogisticsShowcase() {
 
   return (
     <div className="bg-black min-h-screen pb-20 pt-2 flex flex-col items-center">
+      {/* Кнопка назад */}
       <button
         onClick={() => navigate(-1)}
         style={{
@@ -61,8 +55,16 @@ export default function LogisticsShowcase() {
         </svg>
         Назад
       </button>
-      {/* Фильтр */}
-      <div style={{ display: "flex", gap: 9, marginBottom: 18 }}>
+
+      {/* Фильтр — компакт */}
+      <div style={{
+        display: "flex",
+        gap: 7,
+        marginBottom: 15,
+        width: "100%",
+        justifyContent: "center",
+        flexWrap: "nowrap"
+      }}>
         {FILTERS.map((f) => (
           <button
             key={f}
@@ -71,19 +73,23 @@ export default function LogisticsShowcase() {
               color: region === f ? "#20d978" : "#bababa",
               border: `1.3px solid ${region === f ? "#20d978" : "#23232a"}`,
               borderRadius: 8,
-              padding: "4.5px 15px",
+              padding: "3px 9px",
               fontWeight: 700,
-              fontSize: 13,
-              minWidth: 70,
+              fontSize: 12,
+              minWidth: 50,
+              maxWidth: 90,
               cursor: "pointer",
-              transition: "border .13s, color .13s, background .13s",
-              outline: "none"
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              transition: "border .13s, color .13s, background .13s"
             }}
             onClick={() => setRegion(f)}
           >{f}</button>
         ))}
       </div>
-      {/* Карточки 2 в ряд */}
+
+      {/* Карточки 2 в ряд, квадратные, без зазора */}
       <div style={{
         width: "100%",
         maxWidth: 400,
@@ -98,15 +104,12 @@ export default function LogisticsShowcase() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            marginBottom: 0,
-            marginTop: 0,
+            margin: 0,
             userSelect: "none"
           }}>
             <div style={{
-              position: "relative",
               width: CARD_SIZE,
               height: CARD_SIZE,
-              marginBottom: 3,
               background: card.isPlaceholder ? "#23232b" : "#191a1d",
               borderRadius: 17,
               overflow: "hidden",
@@ -139,33 +142,21 @@ export default function LogisticsShowcase() {
                 />
               )}
             </div>
-            {/* Текст под карточкой */}
+            {/* Только название компании */}
             {!card.isPlaceholder && (
-              <>
-                <div style={{
-                  textAlign: "center",
-                  fontWeight: 600,
-                  color: "#fff",
-                  fontSize: 13.3,
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  maxWidth: CARD_SIZE + 10,
-                  marginBottom: 0,
-                  marginTop: 1
-                }}>
-                  {card.name}
-                </div>
-                <div style={{
-                  color: "#20d978",
-                  fontSize: 10.2,
-                  fontWeight: 500,
-                  marginBottom: 1,
-                  textAlign: "center"
-                }}>
-                  {card.address}
-                </div>
-              </>
+              <div style={{
+                textAlign: "center",
+                fontWeight: 600,
+                color: "#fff",
+                fontSize: 13.5,
+                margin: "2px 0 5px 0",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: CARD_SIZE + 12
+              }}>
+                {card.name}
+              </div>
             )}
           </div>
         ))}

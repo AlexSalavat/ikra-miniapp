@@ -1,4 +1,3 @@
-// /src/components/CompanyProfileModal.js
 import React from 'react';
 import CompanyProfile from './CompanyProfile';
 
@@ -34,11 +33,21 @@ export default function CompanyProfileModal({ company, onClose }) {
         <button
           onClick={onClose}
           style={{
-            position: 'absolute', right: 17, top: 11, zIndex: 2,
-            fontSize: 22, color: '#bbb', background: 'none', border: 'none', cursor: 'pointer'
+            position: 'absolute',
+            right: 17,
+            top: 11,
+            zIndex: 2,
+            fontSize: 22,
+            color: '#bbb',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'color .18s'
           }}
+          onMouseOver={e => e.currentTarget.style.color = '#37e08a'}
+          onMouseOut={e => e.currentTarget.style.color = '#bbb'}
         >×</button>
-        <div style={{padding:'0 18px'}}>
+        <div style={{ padding: '0 18px' }}>
           <CompanyProfile company={company} />
         </div>
       </div>

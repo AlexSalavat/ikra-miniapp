@@ -26,8 +26,8 @@ const ProducerDetail = () => {
           marginBottom: 18,
           padding: '6px 16px',
           borderRadius: 11,
-          background: '#222',
-          color: '#fff',
+          background: "none",
+          color: '#357cff',
           border: 'none',
           fontWeight: 500,
           fontSize: 15,
@@ -44,15 +44,14 @@ const ProducerDetail = () => {
           justifyContent: 'center',
           overflow: 'hidden'
         }}>
-          {producer.logo ?
+          {producer.logo ? (
             <img src={producer.logo} alt={producer.name}
               style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-            : producer.isPlaceholder ? (
-              <span style={{ color: '#bdbdbd', fontWeight: 600, fontSize: 15 }}>Место<br />свободно</span>
-            ) : (
-              <span style={{ color: '#bdbdbd', fontWeight: 700, fontSize: 13 }}>Лого<br />в разработке</span>
-            )
-          }
+          ) : producer.isPlaceholder ? (
+            <span style={{ color: '#bdbdbd', fontWeight: 600, fontSize: 15, textAlign: "center" }}>Место<br />свободно</span>
+          ) : (
+            <span style={{ color: '#bdbdbd', fontWeight: 700, fontSize: 13 }}>Лого<br />в разработке</span>
+          )}
         </div>
         <div>
           <div style={{ fontWeight: 700, fontSize: 18, lineHeight: 1.1, marginBottom: 3 }}>{producer.name}</div>

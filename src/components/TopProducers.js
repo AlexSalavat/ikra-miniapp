@@ -1,4 +1,3 @@
-// /src/components/TopProducers.js
 import React, { useState, useEffect, useMemo } from 'react';
 import producers from '../data/producers';
 import CompanyProfileModal from './CompanyProfileModal';
@@ -13,12 +12,16 @@ export default function TopProducers() {
   const [page, setPage] = useState(0);
   const [selectedCard, setSelectedCard] = useState(null);
 
+  const filtered = useMemo(
+    () => producers.filter(p => p.region === filter),
+    [filter]
+  );
+
   const filteredPages = useMemo(() => {
-    const filtered = producers.filter(p => p.region === filter);
     return Array.from({ length: Math.ceil(filtered.length / CARDS_PER_PAGE) }, (_, i) =>
       filtered.slice(i * CARDS_PER_PAGE, (i + 1) * CARDS_PER_PAGE)
     );
-  }, [filter]);
+  }, [filtered]);
 
   const currentCards = filteredPages[page] || [];
 
@@ -41,10 +44,18 @@ export default function TopProducers() {
 
   return (
     <div className="bg-black min-h-screen p-3">
+      {/* Кнопка Назад */}
       <button
         onClick={() => window.history.back()}
-        className="mb-3 py-1.5 px-3.5 rounded-lg bg-[#23232a] text-white font-medium text-sm cursor-pointer"
-      >← Назад</button>
+        className="mb-3 py-1.5 px-3.5 rounded-lg bg-transparent text-[#357cff] font-medium text-base cursor-pointer"
+        style={{ marginLeft: 3 }}
+      >
+        <svg width="18" height="18" fill="none" style={{ verticalAlign: '-3px', marginRight: 3 }}>
+          <path d="M12 4l-6 5 6 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        Назад
+      </button>
+      {/* Фильтр по регионам */}
       <div className="flex gap-1 justify-center mb-3 overflow-auto">
         {REGIONS.map(region => (
           <button
@@ -56,6 +67,7 @@ export default function TopProducers() {
           </button>
         ))}
       </div>
+      {/* Сетка карточек */}
       <div
         className="grid"
         style={{
@@ -67,8 +79,12 @@ export default function TopProducers() {
         {currentCards.map(card => (
           <div
             key={card.id}
-            className="relative bg-[#16181e] rounded-[19px] overflow-hidden flex items-end justify-center cursor-pointer shadow-lg aspect-[1.28/1]"
+            className="relative bg-[#16181e] rounded-[19px] overflow-hidden flex items-end justify-center cursor-pointer shadow-lg aspect-[1.17/1]"
             onClick={() => !card.isPlaceholder && setSelectedCard(card)}
+            style={{
+              minHeight: 148,
+              maxHeight: 160
+            }}
           >
             {card.logo ? (
               <img
@@ -98,6 +114,7 @@ export default function TopProducers() {
           </div>
         ))}
       </div>
+      {/* Пагинация */}
       {filteredPages.length > 1 && (
         <div className="flex justify-center gap-3 items-center mt-1.5">
           <button

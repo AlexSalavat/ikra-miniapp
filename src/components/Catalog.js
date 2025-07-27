@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import suppliers from "../data/suppliers";
 import BackButton from "./BackButton";
 import styles from "../styles/SuppliersCategory.module.css";
@@ -7,12 +8,12 @@ const ITEMS_PER_PAGE = 18;
 
 function Catalog() {
   const [page, setPage] = useState(1);
+  const navigate = useNavigate();
 
   const totalPages = Math.ceil(Math.max(suppliers.length, ITEMS_PER_PAGE) / ITEMS_PER_PAGE);
   const start = (page - 1) * ITEMS_PER_PAGE;
   const currentSuppliers = suppliers.slice(start, start + ITEMS_PER_PAGE);
 
-  // Генерируем пустышки ("Место свободно")
   const cards = [
     ...currentSuppliers,
     ...Array.from(
@@ -20,7 +21,7 @@ function Catalog() {
       (_, i) => ({
         id: `placeholder-${i}`,
         name: "Место свободно",
-        logo: "/images/no-image.webp",
+        logo: "",
         empty: true,
       })
     ),
@@ -36,16 +37,25 @@ function Catalog() {
             key={supplier.id || idx}
             className={`${styles.card} ${supplier.empty ? styles.empty : ""}`}
             title={supplier.name}
+            onClick={() => {
+              if (!supplier.empty && supplier.id) {
+                navigate(`/supplier/${supplier.id}`);
+              }
+            }}
+            style={supplier.empty ? { cursor: "default" } : { cursor: "pointer" }}
           >
-            <div className={styles.imgBox}>
-              <img
-                src={supplier.logo || "/images/no-image.webp"}
-                alt={supplier.name}
-                className={styles.logo}
-              />
-              <div className={styles.gradient} />
-              <span className={styles.name}>{supplier.name}</span>
-            </div>
+            {supplier.logo && !supplier.empty ? (
+              <>
+                <img
+                  src={supplier.logo}
+                  alt={supplier.name}
+                  className={styles.logo}
+                />
+                <span className={styles.name}>{supplier.name}</span>
+              </>
+            ) : (
+              <span className={styles.placeholderText}>{supplier.name}</span>
+            )}
           </div>
         ))}
       </div>

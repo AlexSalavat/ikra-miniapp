@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import neirobizServices from '../data/neirobizServices';
 import services from '../data/neirobiz';
 
 const CARD_HEIGHT = 145;
 const CARD_RADIUS = 19;
-const TG_LINK = "https://t.me/username"; // <-- потом подставишь свой username
+const TG_LINK = "https://t.me/username"; // <-- подставь свой username
 
 const NeirobizScreen = () => {
   const [modalService, setModalService] = useState(null);
+  const navigate = useNavigate();
 
   // Найти полную инфу по id
   const getFullService = (id) => services.find(
@@ -16,6 +18,32 @@ const NeirobizScreen = () => {
 
   return (
     <div className="bg-black min-h-screen py-7 px-1 flex flex-col items-center">
+      {/* Кнопка назад */}
+      <div style={{ width: '100%', maxWidth: 490, marginBottom: 14 }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 7,
+            background: '#192542',
+            color: '#3B82F6',
+            fontWeight: 600,
+            fontSize: 15,
+            padding: '7px 17px 7px 14px',
+            borderRadius: 11,
+            border: 'none',
+            cursor: 'pointer',
+            boxShadow: '0 1px 4px #24305a11',
+            transition: 'background .15s',
+          }}
+        >
+          <svg width="20" height="20" fill="none">
+            <path d="M13 4l-6 6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Назад
+        </button>
+      </div>
       <h1 style={{
         color: '#fff',
         fontWeight: 700,

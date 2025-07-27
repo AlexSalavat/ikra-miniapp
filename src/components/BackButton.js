@@ -1,20 +1,36 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function BackButton({ className = "" }) {
+const BackButton = ({ style = {}, children = "Назад" }) => {
   const navigate = useNavigate();
+
   return (
     <button
-      className={`flex items-center gap-1 text-blue-400 hover:text-blue-600 bg-transparent border-none px-1 py-2 text-base font-normal cursor-pointer transition ${className}`}
-      style={{ boxShadow: "none", outline: "none" }}
       onClick={() => navigate(-1)}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 5,
+        background: 'none',
+        color: '#357cff',
+        fontWeight: 500,
+        fontSize: 16,
+        padding: '6px 13px 6px 7px',
+        borderRadius: 11,
+        border: 'none',
+        cursor: 'pointer',
+        boxShadow: 'none',
+        transition: 'color .15s',
+        outline: 'none',
+        ...style
+      }}
     >
       <svg width="20" height="20" fill="none">
         <path d="M13 4l-6 6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
-      <span>Назад</span>
+      {children}
     </button>
   );
-}
+};
 
 export default BackButton;

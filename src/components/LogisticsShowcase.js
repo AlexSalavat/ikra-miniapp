@@ -3,8 +3,8 @@ import logistics from "../data/logistics";
 import { useNavigate } from "react-router-dom";
 
 const FILTERS = ["Камчатка", "Владивосток", "Сахалин", "Хабаровск"];
-const CARD_SIZE = 134;
-const GAP = 2; // минимальный зазор
+const CARD_SIZE = 150;
+const GAP = 1;
 
 function getRegionShort(address = "") {
   if (address.toLowerCase().includes("камчат")) return "Камчатка";
@@ -19,6 +19,7 @@ export default function LogisticsShowcase() {
   const navigate = useNavigate();
   const filtered = logistics.filter(item => getRegionShort(item.address) === region);
 
+  // Формируем сетку: до 10 карточек, заполняем "место свободно"
   const cards = [
     ...filtered.map(s => ({ ...s, isPlaceholder: false })),
     ...Array(10 - filtered.length).fill(0).map((_, i) => ({
@@ -55,8 +56,8 @@ export default function LogisticsShowcase() {
       {/* Компактный фильтр */}
       <div style={{
         display: "flex",
-        gap: 6,
-        marginBottom: 14,
+        gap: 5,
+        marginBottom: 13,
         width: "100%",
         justifyContent: "center",
         flexWrap: "nowrap"
@@ -69,11 +70,11 @@ export default function LogisticsShowcase() {
               color: region === f ? "#20d978" : "#bababa",
               border: `1.2px solid ${region === f ? "#20d978" : "#23232a"}`,
               borderRadius: 8,
-              padding: "2.5px 9px",
+              padding: "2.5px 8px",
               fontWeight: 700,
               fontSize: 12,
-              minWidth: 52,
-              maxWidth: 80,
+              minWidth: 50,
+              maxWidth: 70,
               cursor: "pointer",
               whiteSpace: "nowrap",
               overflow: "hidden",
@@ -87,11 +88,11 @@ export default function LogisticsShowcase() {
 
       <div style={{
         width: "100%",
-        maxWidth: 420,
+        maxWidth: 350,
         display: "grid",
-        gridTemplateColumns: "repeat(2, 1fr)",
+        gridTemplateColumns: `repeat(2, 1fr)`,
         gap: `${GAP}px`,
-        padding: "0 4px"
+        padding: "0 0px"
       }}>
         {cards.map((card, idx) => (
           <div key={card.id}
@@ -108,18 +109,19 @@ export default function LogisticsShowcase() {
               background: card.isPlaceholder ? "#23232b" : "#191a1d",
               borderRadius: 19,
               overflow: "hidden",
-              border: "1.2px solid #23232b",
+              border: "1px solid #23232b",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
+              marginBottom: 2
             }}>
               {card.isPlaceholder ? (
                 <span style={{
                   color: "#aaa",
-                  fontSize: 15.2,
+                  fontSize: 16,
                   fontWeight: 600,
                   textAlign: "center",
-                  lineHeight: "18px",
+                  lineHeight: "19px",
                   whiteSpace: "pre-line"
                 }}>Место{"\n"}свободно</span>
               ) : (
@@ -142,9 +144,8 @@ export default function LogisticsShowcase() {
               fontWeight: 600,
               color: "#fff",
               fontSize: 13,
-              margin: "2.5px 0 0 0", // минимальный отступ
-              minHeight: 16,
-              maxWidth: CARD_SIZE + 12,
+              minHeight: 17,
+              maxWidth: CARD_SIZE + 10,
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap"

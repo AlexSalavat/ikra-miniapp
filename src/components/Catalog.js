@@ -7,7 +7,7 @@ const CARDS_COUNT = 18;
 export default function Catalog() {
   const navigate = useNavigate();
 
-  // Формируем массив из 18 карточек (заполненные + "место свободно")
+  // 18 карточек: заполненные + пустые
   const cards = [
     ...suppliers.map(s => ({ ...s, isPlaceholder: false })),
     ...Array(CARDS_COUNT - suppliers.length).fill(0).map((_, i) => ({
@@ -42,10 +42,10 @@ export default function Catalog() {
       </button>
       <div style={{
         width: "100%",
-        maxWidth: 500,
+        maxWidth: 460,
         display: "grid",
         gridTemplateColumns: "repeat(3, 1fr)",
-        gap: 13,
+        gap: 12,
         justifyContent: "center",
         padding: "0 6px",
       }}>
@@ -54,30 +54,27 @@ export default function Catalog() {
             key={card.id}
             style={{
               background: "#23232a",
-              borderRadius: 17,
-              height: 115,
+              borderRadius: 16,
+              height: 110,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              justifyContent: "flex-end",
-              padding: "0 3px 15px 3px",
+              justifyContent: "center",
               fontWeight: 600,
-              color: "#999",
-              fontSize: 15,
+              color: "#9ea1a6",
+              fontSize: 14.7,
               textAlign: "center",
-              boxShadow: "0 2px 10px #18161d25"
+              boxShadow: "0 2px 9px #18161d22"
             }}
           >
             <span style={{
-              marginTop: 12,
-              marginBottom: 3,
-              fontSize: 14,
+              fontSize: 13.8,
               color: "#bdbdbd",
               fontWeight: 500,
               width: "100%",
               whiteSpace: "pre-line",
               letterSpacing: 0.1
-            }}>Место<br />свободно</span>
+            }}>Место{"\n"}свободно</span>
           </div>
         ) : (
           <div
@@ -85,38 +82,41 @@ export default function Catalog() {
             onClick={() => navigate(`/supplier/${card.id}`)}
             style={{
               background: "#19191d",
-              borderRadius: 17,
-              height: 115,
+              borderRadius: 16,
+              height: 110,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "flex-end",
-              padding: "0 4px 9px 4px",
+              padding: "0 0 6px 0",
               cursor: "pointer",
               position: "relative",
-              boxShadow: "0 2px 11px #18161d22",
-              transition: "box-shadow 0.14s"
+              boxShadow: "0 2px 10px #18161d22",
+              transition: "box-shadow 0.13s"
             }}
           >
             <div style={{
-              width: "90%",
-              height: 57,
-              background: "#23232a",
-              borderRadius: 13,
-              marginTop: 7,
-              marginBottom: 3,
+              width: "100%",
+              flex: "1 1 auto",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              background: "#23232a",
+              borderRadius: 12,
+              marginTop: 5,
+              marginBottom: 0,
               overflow: "hidden",
-              border: "1.5px solid #20202a"
+              border: "1.5px solid #20202a",
+              height: 70,
+              minHeight: 0,
+              maxHeight: 74
             }}>
               <img
                 src={card.logo || "/images/no-logo.webp"}
                 alt={card.name}
                 style={{
-                  width: "83%",
-                  height: "83%",
+                  width: "85%",
+                  height: "85%",
                   objectFit: "contain",
                   display: "block",
                   background: "transparent"
@@ -125,24 +125,24 @@ export default function Catalog() {
               />
             </div>
             <div style={{
-              width: "98%",
+              width: "95%",
               textAlign: "center",
               fontWeight: 600,
               color: "#fff",
-              fontSize: 12.8,
-              letterSpacing: 0.02,
+              fontSize: 11.5,
+              letterSpacing: 0.01,
               whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
-              margin: "0 auto 2px auto"
+              margin: "1px auto 0 auto"
             }}>
               {card.name}
             </div>
             <div style={{
               color: "#37e08a",
-              fontSize: 11.2,
-              fontWeight: 600,
-              marginBottom: 1,
+              fontSize: 10.4,
+              fontWeight: 500,
+              marginBottom: 0,
               marginTop: 0,
               textAlign: "center"
             }}>

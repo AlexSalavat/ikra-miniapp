@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import suppliers from "../data/suppliers";
 
 const CARDS_COUNT = 18;
-const CARD_SIZE = 114;  // Можно подогнать до 120–125 для твоего экрана
+const CARD_SIZE = 114; // твой текущий размер
 
 export default function Catalog() {
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ export default function Catalog() {
                 background: card.isPlaceholder
                   ? "#25252b"
                   : (activeIdx === idx
-                    ? "linear-gradient(102deg,#19ffb177 10%,#2f83fc88 90%)"
+                    ? "linear-gradient(100deg, #25f7d0 15%, #297fff 85%)"
                     : "#15181c"),
                 borderRadius: 17,
                 boxShadow: "0 2px 10px #19171c16",
@@ -76,7 +76,7 @@ export default function Catalog() {
                 marginTop: 2,
                 border: card.isPlaceholder ? "none" : "1.2px solid #23242d",
                 overflow: "hidden",
-                transition: "box-shadow .17s, background .17s",
+                transition: "box-shadow .17s, background .18s",
                 padding: 0
               }}
             >

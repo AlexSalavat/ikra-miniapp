@@ -1,29 +1,38 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import logistics from "../data/logistics";
 
-const REGIONS = ["Камчатка", "Владивосток", "Сахалин", "Хабаровск"];
+const CARDS_COUNT = 10;
+const CARD_SIZE = 138;  // Подгони под свой экран, увеличь если надо
 
 export default function LogisticsShowcase() {
-  const [region, setRegion] = useState(REGIONS[0]);
-  const filtered = logistics.filter(x => x.address.includes(region));
+  const navigate = useNavigate();
+
+  const cards = [
+    ...logistics.map(l => ({ ...l, isPlaceholder: false })),
+    ...Array(CARDS_COUNT - logistics.length).fill(0).map((_, i) => ({
+      isPlaceholder: true,
+      id: "empty-" + (i + 1)
+    }))
+  ].slice(0, CARDS_COUNT);
 
   return (
-    <div className="bg-black min-h-screen pb-20 pt-4 flex flex-col items-center">
+    <div className="bg-black min-h-screen pb-20 pt-2 flex flex-col items-center">
       <button
-        onClick={() => window.history.back()}
+        onClick={() => navigate(-1)}
         style={{
-          color: "#357cff",
+          color: "#2678f3",
           background: "none",
           border: "none",
           fontWeight: 500,
-          fontSize: 16,
+          fontSize: 18,
           cursor: "pointer",
-          marginBottom: 8,
+          marginBottom: 10,
           display: "flex",
           alignItems: "center",
           gap: 5,
           alignSelf: "flex-start",
-          marginLeft: 10,
+          marginLeft: 12,
         }}
       >
         <svg width="18" height="18" fill="none" style={{ verticalAlign: "-3px" }}>
@@ -32,89 +41,86 @@ export default function LogisticsShowcase() {
         Назад
       </button>
       <div style={{
-        display: "flex",
-        gap: 5,
-        marginBottom: 11,
-        justifyContent: "center",
-        flexWrap: "wrap",
         width: "100%",
+        maxWidth: 440,
+        display: "grid",
+        gridTemplateColumns: "repeat(2, 1fr)",
+        gap: 4,
+        padding: "0 4px"
       }}>
-        {REGIONS.map(r => (
-          <button
-            key={r}
-            style={{
-              background: region === r ? "#23232a" : "none",
-              color: region === r ? "#2678f3" : "#bababa",
-              border: `1.1px solid ${region === r ? "#2678f3" : "#222"}`,
-              borderRadius: 8,
-              padding: "4px 12px",
-              fontWeight: 700,
-              fontSize: 11.4,
-              minWidth: 66,
-              cursor: "pointer",
-              lineHeight: "1.13"
-            }}
-            onClick={() => setRegion(r)}
-          >{r}</button>
-        ))}
-      </div>
-      <div
-        className="grid"
-        style={{
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: 14,
-          width: "100%",
-          maxWidth: 390,
-        }}
-      >
-        {(filtered.length > 0 ? filtered : logistics.slice(0, 10)).map(item => (
-          <div
-            key={item.id}
-            className="relative bg-[#16181e] rounded-[15px] overflow-hidden aspect-[1.1/1] flex items-end justify-center"
-            style={{ minHeight: 128, boxShadow: "0 2px 10px #19192416" }}
-          >
-            {item.logo ? (
-              <img
-                src={item.logo}
-                alt={item.name}
-                className="absolute inset-0 w-full h-full object-cover"
-                onError={e => { e.target.src = "/images/no-image.webp"; }}
-              />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#242439] to-[#23232a]">
-                <span className="text-[#bababa] font-semibold text-[13.5px] text-center opacity-90 whitespace-pre-line leading-snug">
-                  Лого в разработке
-                </span>
-              </div>
-            )}
+        {cards.map((card, idx) => (
+          <div key={card.id} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <div
               style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                width: "100%",
-                padding: "6px 0 5px 0",
-                background: "linear-gradient(0deg,#18181b 92%,transparent)",
-                textAlign: "center",
-                zIndex: 2,
+                background: card.isPlaceholder ? "#25252b" : "#16181e",
+                borderRadius: 17,
+                boxShadow: "0 2px 10px #18171c15",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: card.isPlaceholder ? "default" : "pointer",
+                height: CARD_SIZE,
+                width: CARD_SIZE,
+                marginBottom: 2,
+                marginTop: 2,
+                border: card.isPlaceholder ? "none" : "1.2px solid #23242d",
+                overflow: "hidden",
+                padding: 0
               }}
             >
-              <span
-                style={{
+              {card.isPlaceholder ? (
+                <span style={{
+                  color: "#aaa",
+                  fontSize: 16,
+                  fontWeight: 600,
+                  textAlign: "center",
+                  lineHeight: "17px",
+                  whiteSpace: "pre-line"
+                }}>Место{"\n"}свободно</span>
+              ) : (
+                <img
+                  src={card.logo || "/images/no-logo.webp"}
+                  alt={card.name}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                    background: "transparent",
+                    display: "block"
+                  }}
+                  onError={e => { e.target.src = "/images/no-logo.webp"; }}
+                />
+              )}
+            </div>
+            {/* Текст под карточкой */}
+            {!card.isPlaceholder && (
+              <>
+                <div style={{
+                  textAlign: "center",
+                  fontWeight: 600,
                   color: "#fff",
-                  fontWeight: 700,
-                  fontSize: 13,
-                  textShadow: "0 1.5px 7px #191b21",
-                  letterSpacing: "0.01em",
+                  fontSize: 13.2,
+                  letterSpacing: 0.01,
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
-                  display: "block",
-                }}
-              >
-                {item.name}
-              </span>
-            </div>
+                  maxWidth: CARD_SIZE + 10,
+                  marginBottom: 1,
+                  marginTop: -1
+                }}>
+                  {card.name}
+                </div>
+                <div style={{
+                  color: "#13ffc4",
+                  fontSize: 10.3,
+                  fontWeight: 500,
+                  marginBottom: 1,
+                  textAlign: "center"
+                }}>
+                  {card.address?.split(",")[0] || ""}
+                </div>
+              </>
+            )}
           </div>
         ))}
       </div>

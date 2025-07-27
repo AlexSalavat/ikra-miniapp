@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import suppliers from "../data/suppliers";
 
 const CARDS_COUNT = 18;
+const CARD_SIZE = 86;  // Можно увеличить/уменьшить для твоего размера
 
 export default function Catalog() {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ export default function Catalog() {
         maxWidth: 430,
         display: "grid",
         gridTemplateColumns: "repeat(3, 1fr)",
-        gap: 18,
+        gap: 11,
         padding: "0 10px"
       }}>
         {cards.map((card, idx) => (
@@ -53,23 +54,25 @@ export default function Catalog() {
               onClick={() => !card.isPlaceholder && navigate(`/supplier/${card.id}`)}
               style={{
                 background: card.isPlaceholder ? "#25252b" : "#1a1b1f",
-                borderRadius: 18,
-                boxShadow: "0 2px 10px #19171c33",
+                borderRadius: 17,
+                boxShadow: "0 2px 10px #19171c22",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 cursor: card.isPlaceholder ? "default" : "pointer",
-                height: 74,
-                width: 74,
+                height: CARD_SIZE,
+                width: CARD_SIZE,
                 marginBottom: 7,
                 marginTop: 6,
-                border: card.isPlaceholder ? "none" : "1.3px solid #262637"
+                border: card.isPlaceholder ? "none" : "1.3px solid #262637",
+                overflow: "hidden",
+                transition: "box-shadow .18s"
               }}
             >
               {card.isPlaceholder ? (
                 <span style={{
                   color: "#aaa",
-                  fontSize: 12.7,
+                  fontSize: 13,
                   fontWeight: 600,
                   textAlign: "center",
                   lineHeight: "15px",
@@ -80,8 +83,8 @@ export default function Catalog() {
                   src={card.logo || "/images/no-logo.webp"}
                   alt={card.name}
                   style={{
-                    width: "87%",
-                    height: "87%",
+                    width: "98%",
+                    height: "98%",
                     objectFit: "contain",
                     display: "block",
                     background: "transparent"
@@ -97,18 +100,18 @@ export default function Catalog() {
                   textAlign: "center",
                   fontWeight: 600,
                   color: "#fff",
-                  fontSize: 12.2,
+                  fontSize: 12.8,
                   letterSpacing: 0.01,
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
-                  maxWidth: 85,
+                  maxWidth: CARD_SIZE + 16,
                 }}>
                   {card.name}
                 </div>
                 <div style={{
-                  color: "#33df98",
-                  fontSize: 10.1,
+                  color: "#2bf599",
+                  fontSize: 10.3,
                   fontWeight: 500,
                   marginBottom: 1,
                   textAlign: "center"

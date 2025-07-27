@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 const FILTERS = ["Камчатка", "Владивосток", "Сахалин", "Хабаровск"];
 
+// Карточки как в Производстве: чуть меньше  (примерно 142px x 142px)
+const CARD_SIZE = 142; // выстави как тебе нравится
+
 function getRegionShort(address = "") {
   if (address.toLowerCase().includes("камчат")) return "Камчатка";
   if (address.toLowerCase().includes("сахалин")) return "Сахалин";
@@ -17,7 +20,7 @@ export default function LogisticsShowcase() {
   const navigate = useNavigate();
   const filtered = logistics.filter(item => getRegionShort(item.address) === region);
 
-  // до 10 карточек, добиваем пустыми для ровной сетки
+  // до 10 карточек (2x5)
   const cards = [
     ...filtered.map(s => ({ ...s, isPlaceholder: false })),
     ...Array(10 - filtered.length).fill(0).map((_, i) => ({
@@ -51,7 +54,7 @@ export default function LogisticsShowcase() {
         Назад
       </button>
 
-      {/* Компактный фильтр */}
+      {/* Фильтр — компактный */}
       <div style={{
         display: "flex",
         gap: 4,
@@ -67,11 +70,11 @@ export default function LogisticsShowcase() {
               color: region === f ? "#20d978" : "#bababa",
               border: `1.2px solid ${region === f ? "#20d978" : "#23232a"}`,
               borderRadius: 7,
-              padding: "2.3px 7px",
+              padding: "2.2px 8px",
               fontWeight: 700,
-              fontSize: 12.2,
+              fontSize: 12,
               minWidth: 46,
-              maxWidth: 65,
+              maxWidth: 78,
               cursor: "pointer",
               whiteSpace: "nowrap",
               overflow: "hidden",
@@ -82,31 +85,35 @@ export default function LogisticsShowcase() {
         ))}
       </div>
 
+      {/* Сетка карточек */}
       <div style={{
         width: "100%",
-        maxWidth: 360, // максимально широко на мобиле, чтобы квадраты!
+        maxWidth: 2 * CARD_SIZE + 12, // два в ряд + зазор минимальный
         display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 0 // без зазоров!
+        gridTemplateColumns: `repeat(2, ${CARD_SIZE}px)`,
+        gap: 7,
+        justifyContent: "center"
       }}>
         {cards.map((card, idx) => (
-          <div key={card.id}
+          <div
+            key={card.id}
             style={{
+              width: CARD_SIZE,
+              height: CARD_SIZE,
+              background: card.isPlaceholder ? "#23232b" : "#191a1d",
+              borderRadius: 17,
+              overflow: "hidden",
+              border: "1.3px solid #18191c",
+              margin: 0,
+              position: "relative",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              userSelect: "none",
-              width: "100%",
-              aspectRatio: "1 / 1", // квадраты!
-              background: card.isPlaceholder ? "#23232b" : "#191a1d",
-              borderRadius: 19,
-              overflow: "hidden",
-              border: "1.5px solid #19191c",
               justifyContent: "flex-end",
-              margin: 0,
-              position: "relative"
+              boxShadow: "0 2px 10px #16141a22"
             }}
           >
+            {/* Фото/лого или заглушка */}
             <div style={{
               position: "absolute",
               inset: 0,
@@ -119,10 +126,10 @@ export default function LogisticsShowcase() {
               {card.isPlaceholder ? (
                 <span style={{
                   color: "#aaa",
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: 600,
                   textAlign: "center",
-                  lineHeight: "19px",
+                  lineHeight: "18px",
                   whiteSpace: "pre-line"
                 }}>Место{"\n"}свободно</span>
               ) : (
@@ -140,25 +147,28 @@ export default function LogisticsShowcase() {
                 />
               )}
             </div>
-            <div style={{
-              width: "100%",
-              background: "rgba(0,0,0,0.65)",
-              textAlign: "center",
-              fontWeight: 600,
-              color: "#fff",
-              fontSize: 13,
-              position: "absolute",
-              left: 0,
-              bottom: 0,
-              padding: "4px 0 2px 0",
-              borderBottomLeftRadius: 19,
-              borderBottomRightRadius: 19,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap"
-            }}>
-              {!card.isPlaceholder ? card.name : ""}
-            </div>
+            {/* Название компании */}
+            {!card.isPlaceholder && (
+              <div style={{
+                width: "100%",
+                background: "rgba(0,0,0,0.67)",
+                textAlign: "center",
+                fontWeight: 600,
+                color: "#fff",
+                fontSize: 13,
+                position: "absolute",
+                left: 0,
+                bottom: 0,
+                padding: "4.5px 0 2.5px 0",
+                borderBottomLeftRadius: 17,
+                borderBottomRightRadius: 17,
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                overflow: "hidden"
+              }}>
+                {card.name}
+              </div>
+            )}
           </div>
         ))}
       </div>

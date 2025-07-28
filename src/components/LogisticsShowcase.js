@@ -7,9 +7,9 @@ const FILTERS = [
   { label: "Сахалин", keys: ["Сахалин"] },
   { label: "Хабаровск", keys: ["Хабаровск"] },
 ];
+
 const CARDS_PER_ROW = 2;
-const GAP = 6;
-const CARD_SIZE = `calc((100vw - 28px - ${GAP}px) / 2)`;
+const GAP = 7;
 
 function isMatchByKeys(item, keys) {
   if (!keys || keys.length === 0) return true;
@@ -20,12 +20,12 @@ function isMatchByKeys(item, keys) {
 export default function LogisticsShowcase() {
   const [filter, setFilter] = useState(FILTERS[0].label);
 
-  // Найти ключи для фильтра
   const activeKeys = FILTERS.find(f => f.label === filter)?.keys || [];
-
-  // Отфильтровать по городу/региону
   const filtered = logistics.filter(item => isMatchByKeys(item, activeKeys));
   const cards = filtered.concat(Array(Math.max(0, 10 - filtered.length)).fill({ isEmpty: true }));
+
+  // Размер вычисляем по ширине экрана (чтобы квадраты!)
+  const CARD_SIZE = `calc((100vw - 26px - ${GAP}px) / 2)`;
 
   return (
     <div className="bg-black min-h-screen pt-2 pb-20 flex flex-col items-center">
@@ -52,7 +52,7 @@ export default function LogisticsShowcase() {
         </svg>
         Назад
       </button>
-      {/* Фильтр — всегда в одну строку, прокручиваем если не влезает */}
+      {/* Фильтр */}
       <div style={{
         display: "flex",
         gap: 6,
@@ -73,24 +73,27 @@ export default function LogisticsShowcase() {
             style={{
               background: filter === f.label ? "#0a1918" : "none",
               color: filter === f.label ? "#23df81" : "#d3d3d7",
-              border: `1.3px solid ${filter === f.label ? "#22b978" : "#20222b"}`,
-              borderRadius: 9,
+              border: `1.2px solid ${filter === f.label ? "#22b978" : "#20222b"}`,
+              borderRadius: 10,
               fontWeight: 600,
-              fontSize: 13.4,
-              minWidth: 87,
-              padding: "4.5px 13px",
+              fontSize: 13.3,
+              minWidth: 92,
+              maxWidth: 110,
+              padding: "4px 10px",
               cursor: "pointer",
-              outline: "none"
+              outline: "none",
+              overflow: "hidden",
+              textOverflow: "ellipsis"
             }}
           >
-            {f.label}
+            <span style={{whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}}>{f.label}</span>
           </button>
         ))}
       </div>
       {/* Сетка карточек */}
       <div style={{
         width: "100%",
-        maxWidth: 2 * 174 + GAP + 18,
+        maxWidth: `calc(2 * ${CARD_SIZE} + ${GAP}px)`,
         display: "grid",
         gridTemplateColumns: `repeat(${CARDS_PER_ROW}, minmax(0, 1fr))`,
         gap: GAP,
@@ -98,93 +101,61 @@ export default function LogisticsShowcase() {
         padding: "0 10px"
       }}>
         {cards.map((item, idx) => (
-          <div key={idx}
+          <div
+            key={idx}
             style={{
               background: "#212127",
-              borderRadius: 18,
+              borderRadius: 19,
               width: "100%",
               aspectRatio: "1 / 1",
+              overflow: "hidden",
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
               minHeight: 0,
               minWidth: 0,
-              overflow: "hidden",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              position: "relative"
             }}>
             {/* Фото/лого */}
-            <div style={{
-              width: "100%",
-              height: "74%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center"
-            }}>
-              {!item.isEmpty && item.logo
-                ? <img
-                    src={item.logo}
-                    alt={item.name}
-                    style={{
-                      width: "92%",
-                      height: "92%",
-                      objectFit: "contain",
-                      background: "#18191c",
-                      borderRadius: 13,
-                    }}
-                    onError={e => { e.target.src = "/images/no-logo.webp"; }}
-                  />
-                : <span style={{
-                    color: "#86868d",
-                    fontSize: 15.5,
-                    fontWeight: 600,
-                    textAlign: "center",
-                    width: "90%"
-                  }}>{item.isEmpty ? "Место\nсвободно" : "Лого в разработке"}</span>
-              }
-            </div>
-            {/* Название и город отдельно — под карточкой */}
-            <div style={{
-              width: "100%",
-              background: "none",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              minHeight: 37,
-              marginTop: 0,
-              marginBottom: 2
-            }}>
-              {!item.isEmpty && (
-                <>
-                  <div style={{
-                    color: "#fff",
-                    fontWeight: 700,
-                    fontSize: 13.5,
-                    textAlign: "center",
+            {!item.isEmpty && item.logo
+              ? <img
+                  src={item.logo}
+                  alt={item.name}
+                  style={{
                     width: "100%",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    marginBottom: 1
-                  }}>
-                    {item.name}
-                  </div>
-                  <div style={{
-                    color: "#22db94",
-                    fontWeight: 500,
-                    fontSize: 11.7,
-                    textAlign: "center",
-                    width: "100%",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap"
-                  }}>
-                    {item.address?.split(",")[0] || ""}
-                  </div>
-                </>
-              )}
-            </div>
+                    height: "100%",
+                    objectFit: "cover",    // Или попробуй 'contain' если только логотипы
+                    background: "#18191c",
+                  }}
+                  onError={e => { e.target.src = "/images/no-logo.webp"; }}
+                />
+              : <span style={{
+                  color: "#86868d",
+                  fontSize: 15.5,
+                  fontWeight: 600,
+                  textAlign: "center",
+                  width: "100%"
+                }}>{item.isEmpty ? "Место\nсвободно" : "Лого в разработке"}</span>
+            }
+            {/* Название компании — под карточкой! */}
+            {!item.isEmpty && (
+              <div style={{
+                position: "absolute",
+                left: 0, right: 0, bottom: 0,
+                background: "rgba(0,0,0,0.46)",
+                color: "#fff",
+                fontWeight: 700,
+                fontSize: 13.2,
+                textAlign: "center",
+                padding: "6px 5px 5px 5px",
+                width: "100%",
+                lineHeight: "1.11",
+                letterSpacing: ".02em",
+                textShadow: "0 2px 10px #0009"
+              }}>
+                {item.name}
+              </div>
+            )}
           </div>
         ))}
       </div>

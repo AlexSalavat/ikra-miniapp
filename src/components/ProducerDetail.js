@@ -1,45 +1,114 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import producers from '../data/producers';
 
 const accent = "#38d8ff";
-const dark = "#191a23";
-const shadow = "0 4px 24px #17304155";
+const bgBlock = "#181a23";
+const shadow = "0 4px 22px #19283d44";
 const round = 22;
 
-const ICONS = {
-  phone: (
-    <span style={{
-      background: "#182433", borderRadius: "50%", display: "inline-flex", width: 30, height: 30,
-      alignItems: "center", justifyContent: "center", marginRight: 10
-    }}>
-      <svg width="17" height="17" viewBox="0 0 20 20"><path d="M3.3 2.7a2.4 2.4 0 0 1 3.2 0l1.7 1.7a2.4 2.4 0 0 1 0 3.3l-.7.7a12.4 12.4 0 0 0 5.3 5.3l.7-.7a2.4 2.4 0 0 1 3.3 0l1.7 1.7a2.4 2.4 0 0 1 0 3.2l-1 1a2.4 2.4 0 0 1-2.6.5c-2.2-.8-4.2-2-6-3.7-1.7-1.8-2.9-3.8-3.7-6A2.4 2.4 0 0 1 2.3 3.7l1-1z" fill={accent}/></svg>
-    </span>
-  ),
-  email: (
-    <span style={{
-      background: "#1a3245", borderRadius: "50%", display: "inline-flex", width: 30, height: 30,
-      alignItems: "center", justifyContent: "center", marginRight: 10
-    }}>
-      <svg width="17" height="17" viewBox="0 0 20 20"><path d="M2 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4zm2-.5v.3l6 4.7 6-4.7v-.3H4zm12 2.2-6 4.7-6-4.7V16h12V5.7z" fill="#88cfff"/></svg>
-    </span>
-  ),
-};
+// --- SVG Icons ---
+const IconPhone = () => (
+  <svg width="20" height="20" style={{marginRight:8}} viewBox="0 0 20 20">
+    <path d="M3.5 2.8A2.1 2.1 0 0 1 6.5 2l1.6 1.7c.6.6.6 1.5 0 2.1l-.7.7a12 12 0 0 0 5.2 5.2l.7-.7c.6-.6 1.5-.6 2.1 0L18 13.5a2.1 2.1 0 0 1 0 3c-.9.9-2.3 1.1-3.4.7A16.2 16.2 0 0 1 4 7.3c-.4-1.1-.2-2.5.7-3.4z"
+      stroke="#61e7ee" strokeWidth="1.4" fill="none" strokeLinecap="round"/>
+  </svg>
+);
+const IconMail = () => (
+  <svg width="19" height="19" style={{marginRight:8}} viewBox="0 0 20 20">
+    <rect x="2.8" y="4.5" width="14.5" height="10.5" rx="2.2"
+      stroke="#82aaff" strokeWidth="1.3" fill="none"/>
+    <path d="M4.4 6l5.6 4 5.6-4" stroke="#82aaff" strokeWidth="1.1" fill="none"/>
+  </svg>
+);
+
+// --- MODAL PREVIEW ---
+function GalleryModal({ images, idx, onClose }) {
+  const [current, setCurrent] = useState(idx);
+
+  const goLeft = () => setCurrent((current - 1 + images.length) % images.length);
+  const goRight = () => setCurrent((current + 1) % images.length);
+
+  React.useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") goLeft();
+      if (e.key === "ArrowRight") goRight();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [current]);
+
+  return (
+    <div
+      style={{
+        position: "fixed", inset: 0, zIndex: 1001,
+        background: "rgba(15,17,22,0.98)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        animation: "fadeIn .25s"
+      }}
+      onClick={onClose}
+    >
+      {/* Left Arrow */}
+      {images.length > 1 && (
+        <button onClick={e => {e.stopPropagation(); goLeft();}}
+          style={{
+            position: "absolute", left: 22, top: "50%", transform: "translateY(-50%)",
+            background: "rgba(34,38,52,0.6)", border: "none", borderRadius: "50%",
+            width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
+            cursor: "pointer"
+          }}>
+          <svg width="22" height="22"><path d="M14.2 5.7L8.5 11l5.7 5.3" stroke="#fff" strokeWidth="2.4" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </button>
+      )}
+      {/* Image */}
+      <img
+        src={images[current]}
+        alt=""
+        style={{
+          maxWidth: "96vw", maxHeight: "92vh",
+          borderRadius: 22, boxShadow: "0 8px 50px #000c",
+          objectFit: "contain", background: "#15181d"
+        }}
+        onClick={e => e.stopPropagation()}
+      />
+      {/* Right Arrow */}
+      {images.length > 1 && (
+        <button onClick={e => {e.stopPropagation(); goRight();}}
+          style={{
+            position: "absolute", right: 22, top: "50%", transform: "translateY(-50%)",
+            background: "rgba(34,38,52,0.6)", border: "none", borderRadius: "50%",
+            width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
+            cursor: "pointer"
+          }}>
+          <svg width="22" height="22"><path d="M8.2 5.7L14 11l-5.8 5.3" stroke="#fff" strokeWidth="2.4" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </button>
+      )}
+      {/* Close */}
+      <button onClick={onClose}
+        style={{
+          position: "absolute", top: 36, right: 32,
+          background: "rgba(20,22,32,0.72)", border: "none", borderRadius: "50%",
+          width: 38, height: 38, display: "flex", alignItems: "center", justifyContent: "center",
+          cursor: "pointer"
+        }}>
+        <svg width="19" height="19"><path d="M5 5l9 9m-9 0l9-9" stroke="#fff" strokeWidth="2.1" strokeLinecap="round"/></svg>
+      </button>
+    </div>
+  );
+}
 
 const ProducerDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const [modal, setModal] = useState({ open: false, idx: 0 });
   const producer = producers.find(p => String(p.id) === id || Number(p.id) === Number(id));
-  if (!producer) return (
-    <div style={{ color: '#fff', padding: 30 }}>Завод не найден</div>
-  );
+  if (!producer) return <div style={{ color: '#fff', padding: 30 }}>Завод не найден</div>;
 
-  // --- Разделяем контакты ---
-  const { name, region, description, fullDescription, address, contacts, categories, site, gallery } = producer;
+  // Контакты
   let phones = [], emails = [];
-  if (contacts) {
-    Object.values(contacts).forEach(val => {
+  if (producer.contacts) {
+    Object.values(producer.contacts).forEach(val => {
       if (typeof val === "string") {
         if (/^[-+()\d\s]{7,}$/.test(val)) phones.push(val);
         else if (/@/.test(val)) emails.push(val);
@@ -74,136 +143,109 @@ const ProducerDetail = () => {
         Назад
       </button>
 
-      {/* Card */}
+      {/* CARD */}
       <div style={{
-        background: dark,
+        background: bgBlock,
         borderRadius: round,
         margin: "0 auto",
         boxShadow: shadow,
-        maxWidth: 420,
-        padding: "22px 22px 17px 22px",
-        marginBottom: 24
+        maxWidth: 430,
+        padding: "22px 22px 18px 22px",
+        marginBottom: 26
       }}>
-        {/* Лого + имя */}
-        <div style={{ display: "flex", alignItems: "center", gap: 17, marginBottom: 12 }}>
-          <div style={{
-            minWidth: 64, minHeight: 64, maxWidth: 64, maxHeight: 64,
-            background: "#22262c", borderRadius: 16, display: "flex",
-            alignItems: "center", justifyContent: "center", overflow: "hidden"
-          }}>
-            {producer.logo
-              ? <img src={producer.logo} alt={producer.name}
-                  style={{ width: "98%", height: "98%", objectFit: "contain" }} />
-              : <span style={{ color: "#bbc7d2", fontWeight: 600, fontSize: 16, textAlign: "center" }}>Нет<br />лого</span>
-            }
-          </div>
+        {/* Название и регион */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16
+        }}>
+          <img src={producer.logo} alt="logo"
+            style={{
+              width: 62, height: 62, borderRadius: 16, background: "#181b20",
+              objectFit: "cover", boxShadow: "0 1px 5px #19223b33"
+            }}
+          />
           <div>
-            <div style={{
-              fontWeight: 900, fontSize: 19.5, color: "#fff",
-              marginBottom: 3, letterSpacing: ".01em", lineHeight: "1.12"
-            }}>{name}</div>
-            <div style={{
-              color: accent, fontWeight: 700, fontSize: 15,
-              marginBottom: 0, letterSpacing: ".01em"
-            }}>{region}</div>
+            <div style={{ fontWeight: 700, fontSize: 18, color: "#fff" }}>{producer.name}</div>
+            <div style={{ color: "#1edc80", fontWeight: 500, fontSize: 13 }}>{producer.region}</div>
           </div>
         </div>
+
         {/* Описание */}
         <div style={{
-          color: "#e9eefa", fontSize: 15.5, fontWeight: 500,
-          marginBottom: 13, marginTop: 4, lineHeight: 1.52
-        }}>{fullDescription || description}</div>
+          color: "#e3e3e3", fontSize: 15.1, marginBottom: 16, fontWeight: 400, lineHeight: 1.45
+        }}>{producer.fullDescription || producer.description}</div>
+
         {/* Адрес */}
-        {address && (
+        {producer.address && (
           <div style={{
-            background: "#151e28",
-            borderRadius: 13,
-            padding: "10px 12px 7px 12px",
-            color: "#fff",
-            fontWeight: 600,
-            marginBottom: 8,
-            fontSize: 14.4,
-            letterSpacing: "0.01em",
-            display: "flex",
-            alignItems: "flex-start",
-            gap: 7
-          }}>
-            <span style={{
-              background: "#25b1e6", borderRadius: 7,
-              color: "#fff", fontSize: 12.2, fontWeight: 700,
-              padding: "3px 10px 3px 8px", marginRight: 7
-            }}>Адрес</span>
-            <span style={{ color: "#fff", fontWeight: 500 }}>{address}</span>
-          </div>
+            color: "#e7edff", fontWeight: 600, fontSize: 14.1, marginBottom: 8
+          }}>Адрес: <span style={{ color: "#fff", fontWeight: 500 }}>{producer.address}</span></div>
         )}
+
         {/* Контакты */}
-        {(phones.length > 0 || emails.length > 0) && (
-          <div style={{
-            background: "#17202a",
-            borderRadius: 13,
-            padding: "12px 13px 8px 13px",
-            color: "#fff",
-            marginBottom: 8,
-            fontSize: 14.3,
-            boxShadow: "0 1px 5px #182d3855"
-          }}>
-            <div style={{
-              color: "#4be3b5", fontWeight: 700,
-              fontSize: 13.8, marginBottom: 7
-            }}>Контакты</div>
-            {phones.map((phone, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", marginBottom: 2, fontWeight: 600 }}>
-                {ICONS.phone}<span style={{color: "#b8f7f6"}}>{phone}</span>
-              </div>
-            ))}
-            {emails.map((mail, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", marginBottom: 2, fontWeight: 600 }}>
-                {ICONS.email}<span style={{color: "#b6c7fa"}}>{mail}</span>
-              </div>
-            ))}
+        {phones.length > 0 && (
+          <div style={{ display: 'flex', alignItems: 'center', color: '#79e6e6', fontWeight: 600, marginBottom: 4 }}>
+            <IconPhone />
+            {phones.join(", ")}
           </div>
         )}
+        {emails.length > 0 && (
+          <div style={{ display: 'flex', alignItems: 'center', color: '#97b5f7', fontWeight: 600, marginBottom: 5 }}>
+            <IconMail />
+            {emails.join(", ")}
+          </div>
+        )}
+
         {/* Продукция */}
-        {categories && categories.length > 0 && (
-          <div style={{
-            background: "#18262d",
-            borderRadius: 11,
-            padding: "8px 12px 7px 12px",
-            color: "#83ffd8",
-            fontWeight: 700,
-            marginBottom: 8,
-            fontSize: 14.2
-          }}>
-            Продукция: <span style={{ color: "#fff", fontWeight: 500 }}>{categories.join(', ')}</span>
+        {producer.categories && producer.categories.length > 0 && (
+          <div style={{ color: "#1edc80", fontWeight: 700, fontSize: 13.7, margin: "10px 0 4px 0" }}>
+            Продукция: <span style={{ color: "#e3ffe2" }}>{producer.categories.join(", ")}</span>
           </div>
         )}
+
         {/* Сайт */}
-        {site && (
-          <a href={site.startsWith('http') ? site : `https://${site}`} target="_blank" rel="noopener noreferrer"
-            style={{
-              display: "inline-block",
-              background: "linear-gradient(92deg,#1d8dff,#23d3ff 95%)",
-              color: "#fff", fontWeight: 700, borderRadius: 11,
-              padding: "8px 15px 6px 15px", fontSize: 14.7,
-              textDecoration: "none", marginBottom: 5, marginTop: 4
-            }}>
-            {site.replace(/^https?:\/\//, '')}
-          </a>
+        {producer.site && (
+          <div style={{ fontSize: 14, margin: "5px 0 5px 0" }}>
+            <a href={producer.site.startsWith('http') ? producer.site : `https://${producer.site}`}
+              target="_blank" rel="noopener noreferrer"
+              style={{
+                color: "#38d8ff", fontWeight: 700,
+                textDecoration: "none", borderBottom: "1.5px dashed #36d8ff", paddingBottom: 1
+              }}>
+              {producer.site.replace(/^https?:\/\//, "")}
+            </a>
+          </div>
         )}
+
         {/* Галерея */}
-        {gallery && gallery.length > 0 && (
-          <div style={{ marginTop: 12 }}>
-            <div style={{ color: "#abb8cc", fontSize: 13, marginBottom: 6, fontWeight: 600 }}>Фото</div>
+        {producer.gallery && producer.gallery.length > 0 && (
+          <div style={{ marginTop: 13 }}>
+            <div style={{ color: "#abb8cc", fontSize: 13, marginBottom: 5, fontWeight: 600 }}>Фото</div>
             <div style={{ display: 'flex', gap: 8, overflowX: 'auto' }}>
-              {gallery.map((img, i) => (
-                <img key={i} src={img} alt="фото" style={{
-                  width: 98, height: 68, objectFit: 'cover', borderRadius: 12, border: '1px solid #19223a'
-                }} />
+              {producer.gallery.map((img, i) => (
+                <img
+                  key={i}
+                  src={img}
+                  alt="фото"
+                  style={{
+                    width: 98, height: 68, objectFit: 'cover', borderRadius: 12, border: '1px solid #19223a',
+                    cursor: "pointer", transition: "transform .14s", boxShadow: "0 2px 9px #17181f33"
+                  }}
+                  onClick={() => setModal({ open: true, idx: i })}
+                />
               ))}
             </div>
           </div>
         )}
       </div>
+
+      {/* Gallery Modal */}
+      {modal.open && (
+        <GalleryModal
+          images={producer.gallery}
+          idx={modal.idx}
+          onClose={() => setModal({ open: false, idx: 0 })}
+        />
+      )}
     </div>
   );
 };

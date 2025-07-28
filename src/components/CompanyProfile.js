@@ -9,7 +9,6 @@ const CERT_COLORS = {
 const BADGE_STYLE = 'px-2 py-0.5 rounded text-[11px] font-semibold select-none whitespace-nowrap';
 const PRICE_MINT = '#34e0a1';
 
-// Мини-кнопки: тонкая рамка, компактные
 const BUTTON_BADGE_STYLE = {
   padding: '2px 12px',
   borderRadius: '8px',
@@ -33,12 +32,13 @@ const CompanyProfile = ({ company }) => {
 
   const certBadges = ['Честный знак', 'Меркурий'].filter(cert => company.certs?.includes(cert));
   const shortDesc =
-    company.fullDescription.length > 180 && !showFullDesc
-      ? company.fullDescription.slice(0, 180) + '...'
+    company.fullDescription.length > 200 && !showFullDesc
+      ? company.fullDescription.slice(0, 200) + '...'
       : company.fullDescription;
 
   return (
     <div className="bg-black text-white min-h-screen p-4 pb-36 max-w-2xl mx-auto rounded-2xl shadow-2xl font-sans">
+      {/* Назад */}
       <div className="mb-3">
         <button
           onClick={() => navigate('/catalog/suppliers')}
@@ -47,8 +47,9 @@ const CompanyProfile = ({ company }) => {
           ← Назад
         </button>
       </div>
+
+      {/* Лого + Инфо */}
       <div className="flex flex-row items-center mb-6 gap-6">
-        {/* Логотип */}
         <div className="flex-shrink-0 flex items-center justify-center">
           <div style={{
             width: 112,
@@ -76,7 +77,6 @@ const CompanyProfile = ({ company }) => {
             />
           </div>
         </div>
-        {/* Блок справа — текст крупнее */}
         <div className="flex-1 min-w-0 flex flex-col justify-center items-start gap-2">
           <div className="flex items-center gap-2 flex-wrap w-full">
             <span className="font-bold" style={{fontSize: "1.15rem", lineHeight:'1.13', maxWidth:'220px', color:'#fff'}}>
@@ -118,12 +118,23 @@ const CompanyProfile = ({ company }) => {
         </div>
       </div>
 
-      {/* Описание с кнопкой "Показать полностью" */}
-      <div className="mb-3">
+      {/* Крутой блок “О компании” + преимущества */}
+      <div className="mb-4">
         <div className="text-white text-lg font-semibold mb-1">О компании</div>
-        <div className="text-zinc-300" style={{fontSize:'15px'}}>
-          {shortDesc}
-          {company.fullDescription.length > 180 && (
+        <div className="text-zinc-300" style={{ fontSize: '15px', marginBottom: 10 }}>
+          <b style={{ color: "#38d8ff" }}>{company.name}</b> — прямые поставки {company.products?.join(', ').toLowerCase() || 'рыбы и морепродуктов'} по всей России и СНГ.
+          <br/>
+          <span style={{ color: "#23df81", fontWeight: 600 }}>
+            Работаем с оптом, розницей, HoReCa, производителями. Оперативно отвечаем на все запросы.
+          </span>
+          <ul style={{ margin: "10px 0 0 19px", padding: 0 }}>
+            <li>🛡 <b>Гарантия свежести</b> — только проверенная продукция, быстрая отгрузка.</li>
+            <li>📄 <b>Вся документация:</b> Честный знак, Меркурий, сертификаты.</li>
+            <li>🤝 <b>Индивидуальные условия</b> для постоянных клиентов и партнёров.</li>
+            <li>🚚 <b>Доставка по РФ и СНГ</b> — собственный автопарк, проверенные логисты.</li>
+            <li>📞 <b>Личный менеджер</b> для каждого клиента.</li>
+          </ul>
+          {company.fullDescription.length > 200 && (
             <button
               onClick={() => setShowFullDesc(v => !v)}
               className="text-blue-400 underline ml-2"
@@ -131,6 +142,11 @@ const CompanyProfile = ({ company }) => {
             >
               {showFullDesc ? 'Скрыть' : 'Показать полностью'}
             </button>
+          )}
+          {showFullDesc && (
+            <div className="text-zinc-400 mt-2" style={{fontSize:'14px'}}>
+              {company.fullDescription}
+            </div>
           )}
         </div>
       </div>

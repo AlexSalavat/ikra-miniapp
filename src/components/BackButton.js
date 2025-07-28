@@ -1,9 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-/**
- * Прямоугольная стильная кнопка Назад (AppStore style)
- */
 export default function BackButton({
   text = "Назад",
   color = "#2678f3",

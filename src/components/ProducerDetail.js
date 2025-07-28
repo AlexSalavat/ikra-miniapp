@@ -18,45 +18,53 @@ const ProducerDetail = () => {
       background: '#000',
       minHeight: '100vh',
       color: '#fff',
-      padding: 0,
       fontFamily: 'inherit',
       maxWidth: 430,
-      margin: '0 auto'
+      margin: '0 auto',
+      padding: 0
     }}>
-      {/* Красивая кнопка Назад */}
+      {/* --- HEADER c кнопкой Назад --- */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
-        padding: '18px 0 7px 0',
-        width: '100%',
-        maxWidth: 430,
+        padding: '0 0 0 0',
+        minHeight: 60,
+        borderBottom: '1.2px solid #191a20',
+        background: '#000',
         position: 'sticky',
         top: 0,
-        background: '#000',
-        zIndex: 100,
+        zIndex: 10
       }}>
         <button
           onClick={() => navigate(-1)}
           style={{
             display: 'flex',
             alignItems: 'center',
-            border: 'none',
+            justifyContent: 'flex-start',
             background: 'none',
+            border: 'none',
             color: '#357cff',
             fontWeight: 500,
-            fontSize: 16,
-            padding: '0 0 0 12px',
+            fontSize: 16.5,
+            padding: '0 0 0 16px',
             cursor: 'pointer',
-            gap: 6
+            minHeight: 52
           }}
         >
-          <svg width="22" height="22" fill="none" style={{ marginRight: 3 }}>
-            <path d="M13.5 6.5L9 11l4.5 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <svg width="22" height="22" fill="none" style={{ marginRight: 2, marginLeft: -2 }}>
+            <path d="M14 6L8.5 11L14 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          Назад
+          <span style={{
+            fontSize: 16.3,
+            fontWeight: 500,
+            position: 'relative',
+            top: 1
+          }}>Назад</span>
         </button>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 18, marginTop: 7, paddingLeft: 18 }}>
+
+      {/* --- CARD CONTENT --- */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 18, marginTop: 18, paddingLeft: 22 }}>
         <div style={{
           width: 84,
           height: 84,
@@ -83,14 +91,14 @@ const ProducerDetail = () => {
       </div>
       {!producer.isPlaceholder && (
         <>
-          <div style={{ color: '#ccc', fontSize: 15, marginBottom: 14, paddingLeft: 18, paddingRight: 10 }}>{producer.fullDescription || producer.description}</div>
+          <div style={{ color: '#ccc', fontSize: 15, marginBottom: 14, paddingLeft: 22, paddingRight: 12 }}>{producer.fullDescription || producer.description}</div>
           {producer.address && (
-            <div style={{ color: '#a4ffbb', fontSize: 13.5, marginBottom: 10, paddingLeft: 18 }}>
+            <div style={{ color: '#a4ffbb', fontSize: 13.5, marginBottom: 10, paddingLeft: 22 }}>
               {label("Адрес")}: {producer.address}
             </div>
           )}
           {producer.contacts && (
-            <div style={{ fontSize: 14, color: "#7af19d", marginBottom: 10, paddingLeft: 18 }}>
+            <div style={{ fontSize: 14, color: "#7af19d", marginBottom: 10, paddingLeft: 22 }}>
               {producer.contacts.phone && <>📞 {producer.contacts.phone}<br /></>}
               {producer.contacts.email && <>✉️ {producer.contacts.email}<br /></>}
               {producer.contacts["Петропавловск-Камчатский"] && <>📞 Петропавловск-Камчатский: {producer.contacts["Петропавловск-Камчатский"]}<br /></>}
@@ -98,7 +106,7 @@ const ProducerDetail = () => {
             </div>
           )}
           {producer.categories && producer.categories.length > 0 && (
-            <div style={{ color: "#23df81", fontSize: 13.5, marginBottom: 7, paddingLeft: 18 }}>
+            <div style={{ color: "#23df81", fontSize: 13.5, marginBottom: 7, paddingLeft: 22 }}>
               {label("Продукция")}: {producer.categories.join(', ')}
             </div>
           )}
@@ -112,11 +120,11 @@ const ProducerDetail = () => {
                 fontWeight: 600,
                 marginBottom: 11,
                 display: 'inline-block',
-                paddingLeft: 18
+                paddingLeft: 22
               }}>{producer.site.replace(/^https?:\/\//, '')}</a>
           )}
           {producer.gallery && producer.gallery.length > 0 && (
-            <div style={{ marginTop: 14, paddingLeft: 18 }}>
+            <div style={{ marginTop: 14, paddingLeft: 22 }}>
               <div style={{ color: '#bbb', fontSize: 13, marginBottom: 4 }}>Фото</div>
               <div style={{ display: 'flex', gap: 8, overflowX: 'auto' }}>
                 {producer.gallery.map((img, i) => (

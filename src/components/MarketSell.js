@@ -3,23 +3,27 @@ import React from "react";
 const CATEGORIES = [
   {
     key: "ikra",
-    image: "/images/ikra1.webp",
+    image: "/images/cav.webp",
     title: "Икра",
+    description: "Красная и черная икра от прямых производителей.",
+  },
+  {
+    key: "ryba",
+    image: "/images/fish.webp",
+    title: "Рыба",
+    description: "Свежемороженая, охлажденная, разделанная рыба — оптом и в розницу.",
   },
   {
     key: "krab",
     image: "/images/krab.webp",
     title: "Краб",
+    description: "Живой, варёно-мороженый, лапы и клещни, премиум-качество.",
   },
   {
-    key: "ryba",
-    image: "/images/ryba1.webp",
-    title: "Рыба",
-  },
-  {
-    key: "more",
+    key: "mor",
     image: "/images/mor.webp",
     title: "Морепродукты",
+    description: "Мидии, гребешок, креветка и другие деликатесы Дальнего Востока.",
   },
 ];
 
@@ -41,7 +45,7 @@ export default function MarketSell() {
         maxWidth: 440,
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        gap: 17,
+        gap: 20,
         justifyContent: "center"
       }}>
         {CATEGORIES.map((cat) => (
@@ -51,31 +55,33 @@ export default function MarketSell() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              cursor: "pointer"
+              cursor: "pointer",
+              background: "none"
             }}
             onClick={() => window.location.href = `/market/sell/${cat.key}`}
           >
-            {/* Фото карточки */}
+            {/* Фото карточки — во всю карточку, с закруглением */}
             <div style={{
               width: "100%",
               aspectRatio: "1/1",
-              background: "#191a1f",
               borderRadius: 19,
               overflow: "hidden",
+              boxShadow: "0 2px 14px #16181d66",
+              background: "#23232a",
+              marginBottom: 7,
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 2px 14px #16181d66"
+              justifyContent: "center"
             }}>
               <img
                 src={cat.image}
                 alt={cat.title}
                 style={{
-                  width: "86%",
-                  height: "86%",
-                  objectFit: "contain",
-                  background: "#23232a",
-                  borderRadius: 16,
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderRadius: 19,
+                  display: "block"
                 }}
                 onError={e => { e.target.src = '/images/no-image.webp'; }}
               />
@@ -83,23 +89,30 @@ export default function MarketSell() {
             {/* Название под карточкой */}
             <div
               style={{
-                marginTop: 8,
                 color: "#fff",
-                fontWeight: 700,
-                fontSize: 13.3,
+                fontWeight: 800,
+                fontSize: 15.2,
+                marginBottom: 2,
+                marginTop: 2,
                 textAlign: "center",
-                maxHeight: 44,
-                minHeight: 28,
-                overflow: "hidden",
-                display: "-webkit-box",
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
-                whiteSpace: "normal",
-                lineHeight: "1.14"
+                letterSpacing: ".01em"
               }}
-              title={cat.title}
             >
               {cat.title}
+            </div>
+            {/* Описание */}
+            <div
+              style={{
+                color: "#a5ffa5",
+                fontWeight: 400,
+                fontSize: 11.3,
+                textAlign: "center",
+                lineHeight: "1.16",
+                minHeight: 28,
+                marginBottom: 2
+              }}
+            >
+              {cat.description}
             </div>
           </div>
         ))}

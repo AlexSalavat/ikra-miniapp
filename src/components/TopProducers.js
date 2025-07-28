@@ -78,8 +78,8 @@ export default function TopProducers() {
               style={{
                 width: "100%",
                 aspectRatio: "1/1",
-                minHeight: 128,
-                maxHeight: 148,
+                minHeight: 148,
+                maxHeight: 164,
                 marginBottom: 7,
                 border: "1px solid #23232a",
                 display: "flex",
@@ -88,17 +88,28 @@ export default function TopProducers() {
               }}
             >
               {card.logo ? (
-                <img
-                  src={card.logo}
-                  alt={card.name}
-                  style={{
-                    width: 94,
-                    height: 94,
-                    objectFit: "contain",
-                    display: "block"
-                  }}
-                  onError={e => { e.target.src = '/images/no-logo.webp'; }}
-                />
+                <div style={{
+                  width: 120,
+                  height: 120,
+                  background: "#181820",
+                  borderRadius: 16,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow: "0 2px 16px #23232a22"
+                }}>
+                  <img
+                    src={card.logo}
+                    alt={card.name}
+                    style={{
+                      width: 104,
+                      height: 104,
+                      objectFit: "contain",
+                      display: "block"
+                    }}
+                    onError={e => { e.target.src = '/images/no-logo.webp'; }}
+                  />
+                </div>
               ) : (
                 <div
                   className={`absolute inset-0 flex items-center justify-center z-10 ${
@@ -110,7 +121,7 @@ export default function TopProducers() {
                   <span style={{
                     color: "#bdbdbd",
                     fontWeight: 600,
-                    fontSize: 15,
+                    fontSize: 16,
                     textAlign: "center",
                     opacity: 0.90,
                     whiteSpace: "pre-line",
@@ -125,7 +136,7 @@ export default function TopProducers() {
             <div style={{
               color: "#fff",
               fontWeight: 600,
-              fontSize: 13.7,
+              fontSize: 14.5,
               textAlign: "center",
               marginTop: 0,
               marginBottom: 2,

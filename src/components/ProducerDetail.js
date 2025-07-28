@@ -6,44 +6,57 @@ const label = (txt) => <span style={{ color: '#37e08a', fontSize: 14, fontWeight
 
 const ProducerDetail = () => {
   const { id } = useParams();
+  const producer = producers.find(p => String(p.id) === id || Number(p.id) === Number(id));
   const navigate = useNavigate();
 
-  // Гарантировано найдём по числу и строке:
-  const producer = producers.find(
-    p => String(p.id) === id || Number(p.id) === Number(id)
+  if (!producer) return (
+    <div style={{ color: '#fff', padding: 30 }}>Завод не найден</div>
   );
-
-  if (!producer) {
-    return (
-      <div style={{ color: '#fff', padding: 30, background: "#000", minHeight: "100vh" }}>
-        Завод не найден<br />id: {id}
-      </div>
-    );
-  }
 
   return (
     <div style={{
       background: '#000',
       minHeight: '100vh',
       color: '#fff',
-      padding: 24,
+      padding: 0,
       fontFamily: 'inherit',
       maxWidth: 430,
       margin: '0 auto'
     }}>
-      <button onClick={() => navigate(-1)}
-        style={{
-          marginBottom: 18,
-          padding: '6px 16px',
-          borderRadius: 11,
-          background: "none",
-          color: '#357cff',
-          border: 'none',
-          fontWeight: 500,
-          fontSize: 15,
-          cursor: 'pointer'
-        }}>← Назад</button>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 18 }}>
+      {/* Красивая кнопка Назад */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        padding: '18px 0 7px 0',
+        width: '100%',
+        maxWidth: 430,
+        position: 'sticky',
+        top: 0,
+        background: '#000',
+        zIndex: 100,
+      }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            border: 'none',
+            background: 'none',
+            color: '#357cff',
+            fontWeight: 500,
+            fontSize: 16,
+            padding: '0 0 0 12px',
+            cursor: 'pointer',
+            gap: 6
+          }}
+        >
+          <svg width="22" height="22" fill="none" style={{ marginRight: 3 }}>
+            <path d="M13.5 6.5L9 11l4.5 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Назад
+        </button>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 18, marginTop: 7, paddingLeft: 18 }}>
         <div style={{
           width: 84,
           height: 84,
@@ -70,14 +83,14 @@ const ProducerDetail = () => {
       </div>
       {!producer.isPlaceholder && (
         <>
-          <div style={{ color: '#ccc', fontSize: 15, marginBottom: 14 }}>{producer.fullDescription || producer.description}</div>
+          <div style={{ color: '#ccc', fontSize: 15, marginBottom: 14, paddingLeft: 18, paddingRight: 10 }}>{producer.fullDescription || producer.description}</div>
           {producer.address && (
-            <div style={{ color: '#a4ffbb', fontSize: 13.5, marginBottom: 10 }}>
+            <div style={{ color: '#a4ffbb', fontSize: 13.5, marginBottom: 10, paddingLeft: 18 }}>
               {label("Адрес")}: {producer.address}
             </div>
           )}
           {producer.contacts && (
-            <div style={{ fontSize: 14, color: "#7af19d", marginBottom: 10 }}>
+            <div style={{ fontSize: 14, color: "#7af19d", marginBottom: 10, paddingLeft: 18 }}>
               {producer.contacts.phone && <>📞 {producer.contacts.phone}<br /></>}
               {producer.contacts.email && <>✉️ {producer.contacts.email}<br /></>}
               {producer.contacts["Петропавловск-Камчатский"] && <>📞 Петропавловск-Камчатский: {producer.contacts["Петропавловск-Камчатский"]}<br /></>}
@@ -85,7 +98,7 @@ const ProducerDetail = () => {
             </div>
           )}
           {producer.categories && producer.categories.length > 0 && (
-            <div style={{ color: "#23df81", fontSize: 13.5, marginBottom: 7 }}>
+            <div style={{ color: "#23df81", fontSize: 13.5, marginBottom: 7, paddingLeft: 18 }}>
               {label("Продукция")}: {producer.categories.join(', ')}
             </div>
           )}
@@ -98,11 +111,12 @@ const ProducerDetail = () => {
                 textDecoration: 'underline',
                 fontWeight: 600,
                 marginBottom: 11,
-                display: 'inline-block'
+                display: 'inline-block',
+                paddingLeft: 18
               }}>{producer.site.replace(/^https?:\/\//, '')}</a>
           )}
           {producer.gallery && producer.gallery.length > 0 && (
-            <div style={{ marginTop: 14 }}>
+            <div style={{ marginTop: 14, paddingLeft: 18 }}>
               <div style={{ color: '#bbb', fontSize: 13, marginBottom: 4 }}>Фото</div>
               <div style={{ display: 'flex', gap: 8, overflowX: 'auto' }}>
                 {producer.gallery.map((img, i) => (

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 
 const newsSections = [
   {
@@ -14,13 +15,13 @@ const newsSections = [
     link: '/news/ikra-wars'
   },
   {
-    title: 'ТОП-10 производителей',
+    title: 'ТОП производители',
     description: 'Рейтинги, динамика и доверие рынка',
     image: '/images/pk.webp',
     link: '/news/top-producers'
   },
   {
-    title: 'Инсайды отрасли',
+    title: 'Инсайдерский Доступ',
     description: 'Только для своих: слухи, прогнозы, эксклюзив',
     image: '/images/insider.webp',
     link: '/insider',
@@ -30,7 +31,8 @@ const newsSections = [
 
 const CARD_SIZE = 185;
 
-const News = () => {
+export default function News() {
+  const navigate = useNavigate();
   // Можешь заменить isAuthorized на свою логику авторизации
   const isAuthorized = false;
 
@@ -38,7 +40,7 @@ const News = () => {
     if (item.locked && !isAuthorized) {
       alert('Доступ только для своих. Войдите или оставьте заявку на доступ!');
     } else if (item.link && item.link !== '#') {
-      window.location.href = item.link;
+      navigate(item.link);   // ВАЖНО: используем navigate, а не window.location
     }
   };
 
@@ -175,6 +177,4 @@ const News = () => {
       </div>
     </div>
   );
-};
-
-export default News;
+}

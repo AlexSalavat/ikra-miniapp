@@ -1,3 +1,4 @@
+// src/components/Market.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -145,7 +146,7 @@ export default function Market() {
           }}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
-          onClick={() => navigate("/market/sell/create")}
+          onClick={() => navigate("/market/add")} // вот здесь правильный путь!
         >
           Разместить объявление
         </button>

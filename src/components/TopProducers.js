@@ -45,11 +45,11 @@ export default function TopProducers() {
 
   return (
     <div className="bg-black min-h-screen p-3">
-      {/* --- Красивейшая кнопка Назад --- */}
-      <div style={{ marginBottom: 6 }}>
+      {/* Кнопка Назад */}
+      <div style={{ marginBottom: 7 }}>
         <BackButton />
       </div>
-      {/* --- Фильтр по регионам --- */}
+      {/* Фильтр по регионам */}
       <div className="flex gap-1 justify-center mb-3 overflow-auto">
         {REGIONS.map(region => (
           <button
@@ -61,7 +61,7 @@ export default function TopProducers() {
           </button>
         ))}
       </div>
-      {/* --- Сетка карточек и названий --- */}
+      {/* Сетка карточек */}
       <div
         className="grid"
         style={{
@@ -80,24 +80,35 @@ export default function TopProducers() {
                 aspectRatio: "1/1",
                 minHeight: 128,
                 maxHeight: 148,
-                minWidth: 0,
-                maxWidth: "100%",
                 marginBottom: 7,
-                border: "1px solid #23232a"
+                border: "1px solid #23232a",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
               }}
             >
               {card.logo ? (
-                <img
-                  src={card.logo}
-                  alt={card.name}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "contain",
-                    padding: 12,
-                  }}
-                  onError={e => { e.target.src = '/images/no-logo.webp'; }}
-                />
+                <div style={{
+                  width: 88,
+                  height: 88,
+                  background: "#181820",
+                  borderRadius: 14,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}>
+                  <img
+                    src={card.logo}
+                    alt={card.name}
+                    style={{
+                      width: 70,
+                      height: 70,
+                      objectFit: "contain",
+                      display: "block"
+                    }}
+                    onError={e => { e.target.src = '/images/no-logo.webp'; }}
+                  />
+                </div>
               ) : (
                 <div
                   className={`absolute inset-0 flex items-center justify-center z-10 ${
@@ -120,11 +131,11 @@ export default function TopProducers() {
                 </div>
               )}
             </div>
-            {/* --- Название под карточкой --- */}
+            {/* Название под карточкой */}
             <div style={{
               color: "#fff",
               fontWeight: 600,
-              fontSize: 13.5,
+              fontSize: 13.2,
               textAlign: "center",
               marginTop: 0,
               marginBottom: 2,
@@ -146,7 +157,7 @@ export default function TopProducers() {
           </div>
         ))}
       </div>
-      {/* --- Пагинация --- */}
+      {/* Пагинация */}
       {filteredPages.length > 1 && (
         <div className="flex justify-center gap-3 items-center mt-1.5">
           <button

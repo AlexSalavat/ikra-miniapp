@@ -4,7 +4,8 @@ import producers from '../data/producers';
 
 const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
 
-const CARD_SIZE = 155; // Размер карточки (ширина и высота), меняй по вкусу
+// Квадратная большая карточка
+const CARD_SIZE = 182; // Можешь поставить 180-200 для мобильных
 
 export default function TopProducers() {
   const [filter, setFilter] = useState(REGIONS[0]);
@@ -19,15 +20,13 @@ export default function TopProducers() {
     window.scrollTo(0, 0);
   }, [filter]);
 
-  // Обрезка названия до 2 строк с троеточием
-  function trimName(name, maxLen = 50) {
+  function trimName(name, maxLen = 56) {
     if (name.length > maxLen) return name.slice(0, maxLen - 1) + '…';
     return name;
   }
 
   return (
     <div style={{ background: "#000", minHeight: "100vh", padding: "18px 0 54px 0" }}>
-      {/* Назад */}
       <button
         onClick={() => window.history.back()}
         style={{
@@ -36,20 +35,19 @@ export default function TopProducers() {
           display: "flex",
           alignItems: "center",
           gap: 5,
-          fontSize: 16,
+          fontSize: 17,
           background: "none",
           border: "none",
           color: "#357cff",
-          fontWeight: 500,
+          fontWeight: 600,
           cursor: "pointer"
         }}>
-        <svg width="19" height="19" fill="none" style={{ verticalAlign: '-3px', marginRight: 3 }}>
+        <svg width="20" height="20" fill="none" style={{ verticalAlign: '-3px', marginRight: 3 }}>
           <path d="M12 4l-6 5 6 5" stroke="#357cff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
         Назад
       </button>
 
-      {/* Фильтр по регионам */}
       <div style={{
         display: "flex",
         gap: 10,
@@ -79,14 +77,14 @@ export default function TopProducers() {
         ))}
       </div>
 
-      {/* Сетка карточек 2xN */}
+      {/* Сетка: максимально большие квадратные карточки */}
       <div style={{
         width: "100%",
-        maxWidth: 440,
+        maxWidth: 410,
         margin: "0 auto",
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        gap: 23
+        gap: 13 // Меньше расстояние между карточками
       }}>
         {filtered.map(card => (
           <div
@@ -116,8 +114,8 @@ export default function TopProducers() {
                   src={card.logo}
                   alt={card.name}
                   style={{
-                    width: CARD_SIZE - 28,
-                    height: CARD_SIZE - 28,
+                    width: CARD_SIZE - 20,
+                    height: CARD_SIZE - 20,
                     objectFit: "contain",
                     borderRadius: 17,
                     background: "#fff",
@@ -129,7 +127,7 @@ export default function TopProducers() {
                 <span style={{
                   color: "#bdbdbd",
                   fontWeight: 600,
-                  fontSize: 14.5,
+                  fontSize: 15,
                   textAlign: "center"
                 }}>
                   {card.isPlaceholder ? 'Место свободно' : 'Лого в разработке'}
@@ -139,19 +137,19 @@ export default function TopProducers() {
             {/* Название ПОД карточкой */}
             <div
               style={{
-                marginTop: 11,
+                marginTop: 9,
                 color: "#fff",
                 fontWeight: 700,
-                fontSize: 14.3,
+                fontSize: 13.7,
                 textAlign: "center",
-                maxHeight: 37,
+                maxHeight: 41,
                 minHeight: 26,
                 overflow: "hidden",
                 display: "-webkit-box",
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
                 whiteSpace: "normal",
-                lineHeight: "1.14"
+                lineHeight: "1.18"
               }}
               title={card.name}
             >

@@ -5,7 +5,7 @@ import services from '../data/neirobiz';
 
 const CARD_HEIGHT = 145;
 const CARD_RADIUS = 19;
-const TG_LINK = "https://t.me/username"; // <-- подставь свой username
+const TG_LINK = "https://t.me/NeuroBiz_GPT"; // <-- подставь свой username
 
 const NeirobizScreen = () => {
   const [modalService, setModalService] = useState(null);

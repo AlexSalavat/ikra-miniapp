@@ -23,8 +23,6 @@ const CARD_GAP = 22;
 
 export default function Market() {
   const navigate = useNavigate();
-
-  // Для плавного ховера на кнопке (градиент)
   const [hover, setHover] = React.useState(false);
 
   return (
@@ -46,7 +44,7 @@ export default function Market() {
           Объявления
         </h1>
 
-        {/* Сетка карточек: большие и квадратные */}
+        {/* Сетка карточек */}
         <div style={{
           display: "grid",
           gridTemplateColumns: `repeat(2, ${CARD_SIZE}px)`,
@@ -90,13 +88,13 @@ export default function Market() {
           ))}
         </div>
 
-        {/* Названия и описания ПОД карточками, строго два в ряд */}
+        {/* Названия и описания ПОД карточками */}
         <div style={{
           display: "grid",
           gridTemplateColumns: `repeat(2, ${CARD_SIZE}px)`,
           gap: CARD_GAP,
           justifyContent: "center",
-          marginTop: -14, // немного "подъехать" к карточке
+          marginTop: -14,
           marginBottom: 32
         }}>
           {CARDS.map((card) => (
@@ -115,7 +113,7 @@ export default function Market() {
               }}>{card.title}</div>
               <div style={{
                 fontSize: 11.2,
-                color: "#6ee7b7",
+                color: "#38d8ff",
                 minHeight: 17,
                 fontWeight: 500,
                 whiteSpace: "normal",
@@ -125,12 +123,12 @@ export default function Market() {
           ))}
         </div>
 
-        {/* Кнопка Подать объявление — деликатный градиент, плавный ховер */}
+        {/* Кнопка разместить объявление — синий/голубой градиент */}
         <button
           style={{
             background: hover
-              ? "linear-gradient(90deg,#2678f3 48%,#23df81 100%)"
-              : "linear-gradient(90deg,#23df81 55%,#2678f3 100%)",
+              ? "linear-gradient(92deg,#44e2ff 0%,#2678f3 100%)"
+              : "linear-gradient(92deg,#2678f3 0%,#44e2ff 100%)",
             color: "#fff",
             fontWeight: 700,
             borderRadius: 14,
@@ -141,7 +139,7 @@ export default function Market() {
             cursor: "pointer",
             marginTop: 10,
             marginBottom: 4,
-            boxShadow: "0 2px 8px #172a2525",
+            boxShadow: "0 2px 8px #2678f355",
             transition: "background 0.18s, box-shadow .15s",
             letterSpacing: ".01em",
           }}
@@ -149,7 +147,7 @@ export default function Market() {
           onMouseLeave={() => setHover(false)}
           onClick={() => navigate("/market/sell/create")}
         >
-          + Подать объявление
+          Разместить объявление
         </button>
       </div>
     </div>

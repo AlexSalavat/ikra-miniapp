@@ -4,6 +4,8 @@ import producers from '../data/producers';
 
 const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
 
+const CARD_SIZE = 155; // Размер карточки (ширина и высота), меняй по вкусу
+
 export default function TopProducers() {
   const [filter, setFilter] = useState(REGIONS[0]);
   const navigate = useNavigate();
@@ -18,30 +20,30 @@ export default function TopProducers() {
   }, [filter]);
 
   // Обрезка названия до 2 строк с троеточием
-  function trimName(name, maxLen = 44) {
+  function trimName(name, maxLen = 50) {
     if (name.length > maxLen) return name.slice(0, maxLen - 1) + '…';
     return name;
   }
 
   return (
-    <div style={{ background: "#000", minHeight: "100vh", padding: "16px 0 50px 0" }}>
+    <div style={{ background: "#000", minHeight: "100vh", padding: "18px 0 54px 0" }}>
       {/* Назад */}
       <button
         onClick={() => window.history.back()}
         style={{
           marginLeft: 8,
-          marginBottom: 12,
+          marginBottom: 14,
           display: "flex",
           alignItems: "center",
           gap: 5,
-          fontSize: 15,
+          fontSize: 16,
           background: "none",
           border: "none",
           color: "#357cff",
           fontWeight: 500,
           cursor: "pointer"
         }}>
-        <svg width="18" height="18" fill="none" style={{ verticalAlign: '-3px', marginRight: 3 }}>
+        <svg width="19" height="19" fill="none" style={{ verticalAlign: '-3px', marginRight: 3 }}>
           <path d="M12 4l-6 5 6 5" stroke="#357cff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
         Назад
@@ -50,9 +52,9 @@ export default function TopProducers() {
       {/* Фильтр по регионам */}
       <div style={{
         display: "flex",
-        gap: 8,
+        gap: 10,
         justifyContent: "center",
-        marginBottom: 18,
+        marginBottom: 22,
         flexWrap: "wrap"
       }}>
         {REGIONS.map(region => (
@@ -63,11 +65,11 @@ export default function TopProducers() {
               background: filter === region ? '#23232a' : 'none',
               color: filter === region ? '#20d978' : '#bababa',
               border: `1.3px solid ${filter === region ? '#20d978' : '#23232a'}`,
-              borderRadius: 7,
-              padding: '4px 13px',
+              borderRadius: 9,
+              padding: '5px 18px',
               fontWeight: 700,
-              fontSize: 13,
-              minWidth: 76,
+              fontSize: 15,
+              minWidth: 85,
               cursor: 'pointer',
               transition: 'border .12s, color .16s, background .18s'
             }}
@@ -80,11 +82,11 @@ export default function TopProducers() {
       {/* Сетка карточек 2xN */}
       <div style={{
         width: "100%",
-        maxWidth: 430,
+        maxWidth: 440,
         margin: "0 auto",
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        gap: 17
+        gap: 23
       }}>
         {filtered.map(card => (
           <div
@@ -97,27 +99,27 @@ export default function TopProducers() {
             }}
             onClick={() => !card.isPlaceholder && navigate(`/producer/${card.id}`)}
           >
-            {/* Квадратное фото */}
+            {/* Квадратное фото/лого */}
             <div style={{
-              width: 110,
-              height: 110,
+              width: CARD_SIZE,
+              height: CARD_SIZE,
               background: "#18181f",
-              borderRadius: 18,
+              borderRadius: 22,
               overflow: "hidden",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              boxShadow: "0 2px 13px #181a2255"
+              boxShadow: "0 2px 18px #16181d55"
             }}>
               {card.logo ? (
                 <img
                   src={card.logo}
                   alt={card.name}
                   style={{
-                    width: "86px",
-                    height: "86px",
+                    width: CARD_SIZE - 28,
+                    height: CARD_SIZE - 28,
                     objectFit: "contain",
-                    borderRadius: 13,
+                    borderRadius: 17,
                     background: "#fff",
                     display: "block"
                   }}
@@ -127,29 +129,29 @@ export default function TopProducers() {
                 <span style={{
                   color: "#bdbdbd",
                   fontWeight: 600,
-                  fontSize: 13.5,
+                  fontSize: 14.5,
                   textAlign: "center"
                 }}>
                   {card.isPlaceholder ? 'Место свободно' : 'Лого в разработке'}
                 </span>
               )}
             </div>
-            {/* Название — всегда ПОД карточкой, не в ней */}
+            {/* Название ПОД карточкой */}
             <div
               style={{
-                marginTop: 9,
+                marginTop: 11,
                 color: "#fff",
                 fontWeight: 700,
-                fontSize: 12.3,
+                fontSize: 14.3,
                 textAlign: "center",
-                maxHeight: 34,
-                minHeight: 25,
+                maxHeight: 37,
+                minHeight: 26,
                 overflow: "hidden",
                 display: "-webkit-box",
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
                 whiteSpace: "normal",
-                lineHeight: "1.13"
+                lineHeight: "1.14"
               }}
               title={card.name}
             >

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-// Массив объявлений (можно вынести в data/ads.js)
+// Массив объявлений (лучше вынести в data/ads.js)
 const exampleAds = [
   {
     id: 1,
@@ -63,6 +63,30 @@ export default function MarketSellCategory() {
       flexDirection: "column",
       alignItems: "center"
     }}>
+      {/* Кнопка Назад */}
+      <button
+        onClick={() => navigate(-1)}
+        style={{
+          alignSelf: "flex-start",
+          marginLeft: 12,
+          marginBottom: 9,
+          padding: "6px 16px",
+          borderRadius: 11,
+          background: "none",
+          color: '#357cff',
+          border: 'none',
+          fontWeight: 500,
+          fontSize: 15,
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          gap: 5
+        }}>
+        <svg width="18" height="18" fill="none" style={{ verticalAlign: '-3px', marginRight: 3 }}>
+          <path d="M12 4l-6 5 6 5" stroke="#357cff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        Назад
+      </button>
       <h2 style={{
         fontWeight: 800,
         fontSize: 21,

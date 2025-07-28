@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import BackButton from './BackButton'; // путь до компонента
 import producers from '../data/producers';
 
 const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
@@ -44,45 +45,9 @@ export default function TopProducers() {
 
   return (
     <div className="bg-black min-h-screen p-3">
-      {/* --- Красивая кнопка Назад, как в "Икорных войнах" --- */}
-      <div style={{ width: '100%', maxWidth: 430, padding: 0, margin: 0, background: 'transparent', position: 'relative', marginBottom: 2 }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 7,
-            background: 'none',
-            border: 'none',
-            color: '#2678f3',
-            fontWeight: 600,
-            fontSize: 15.5,
-            cursor: 'pointer',
-            padding: '2px 0 13px 2px'
-          }}
-        >
-          {/* Круглая синяя иконка */}
-          <span style={{
-            width: 34,
-            height: 34,
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: '#2678f3',
-            borderRadius: '50%',
-            marginRight: 2
-          }}>
-            <svg width="19" height="19" fill="none" viewBox="0 0 19 19">
-              <path d="M12.5 5.3L8 9.5L12.5 13.7"
-                stroke="#fff"
-                strokeWidth="2.1"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </span>
-          <span style={{ color: '#2678f3', fontWeight: 700, fontSize: 15.5 }}>Назад</span>
-        </button>
+      {/* --- Кнопка Назад --- */}
+      <div style={{ marginBottom: 2 }}>
+        <BackButton />
       </div>
       {/* --- Фильтр по регионам --- */}
       <div className="flex gap-1 justify-center mb-3 overflow-auto">

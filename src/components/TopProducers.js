@@ -88,28 +88,19 @@ export default function TopProducers() {
               }}
             >
               {card.logo ? (
-                <div style={{
-                  width: 120,
-                  height: 120,
-                  background: "#181820",
-                  borderRadius: 16,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: "0 2px 16px #23232a22"
-                }}>
-                  <img
-                    src={card.logo}
-                    alt={card.name}
-                    style={{
-                      width: 104,
-                      height: 104,
-                      objectFit: "contain",
-                      display: "block"
-                    }}
-                    onError={e => { e.target.src = '/images/no-logo.webp'; }}
-                  />
-                </div>
+                <img
+                  src={card.logo}
+                  alt={card.name}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                    borderRadius: 19,    // тот же радиус, что и у карточки
+                    background: "#16181e",
+                    display: "block"
+                  }}
+                  onError={e => { e.target.src = '/images/no-logo.webp'; }}
+                />
               ) : (
                 <div
                   className={`absolute inset-0 flex items-center justify-center z-10 ${

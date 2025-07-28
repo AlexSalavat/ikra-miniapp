@@ -24,6 +24,9 @@ const CARD_GAP = 22;
 export default function Market() {
   const navigate = useNavigate();
 
+  // Для плавного ховера на кнопке (градиент)
+  const [hover, setHover] = React.useState(false);
+
   return (
     <div className="bg-black min-h-screen pb-20 pt-6 flex flex-col items-center">
       <div style={{
@@ -122,22 +125,28 @@ export default function Market() {
           ))}
         </div>
 
-        {/* Кнопка Подать объявление — неоновый стиль */}
+        {/* Кнопка Подать объявление — деликатный градиент, плавный ховер */}
         <button
           style={{
-            background: "linear-gradient(87deg,#23df81 50%,#2678f3 100%)",
+            background: hover
+              ? "linear-gradient(90deg,#2678f3 48%,#23df81 100%)"
+              : "linear-gradient(90deg,#23df81 55%,#2678f3 100%)",
             color: "#fff",
-            fontWeight: 800,
+            fontWeight: 700,
             borderRadius: 14,
-            padding: "14px 0",
-            fontSize: 17,
+            padding: "11px 0",
+            fontSize: 15.4,
             width: "100%",
             border: "none",
             cursor: "pointer",
-            boxShadow: "0 0 25px #23df818a, 0 2px 10px #2678f340",
-            letterSpacing: ".03em",
-            textShadow: "0 2px 8px #23df8133"
+            marginTop: 10,
+            marginBottom: 4,
+            boxShadow: "0 2px 8px #172a2525",
+            transition: "background 0.18s, box-shadow .15s",
+            letterSpacing: ".01em",
           }}
+          onMouseEnter={() => setHover(true)}
+          onMouseLeave={() => setHover(false)}
           onClick={() => navigate("/market/sell/create")}
         >
           + Подать объявление

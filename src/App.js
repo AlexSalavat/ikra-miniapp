@@ -29,15 +29,31 @@ function App() {
             <Route path="/supplier/:id" element={<SupplierDetail />} />
             <Route path="/logistics" element={<LogisticsShowcase />} />
             <Route path="/production" element={<ProductionShowcase />} />
-            <Route path="/producers" element={<TopProducers />} />     {/* Добавлено */}
-            <Route path="/producer/:id" element={<ProducerDetail />} />{/* Добавлено */}
+            <Route path="/producers" element={<TopProducers />} />
+            <Route path="/producer/:id" element={<ProducerDetail />} />
             <Route path="/neirobiz" element={<NeirobizScreen />} />
             <Route path="/news" element={<News />} />
+            <Route path="/news/top-producers" element={<TopProducers />} /> {/* этот маршрут нужен! */}
             <Route path="/market" element={<Market />} />
             <Route path="/market/sell" element={<MarketSell />} />
             <Route path="/market/buy" element={<MarketBuy />} />
             <Route path="/market/sell/:category" element={<MarketSellCategory />} />
             <Route path="/profile" element={<Profile />} />
+            {/* Фолбэк для несуществующих маршрутов */}
+            <Route path="*" element={
+              <div style={{
+                background: "#000",
+                color: "#fff",
+                minHeight: "100vh",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 22
+              }}>
+                Страница не найдена
+              </div>
+            }/>
           </Routes>
         </div>
         <BottomNav />

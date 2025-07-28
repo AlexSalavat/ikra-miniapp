@@ -6,13 +6,20 @@ const label = (txt) => <span style={{ color: '#37e08a', fontSize: 14, fontWeight
 
 const ProducerDetail = () => {
   const { id } = useParams();
-  // id в producers может быть string или number — проверим оба варианта
-  const producer = producers.find(p => String(p.id) === id || Number(p.id) === Number(id));
   const navigate = useNavigate();
 
-  if (!producer) return (
-    <div style={{ color: '#fff', padding: 30 }}>Завод не найден</div>
+  // Гарантировано найдём по числу и строке:
+  const producer = producers.find(
+    p => String(p.id) === id || Number(p.id) === Number(id)
   );
+
+  if (!producer) {
+    return (
+      <div style={{ color: '#fff', padding: 30, background: "#000", minHeight: "100vh" }}>
+        Завод не найден<br />id: {id}
+      </div>
+    );
+  }
 
   return (
     <div style={{

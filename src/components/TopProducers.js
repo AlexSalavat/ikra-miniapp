@@ -88,27 +88,17 @@ export default function TopProducers() {
               }}
             >
               {card.logo ? (
-                <div style={{
-                  width: 88,
-                  height: 88,
-                  background: "#181820",
-                  borderRadius: 14,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}>
-                  <img
-                    src={card.logo}
-                    alt={card.name}
-                    style={{
-                      width: 70,
-                      height: 70,
-                      objectFit: "contain",
-                      display: "block"
-                    }}
-                    onError={e => { e.target.src = '/images/no-logo.webp'; }}
-                  />
-                </div>
+                <img
+                  src={card.logo}
+                  alt={card.name}
+                  style={{
+                    width: 94,
+                    height: 94,
+                    objectFit: "contain",
+                    display: "block"
+                  }}
+                  onError={e => { e.target.src = '/images/no-logo.webp'; }}
+                />
               ) : (
                 <div
                   className={`absolute inset-0 flex items-center justify-center z-10 ${
@@ -135,7 +125,7 @@ export default function TopProducers() {
             <div style={{
               color: "#fff",
               fontWeight: 600,
-              fontSize: 13.2,
+              fontSize: 13.7,
               textAlign: "center",
               marginTop: 0,
               marginBottom: 2,

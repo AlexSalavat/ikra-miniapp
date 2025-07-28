@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BackButton from './BackButton'; // путь до компонента
+import BackButton from './BackButton';
 import producers from '../data/producers';
 
 const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
@@ -45,8 +45,8 @@ export default function TopProducers() {
 
   return (
     <div className="bg-black min-h-screen p-3">
-      {/* --- Кнопка Назад --- */}
-      <div style={{ marginBottom: 2 }}>
+      {/* --- Красивейшая кнопка Назад --- */}
+      <div style={{ marginBottom: 6 }}>
         <BackButton />
       </div>
       {/* --- Фильтр по регионам --- */}
@@ -61,7 +61,7 @@ export default function TopProducers() {
           </button>
         ))}
       </div>
-      {/* --- Сетка карточек --- */}
+      {/* --- Сетка карточек и названий --- */}
       <div
         className="grid"
         style={{
@@ -71,39 +71,77 @@ export default function TopProducers() {
         }}
       >
         {currentCards.map(card => (
-          <div
-            key={card.id}
-            className="relative bg-[#16181e] rounded-[19px] overflow-hidden flex items-end justify-center cursor-pointer shadow-lg aspect-[1.17/1]"
-            onClick={() => !card.isPlaceholder && navigate(`/producer/${card.id}`)}
-            style={{
-              minHeight: 148,
-              maxHeight: 160
-            }}
-          >
-            {card.logo ? (
-              <img
-                src={card.logo}
-                alt={card.name}
-                className="absolute inset-0 w-full h-full object-cover z-10"
-                onError={e => { e.target.src = '/images/no-logo.webp'; }}
-              />
-            ) : (
-              <div
-                className={`absolute inset-0 flex items-center justify-center z-10 ${
-                  card.isPlaceholder
-                    ? 'bg-gradient-to-br from-[#262632] to-[#23232a]'
-                    : 'bg-gradient-to-br from-[#363646] to-[#23232a]'
-                }`}
-              >
-                <span className="text-[#bdbdbd] font-semibold text-[15px] text-center opacity-90 whitespace-pre-line leading-snug">
-                  {card.isPlaceholder ? 'Место\nсвободно' : 'Лого\nв разработке'}
-                </span>
-              </div>
-            )}
-            <div className="absolute bottom-0 inset-x-0 z-20 bg-gradient-to-t from-[#121217f5] via-transparent flex items-center justify-center px-2 pb-1">
-              <span className="text-white font-bold text-sm truncate w-full text-center drop-shadow-md">
-                {card.name}
-              </span>
+          <div key={card.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div
+              className="relative bg-[#16181e] rounded-[19px] overflow-hidden flex items-center justify-center cursor-pointer shadow-lg"
+              onClick={() => !card.isPlaceholder && navigate(`/producer/${card.id}`)}
+              style={{
+                width: "100%",
+                aspectRatio: "1/1",
+                minHeight: 128,
+                maxHeight: 148,
+                minWidth: 0,
+                maxWidth: "100%",
+                marginBottom: 7,
+                border: "1px solid #23232a"
+              }}
+            >
+              {card.logo ? (
+                <img
+                  src={card.logo}
+                  alt={card.name}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                    padding: 12,
+                  }}
+                  onError={e => { e.target.src = '/images/no-logo.webp'; }}
+                />
+              ) : (
+                <div
+                  className={`absolute inset-0 flex items-center justify-center z-10 ${
+                    card.isPlaceholder
+                      ? 'bg-gradient-to-br from-[#262632] to-[#23232a]'
+                      : 'bg-gradient-to-br from-[#363646] to-[#23232a]'
+                  }`}
+                >
+                  <span style={{
+                    color: "#bdbdbd",
+                    fontWeight: 600,
+                    fontSize: 15,
+                    textAlign: "center",
+                    opacity: 0.90,
+                    whiteSpace: "pre-line",
+                    lineHeight: "1.2"
+                  }}>
+                    {card.isPlaceholder ? 'Место\nсвободно' : 'Лого\nв разработке'}
+                  </span>
+                </div>
+              )}
+            </div>
+            {/* --- Название под карточкой --- */}
+            <div style={{
+              color: "#fff",
+              fontWeight: 600,
+              fontSize: 13.5,
+              textAlign: "center",
+              marginTop: 0,
+              marginBottom: 2,
+              width: "98%",
+              lineHeight: "1.14",
+              letterSpacing: "0.01em",
+              whiteSpace: "normal",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              wordBreak: "break-word",
+              minHeight: 36,
+              maxHeight: 38,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}>
+              {card.name}
             </div>
           </div>
         ))}

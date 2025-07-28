@@ -23,46 +23,48 @@ const ProducerDetail = () => {
       margin: '0 auto',
       padding: 0
     }}>
-      {/* --- КНОПКА НАЗАД --- */}
-      <div style={{
-        width: '100%',
-        maxWidth: 430,
-        padding: 0,
-        margin: 0,
-        background: 'transparent',
-        position: 'relative'
-      }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            border: 'none',
-            background: 'none',
-            color: '#357cff',
-            fontWeight: 500,
-            fontSize: 16,
-            padding: '14px 0 6px 8px', // Минимал отступы
-            cursor: 'pointer',
-            gap: 5,
-            lineHeight: 1,
-            boxShadow: 'none'
-          }}
+      {/* ИДЕАЛЬНО ВЫРОВНЯННАЯ КНОПКА НАЗАД */}
+      <button
+        onClick={() => navigate(-1)}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          border: 'none',
+          background: 'none',
+          color: '#357cff',
+          fontWeight: 500,
+          fontSize: 16,
+          padding: '14px 0 8px 7px', // только левый минимальный отступ
+          cursor: 'pointer',
+          gap: 6,
+          boxShadow: 'none',
+          lineHeight: 1
+        }}
+      >
+        <svg
+          width="22"
+          height="22"
+          style={{ display: 'block', marginRight: 1 }}
+          viewBox="0 0 22 22"
         >
-          <svg width="21" height="21" fill="none" style={{ marginRight: 2 }}>
-            <path d="M14 5.5L8.7 11L14 16.5" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          <span style={{
-            fontSize: 16,
-            fontWeight: 500,
-            position: 'relative',
-            top: 0.5,
-            letterSpacing: 0.1
-          }}>
-            Назад
-          </span>
-        </button>
-      </div>
+          <path
+            d="M14 5.5L8.7 11L14 16.5"
+            stroke="currentColor"
+            strokeWidth="2.15"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        <span style={{
+          fontSize: 16,
+          fontWeight: 500,
+          position: 'relative',
+          top: 0.5,
+          letterSpacing: 0.1
+        }}>
+          Назад
+        </span>
+      </button>
 
       {/* --- CARD CONTENT --- */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 18, marginTop: 18, paddingLeft: 22 }}>

@@ -1,13 +1,13 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-// Массив всех объявлений с категорией
+// Массив объявлений (можно вынести в data/ads.js)
 const exampleAds = [
   {
     id: 1,
     title: "Икра кеты солёная, 2024",
     images: ["/images/ikra1.webp"],
-    category: "ikra", // <= совпадает с key в категориях!
+    category: "ikra",
     company: "ООО КамчатИкра",
     region: "Камчатка",
     price: "3200 ₽/кг"
@@ -39,7 +39,6 @@ const exampleAds = [
     region: "Владивосток",
     price: "850 ₽/кг"
   },
-  // ...ещё
 ];
 
 const CATEGORY_LABELS = {
@@ -51,8 +50,8 @@ const CATEGORY_LABELS = {
 
 export default function MarketSellCategory() {
   const { category } = useParams();
+  const navigate = useNavigate();
 
-  // Фильтруем объявления по категории
   const filteredAds = exampleAds.filter(ad => ad.category === category);
 
   return (
@@ -96,10 +95,8 @@ export default function MarketSellCategory() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              cursor: "pointer",
               background: "none"
             }}
-            // onClick={() => ... подробнее ...}
           >
             {/* Фото карточки */}
             <div style={{
@@ -167,6 +164,24 @@ export default function MarketSellCategory() {
             }}>
               {ad.company} {ad.region && `· ${ad.region}`}
             </div>
+            {/* Кнопка Подробнее */}
+            <button
+              style={{
+                background: "#23df81",
+                color: "#131513",
+                fontWeight: 700,
+                borderRadius: 11,
+                padding: "7px 0",
+                fontSize: 13,
+                margin: "3px 0 10px 0",
+                border: "none",
+                cursor: "pointer",
+                width: "82%"
+              }}
+              onClick={() => navigate(`/market/sell/${category}/${ad.id}`)}
+            >
+              Подробнее
+            </button>
           </div>
         ))}
       </div>

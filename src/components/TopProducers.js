@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import producers from '../data/producers';
-import CompanyProfileModal from './CompanyProfileModal';
 
 const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
 const CARDS_PER_PAGE = 10;
@@ -10,7 +10,7 @@ const CARD_GAP = 15;
 export default function TopProducers() {
   const [filter, setFilter] = useState(REGIONS[0]);
   const [page, setPage] = useState(0);
-  const [selectedCard, setSelectedCard] = useState(null);
+  const navigate = useNavigate();
 
   const filtered = useMemo(
     () => producers.filter(p => p.region === filter),
@@ -80,7 +80,7 @@ export default function TopProducers() {
           <div
             key={card.id}
             className="relative bg-[#16181e] rounded-[19px] overflow-hidden flex items-end justify-center cursor-pointer shadow-lg aspect-[1.17/1]"
-            onClick={() => !card.isPlaceholder && setSelectedCard(card)}
+            onClick={() => !card.isPlaceholder && navigate(`/producer/${card.id}`)}
             style={{
               minHeight: 148,
               maxHeight: 160
@@ -131,13 +131,6 @@ export default function TopProducers() {
             className={`text-2xl bg-transparent border-none ${page === filteredPages.length - 1 ? 'text-[#666]' : 'text-white cursor-pointer'}`}
           >→</button>
         </div>
-      )}
-      {/* Модальное окно профиля */}
-      {selectedCard && (
-        <CompanyProfileModal
-          company={selectedCard}
-          onClose={() => setSelectedCard(null)}
-        />
       )}
     </div>
   );

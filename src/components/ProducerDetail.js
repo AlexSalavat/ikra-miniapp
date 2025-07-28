@@ -2,9 +2,12 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import producers from '../data/producers';
 
+const label = (txt) => <span style={{ color: '#37e08a', fontSize: 14, fontWeight: 600 }}>{txt}</span>;
+
 const ProducerDetail = () => {
   const { id } = useParams();
-  const producer = producers.find(p => p.id === Number(id));
+  // id в producers может быть string или number — проверим оба варианта
+  const producer = producers.find(p => String(p.id) === id || Number(p.id) === Number(id));
   const navigate = useNavigate();
 
   if (!producer) return (
@@ -18,7 +21,7 @@ const ProducerDetail = () => {
       color: '#fff',
       padding: 24,
       fontFamily: 'inherit',
-      maxWidth: 400,
+      maxWidth: 430,
       margin: '0 auto'
     }}>
       <button onClick={() => navigate(-1)}
@@ -33,10 +36,10 @@ const ProducerDetail = () => {
           fontSize: 15,
           cursor: 'pointer'
         }}>← Назад</button>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 18 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 18 }}>
         <div style={{
-          width: 80,
-          height: 80,
+          width: 84,
+          height: 84,
           background: '#23232a',
           borderRadius: 17,
           display: 'flex',
@@ -46,7 +49,7 @@ const ProducerDetail = () => {
         }}>
           {producer.logo ? (
             <img src={producer.logo} alt={producer.name}
-              style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           ) : producer.isPlaceholder ? (
             <span style={{ color: '#bdbdbd', fontWeight: 600, fontSize: 15, textAlign: "center" }}>Место<br />свободно</span>
           ) : (
@@ -60,15 +63,48 @@ const ProducerDetail = () => {
       </div>
       {!producer.isPlaceholder && (
         <>
-          <div style={{ color: '#ccc', fontSize: 14, marginBottom: 13 }}>{producer.description}</div>
+          <div style={{ color: '#ccc', fontSize: 15, marginBottom: 14 }}>{producer.fullDescription || producer.description}</div>
+          {producer.address && (
+            <div style={{ color: '#a4ffbb', fontSize: 13.5, marginBottom: 10 }}>
+              {label("Адрес")}: {producer.address}
+            </div>
+          )}
+          {producer.contacts && (
+            <div style={{ fontSize: 14, color: "#7af19d", marginBottom: 10 }}>
+              {producer.contacts.phone && <>📞 {producer.contacts.phone}<br /></>}
+              {producer.contacts.email && <>✉️ {producer.contacts.email}<br /></>}
+              {producer.contacts["Петропавловск-Камчатский"] && <>📞 Петропавловск-Камчатский: {producer.contacts["Петропавловск-Камчатский"]}<br /></>}
+              {producer.contacts["Владивосток"] && <>📞 Владивосток: {producer.contacts["Владивосток"]}<br /></>}
+            </div>
+          )}
+          {producer.categories && producer.categories.length > 0 && (
+            <div style={{ color: "#23df81", fontSize: 13.5, marginBottom: 7 }}>
+              {label("Продукция")}: {producer.categories.join(', ')}
+            </div>
+          )}
           {producer.site && (
-            <a href={`https://${producer.site}`} target="_blank" rel="noopener noreferrer"
+            <a href={producer.site.startsWith('http') ? producer.site : `https://${producer.site}`}
+              target="_blank" rel="noopener noreferrer"
               style={{
                 color: '#37e08a',
                 fontSize: 14,
                 textDecoration: 'underline',
-                fontWeight: 600
-              }}>{producer.site}</a>
+                fontWeight: 600,
+                marginBottom: 11,
+                display: 'inline-block'
+              }}>{producer.site.replace(/^https?:\/\//, '')}</a>
+          )}
+          {producer.gallery && producer.gallery.length > 0 && (
+            <div style={{ marginTop: 14 }}>
+              <div style={{ color: '#bbb', fontSize: 13, marginBottom: 4 }}>Фото</div>
+              <div style={{ display: 'flex', gap: 8, overflowX: 'auto' }}>
+                {producer.gallery.map((img, i) => (
+                  <img key={i} src={img} alt="фото" style={{
+                    width: 92, height: 64, objectFit: 'cover', borderRadius: 11, border: '1px solid #23232a'
+                  }} />
+                ))}
+              </div>
+            </div>
           )}
         </>
       )}

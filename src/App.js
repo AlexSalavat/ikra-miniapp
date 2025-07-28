@@ -11,9 +11,11 @@ import News from "./components/News";
 import Market from "./components/Market";
 import MarketSell from "./components/MarketSell";
 import MarketBuy from "./components/MarketBuy";
-import MarketSellCategory from "./components/MarketSellCategory"; // Если файл есть!
+import MarketSellCategory from "./components/MarketSellCategory";
 import Profile from "./components/Profile";
 import BottomNav from "./components/BottomNav";
+import TopProducers from "./components/TopProducers";
+import ProducerDetail from "./components/ProducerDetail";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
             <Route path="/supplier/:id" element={<SupplierDetail />} />
             <Route path="/logistics" element={<LogisticsShowcase />} />
             <Route path="/production" element={<ProductionShowcase />} />
+            <Route path="/producers" element={<TopProducers />} />     {/* Добавлено */}
+            <Route path="/producer/:id" element={<ProducerDetail />} />{/* Добавлено */}
             <Route path="/neirobiz" element={<NeirobizScreen />} />
             <Route path="/news" element={<News />} />
             <Route path="/market" element={<Market />} />

@@ -17,7 +17,7 @@ const producers = [
     badges: ["Проверенный", "Честный знак", "Меркурий"],
     // Три фото!
     gallery: [
-      "/images/koryak.webp",
+      "/images/koryak-1.webp",
       "/images/koryak-2.webp",
       "/images/koryak-3.webp"
     ]

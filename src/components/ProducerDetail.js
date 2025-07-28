@@ -23,43 +23,44 @@ const ProducerDetail = () => {
       margin: '0 auto',
       padding: 0
     }}>
-      {/* --- HEADER c кнопкой Назад --- */}
+      {/* --- КНОПКА НАЗАД --- */}
       <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0 0 0 0',
-        minHeight: 60,
-        borderBottom: '1.2px solid #191a20',
-        background: '#000',
-        position: 'sticky',
-        top: 0,
-        zIndex: 10
+        width: '100%',
+        maxWidth: 430,
+        padding: 0,
+        margin: 0,
+        background: 'transparent',
+        position: 'relative'
       }}>
         <button
           onClick={() => navigate(-1)}
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'flex-start',
-            background: 'none',
             border: 'none',
+            background: 'none',
             color: '#357cff',
             fontWeight: 500,
-            fontSize: 16.5,
-            padding: '0 0 0 16px',
+            fontSize: 16,
+            padding: '14px 0 6px 8px', // Минимал отступы
             cursor: 'pointer',
-            minHeight: 52
+            gap: 5,
+            lineHeight: 1,
+            boxShadow: 'none'
           }}
         >
-          <svg width="22" height="22" fill="none" style={{ marginRight: 2, marginLeft: -2 }}>
-            <path d="M14 6L8.5 11L14 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <svg width="21" height="21" fill="none" style={{ marginRight: 2 }}>
+            <path d="M14 5.5L8.7 11L14 16.5" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
           <span style={{
-            fontSize: 16.3,
+            fontSize: 16,
             fontWeight: 500,
             position: 'relative',
-            top: 1
-          }}>Назад</span>
+            top: 0.5,
+            letterSpacing: 0.1
+          }}>
+            Назад
+          </span>
         </button>
       </div>
 

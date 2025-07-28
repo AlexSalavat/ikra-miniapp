@@ -2,12 +2,16 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-// Данные объявлений (лучше вынести в отдельный файл data/ads.js и импортировать)
+// Обновлённый массив объявлений
 const exampleAds = [
   {
     id: 1,
     title: "Икра кеты солёная, 2024",
-    images: ["/images/ikra1.webp", "/images/ikra2.webp"],
+    images: [
+      "/images/more-i-sol-1.webp", // ← Новое фото
+      "/images/ikra1.webp",
+      "/images/ikra2.webp"
+    ],
     category: "ikra",
     company: "ООО КамчатИкра",
     region: "Камчатка",
@@ -32,7 +36,7 @@ const exampleAds = [
     warehouse: "Южно-Сахалинск, рыбный порт",
     payment: "Безналичный",
   },
-  // ... ещё объявления
+  // ...ещё объявления
 ];
 
 export default function MarketSellDetail() {
@@ -77,7 +81,7 @@ export default function MarketSellDetail() {
         </svg>
         Назад
       </button>
-      {/* Галерея фото (можно сделать цикл по ad.images) */}
+      {/* Галерея фото — если фото несколько, покажи все (в ряд) */}
       <div style={{
         width: "100%",
         aspectRatio: "1/1",

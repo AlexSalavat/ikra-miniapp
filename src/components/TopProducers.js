@@ -32,6 +32,12 @@ export default function TopProducers() {
     transition: 'border .12s, color .16s, background .18s'
   });
 
+  // Функция обрезки текста до 3 строк
+  function trimName(name, maxLen = 55) {
+    if (name.length > maxLen) return name.slice(0, maxLen - 1) + '…';
+    return name;
+  }
+
   return (
     <div className="bg-black min-h-screen p-3">
       {/* Кнопка Назад */}
@@ -57,7 +63,7 @@ export default function TopProducers() {
           </button>
         ))}
       </div>
-      {/* Сетка карточек */}
+      {/* Сетка карточек + названия под карточками */}
       <div
         className="grid"
         style={{
@@ -69,65 +75,72 @@ export default function TopProducers() {
         {filtered.map(card => (
           <div
             key={card.id}
-            className="relative bg-[#16181e] rounded-[19px] overflow-hidden flex flex-col items-center cursor-pointer shadow-lg"
-            onClick={() => !card.isPlaceholder && navigate(`/producer/${card.id}`)}
             style={{
-              minHeight: 160,
-              maxHeight: 180,
-              padding: "0 0 8px 0"
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              cursor: card.isPlaceholder ? "default" : "pointer"
             }}
+            onClick={() => !card.isPlaceholder && navigate(`/producer/${card.id}`)}
           >
             {/* Лого/Фото */}
             <div style={{
               width: "100%",
-              height: 95,
+              aspectRatio: "1/1",
+              background: "#191a1f",
+              borderRadius: 19,
+              overflow: "hidden",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              borderTopLeftRadius: 19,
-              borderTopRightRadius: 19,
-              background: "#24242b",
-              overflow: "hidden"
+              boxShadow: "0 2px 14px #16181d66"
             }}>
               {card.logo ? (
                 <img
                   src={card.logo}
                   alt={card.name}
                   style={{
-                    width: "84%",
-                    height: "80%",
+                    width: "86%",
+                    height: "86%",
                     objectFit: "contain",
                     background: "#23232a",
-                    borderRadius: 16
+                    borderRadius: 16,
                   }}
                   onError={e => { e.target.src = '/images/no-logo.webp'; }}
                 />
               ) : (
-                <span className="text-[#bdbdbd] font-semibold text-[13px] opacity-90 text-center" style={{ lineHeight: "1.1" }}>
+                <span style={{
+                  color: "#bdbdbd",
+                  fontWeight: 600,
+                  fontSize: 14,
+                  textAlign: "center",
+                  lineHeight: "1.15"
+                }}>
                   {card.isPlaceholder ? 'Место свободно' : 'Лого в разработке'}
                 </span>
               )}
             </div>
-            {/* Название */}
+            {/* Название ПОД карточкой */}
             <div
               style={{
-                marginTop: 9,
-                marginBottom: 0,
-                padding: "0 6px",
+                marginTop: 8,
+                marginBottom: 2,
                 color: "#fff",
                 fontWeight: 700,
                 fontSize: 13.1,
                 textAlign: "center",
-                maxHeight: 35,
+                maxHeight: 48,
+                minHeight: 28,
                 overflow: "hidden",
                 display: "-webkit-box",
-                WebkitLineClamp: 2,
+                WebkitLineClamp: 3,
                 WebkitBoxOrient: "vertical",
                 whiteSpace: "normal",
                 lineHeight: "1.14"
               }}
+              title={card.name}
             >
-              {card.name}
+              {trimName(card.name)}
             </div>
           </div>
         ))}

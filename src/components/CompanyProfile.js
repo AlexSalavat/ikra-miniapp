@@ -32,13 +32,13 @@ const CompanyProfile = ({ company }) => {
 
   const certBadges = ['Честный знак', 'Меркурий'].filter(cert => company.certs?.includes(cert));
   const shortDesc =
-    company.fullDescription.length > 200 && !showFullDesc
-      ? company.fullDescription.slice(0, 200) + '...'
+    company.fullDescription && company.fullDescription.length > 180 && !showFullDesc
+      ? company.fullDescription.slice(0, 180) + '...'
       : company.fullDescription;
 
   return (
     <div className="bg-black text-white min-h-screen p-4 pb-36 max-w-2xl mx-auto rounded-2xl shadow-2xl font-sans">
-      {/* Назад */}
+      {/* Кнопка назад */}
       <div className="mb-3">
         <button
           onClick={() => navigate('/catalog/suppliers')}
@@ -48,7 +48,7 @@ const CompanyProfile = ({ company }) => {
         </button>
       </div>
 
-      {/* Лого + Инфо */}
+      {/* Шапка: Логотип + Название и бэйджи */}
       <div className="flex flex-row items-center mb-6 gap-6">
         <div className="flex-shrink-0 flex items-center justify-center">
           <div style={{
@@ -79,7 +79,7 @@ const CompanyProfile = ({ company }) => {
         </div>
         <div className="flex-1 min-w-0 flex flex-col justify-center items-start gap-2">
           <div className="flex items-center gap-2 flex-wrap w-full">
-            <span className="font-bold" style={{fontSize: "1.15rem", lineHeight:'1.13', maxWidth:'220px', color:'#fff'}}>
+            <span className="font-bold" style={{ fontSize: "1.15rem", lineHeight: '1.13', maxWidth: '220px', color: '#fff' }}>
               {company.name}
             </span>
             {company.verified && (
@@ -100,7 +100,7 @@ const CompanyProfile = ({ company }) => {
               </span>
             )}
           </div>
-          <div className="text-zinc-400" style={{fontSize:'13px'}}>
+          <div className="text-zinc-400" style={{ fontSize: '13px' }}>
             🌍 {company.region}
             {company.city && company.city !== company.region && <> · {company.city}</>}
           </div>
@@ -109,7 +109,7 @@ const CompanyProfile = ({ company }) => {
               <span
                 key={prod}
                 className="bg-zinc-800 text-white rounded-md font-medium"
-                style={{fontSize:'11px', padding:'2.5px 11px'}}
+                style={{ fontSize: '11px', padding: '2.5px 11px' }}
               >
                 {prod}
               </span>
@@ -118,42 +118,48 @@ const CompanyProfile = ({ company }) => {
         </div>
       </div>
 
-      {/* Крутой блок “О компании” + преимущества */}
-      <div className="mb-4">
-        <div className="text-white text-lg font-semibold mb-1">О компании</div>
-        <div className="text-zinc-300" style={{ fontSize: '15px', marginBottom: 10 }}>
-          <b style={{ color: "#38d8ff" }}>{company.name}</b> — прямые поставки {company.products?.join(', ').toLowerCase() || 'рыбы и морепродуктов'} по всей России и СНГ.
-          <br/>
-          <span style={{ color: "#23df81", fontWeight: 600 }}>
-            Работаем с оптом, розницей, HoReCa, производителями. Оперативно отвечаем на все запросы.
-          </span>
-          <ul style={{ margin: "10px 0 0 19px", padding: 0 }}>
-            <li>🛡 <b>Гарантия свежести</b> — только проверенная продукция, быстрая отгрузка.</li>
-            <li>📄 <b>Вся документация:</b> Честный знак, Меркурий, сертификаты.</li>
-            <li>🤝 <b>Индивидуальные условия</b> для постоянных клиентов и партнёров.</li>
-            <li>🚚 <b>Доставка по РФ и СНГ</b> — собственный автопарк, проверенные логисты.</li>
-            <li>📞 <b>Личный менеджер</b> для каждого клиента.</li>
-          </ul>
-          {company.fullDescription.length > 200 && (
-            <button
-              onClick={() => setShowFullDesc(v => !v)}
-              className="text-blue-400 underline ml-2"
-              style={{fontSize:'14px'}}
-            >
-              {showFullDesc ? 'Скрыть' : 'Показать полностью'}
-            </button>
-          )}
-          {showFullDesc && (
-            <div className="text-zinc-400 mt-2" style={{fontSize:'14px'}}>
-              {company.fullDescription}
-            </div>
-          )}
+      {/* О компании */}
+      {company.fullDescription && (
+        <div className="mb-3">
+          <div className="text-white text-lg font-semibold mb-1">О компании</div>
+          <div className="text-zinc-300" style={{ fontSize: '15px' }}>
+            {shortDesc}
+            {company.fullDescription.length > 180 && (
+              <button
+                onClick={() => setShowFullDesc(v => !v)}
+                className="text-blue-400 underline ml-2"
+                style={{ fontSize: '14px' }}
+              >
+                {showFullDesc ? 'Скрыть' : 'Показать полностью'}
+              </button>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Объемы поставок / сезонность */}
+      {/* Преимущества / особенности */}
+      {company.advantages && company.advantages.length > 0 && (
+        <div className="mb-3">
+          <div className="text-white text-lg font-semibold mb-1">Преимущества</div>
+          <ul className="list-disc pl-5 text-zinc-300" style={{ fontSize: '15px' }}>
+            {company.advantages.map((item, idx) => (
+              <li key={idx}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Доставка */}
+      {company.delivery && (
+        <div className="mb-3">
+          <div className="text-white text-lg font-semibold mb-1">Доставка</div>
+          <div className="text-zinc-300" style={{ fontSize: '15px' }}>{company.delivery}</div>
+        </div>
+      )}
+
+      {/* Минимальная/максимальная партия */}
       {company.volumes && (
-        <div className="mb-2 text-zinc-300" style={{fontSize:'15px'}}>
+        <div className="mb-2 text-zinc-300" style={{ fontSize: '15px' }}>
           {company.volumes}
         </div>
       )}

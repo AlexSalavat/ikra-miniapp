@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import producers from '../data/producers';
 
 const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
-const CARD_SIZE = 182; // Как было
+const CARD_SIZE = 182;
 
 export default function TopProducers() {
   const [filter, setFilter] = useState(REGIONS[0]);
+  const [activeCard, setActiveCard] = useState(null);
   const navigate = useNavigate();
 
   const filtered = useMemo(
@@ -16,6 +17,7 @@ export default function TopProducers() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setActiveCard(null);
   }, [filter]);
 
   function trimName(name, maxLen = 56) {
@@ -46,7 +48,6 @@ export default function TopProducers() {
         Назад
       </button>
 
-      {/* Компактный фильтр */}
       <div
         style={{
           display: 'flex',
@@ -67,14 +68,14 @@ export default function TopProducers() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              height: 29,                // ниже
-              minWidth: 62,              // чуть уже
+              height: 29,
+              minWidth: 62,
               background: filter === region ? '#23232a' : 'none',
               color: filter === region ? '#20d978' : '#bababa',
               border: `1.3px solid ${filter === region ? '#20d978' : '#23232a'}`,
               borderRadius: 8,
               fontWeight: 700,
-              fontSize: 12.2,            // меньше!
+              fontSize: 12.2,
               padding: '0 9px',
               textAlign: 'center',
               boxSizing: 'border-box',
@@ -89,14 +90,13 @@ export default function TopProducers() {
         ))}
       </div>
 
-      {/* Сетка карточек */}
       <div style={{
         width: "100%",
         maxWidth: 410,
         margin: "0 auto",
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        gap: 13 // обратно как было
+        gap: 13
       }}>
         {filtered.map(card => (
           <div
@@ -105,11 +105,18 @@ export default function TopProducers() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              cursor: card.isPlaceholder ? "default" : "pointer"
+              cursor: card.isPlaceholder ? "default" : "pointer",
+              transition: "box-shadow .16s, transform .13s",
+              boxShadow:
+                activeCard === card.id
+                  ? "0 0 0 4px #21e0ad77, 0 2px 18px #16181d55"
+                  : "0 2px 18px #16181d55"
             }}
+            onMouseDown={() => setActiveCard(card.id)}
+            onMouseUp={() => setActiveCard(null)}
+            onMouseLeave={() => setActiveCard(null)}
             onClick={() => !card.isPlaceholder && navigate(`/producer/${card.id}`)}
           >
-            {/* Фото/лого */}
             <div style={{
               width: CARD_SIZE,
               height: CARD_SIZE,
@@ -119,7 +126,11 @@ export default function TopProducers() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              boxShadow: "0 2px 18px #16181d55"
+              boxShadow:
+                activeCard === card.id
+                  ? "0 0 24px 6px #21e0ad55"
+                  : "0 2px 18px #16181d55",
+              transition: "box-shadow .18s"
             }}>
               {card.logo ? (
                 <img
@@ -146,7 +157,6 @@ export default function TopProducers() {
                 </span>
               )}
             </div>
-            {/* Название */}
             <div
               style={{
                 marginTop: 9,

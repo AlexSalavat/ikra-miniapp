@@ -3,13 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import producers from '../data/producers';
 
 const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
-
-// Размер карточки
-const CARD_SIZE = 182;
+const CARD_SIZE = 182; // Как было
 
 export default function TopProducers() {
   const [filter, setFilter] = useState(REGIONS[0]);
-  const [activeId, setActiveId] = useState(null);
   const navigate = useNavigate();
 
   const filtered = useMemo(
@@ -49,28 +46,42 @@ export default function TopProducers() {
         Назад
       </button>
 
-      <div style={{
-        display: "flex",
-        gap: 7,
-        justifyContent: "center",
-        marginBottom: 18,
-        flexWrap: "wrap"
-      }}>
+      {/* Компактный фильтр */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 6,
+          marginBottom: 20,
+          paddingLeft: 2,
+          paddingRight: 2,
+          overflowX: 'auto',
+          flexWrap: 'nowrap',
+        }}
+      >
         {REGIONS.map(region => (
           <button
             key={region}
             onClick={() => setFilter(region)}
             style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: 29,                // ниже
+              minWidth: 62,              // чуть уже
               background: filter === region ? '#23232a' : 'none',
               color: filter === region ? '#20d978' : '#bababa',
               border: `1.3px solid ${filter === region ? '#20d978' : '#23232a'}`,
-              borderRadius: 9,
-              padding: '3.5px 14px',
+              borderRadius: 8,
               fontWeight: 700,
-              fontSize: 13.3,
-              minWidth: 73,
+              fontSize: 12.2,            // меньше!
+              padding: '0 9px',
+              textAlign: 'center',
+              boxSizing: 'border-box',
+              outline: 'none',
+              userSelect: 'none',
               cursor: 'pointer',
-              transition: 'border .12s, color .16s, background .18s'
+              transition: 'border .13s, color .14s, background .17s'
             }}
           >
             {region}
@@ -78,13 +89,14 @@ export default function TopProducers() {
         ))}
       </div>
 
+      {/* Сетка карточек */}
       <div style={{
         width: "100%",
         maxWidth: 410,
         margin: "0 auto",
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        gap: 13
+        gap: 13 // обратно как было
       }}>
         {filtered.map(card => (
           <div
@@ -93,21 +105,11 @@ export default function TopProducers() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              cursor: card.isPlaceholder ? "default" : "pointer",
-              boxShadow:
-                activeId === card.id
-                  ? "0 0 24px 3px #27ffd7cc, 0 2px 22px #15171a88"
-                  : "0 2px 18px #16181d55",
-              transition: "box-shadow .19s, transform .14s",
-              transform: activeId === card.id ? "scale(1.045)" : "none",
-              zIndex: activeId === card.id ? 2 : 1,
+              cursor: card.isPlaceholder ? "default" : "pointer"
             }}
             onClick={() => !card.isPlaceholder && navigate(`/producer/${card.id}`)}
-            onMouseDown={() => setActiveId(card.id)}
-            onMouseUp={() => setActiveId(null)}
-            onMouseLeave={() => setActiveId(null)}
           >
-            {/* Квадратное фото/лого */}
+            {/* Фото/лого */}
             <div style={{
               width: CARD_SIZE,
               height: CARD_SIZE,
@@ -144,7 +146,7 @@ export default function TopProducers() {
                 </span>
               )}
             </div>
-            {/* Название ПОД карточкой */}
+            {/* Название */}
             <div
               style={{
                 marginTop: 9,

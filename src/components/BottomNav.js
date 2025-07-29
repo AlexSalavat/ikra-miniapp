@@ -1,70 +1,45 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { LayoutList, Newspaper, Store, User } from "lucide-react";
 
-const navItems = [
-  {
-    to: "/catalog",
-    label: "Каталог",
-    icon: (
-      <svg width="28" height="28" fill="none">
-        <rect x="4" y="6" width="20" height="16" rx="3" stroke="#3B82F6" strokeWidth="2" />
-        <rect x="8" y="10" width="4" height="8" rx="1" fill="#3B82F6" />
-      </svg>
-    ),
-  },
-  {
-    to: "/news",
-    label: "Новости",
-    icon: (
-      <svg width="28" height="28" fill="none">
-        <rect x="4" y="6" width="20" height="16" rx="3" stroke="#3B82F6" strokeWidth="2" />
-        <path d="M8 10H20" stroke="#3B82F6" strokeWidth="2" />
-        <path d="M8 14H20" stroke="#3B82F6" strokeWidth="2" />
-      </svg>
-    ),
-  },
-  {
-    to: "/market",
-    label: "Маркет",
-    icon: (
-      <svg width="28" height="28" fill="none">
-        <rect x="6" y="8" width="16" height="12" rx="3" stroke="#3B82F6" strokeWidth="2" />
-        <circle cx="14" cy="14" r="3" fill="#3B82F6" />
-      </svg>
-    ),
-  },
-  {
-    to: "/profile",
-    label: "Профиль",
-    icon: (
-      <svg width="28" height="28" fill="none">
-        <circle cx="14" cy="14" r="13" stroke="#3B82F6" strokeWidth="2" />
-        <circle cx="14" cy="11" r="4" fill="#3B82F6" />
-        <ellipse cx="14" cy="21" rx="6" ry="3" fill="#3B82F6" opacity="0.7" />
-      </svg>
-    ),
-  },
+const tabs = [
+  { label: "Каталог", icon: LayoutList, path: "/catalog" },
+  { label: "Новости", icon: Newspaper, path: "/news" },
+  { label: "Маркет", icon: Store, path: "/market", highlight: true },
+  { label: "Профиль", icon: User, path: "/profile" }
 ];
 
 function BottomNav() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-neutral-900 border-t border-blue-900 flex justify-around items-center h-16 shadow-xl">
-      {navItems.map((item) => (
-        <Link
-          key={item.to}
-          to={item.to}
-          className={`flex flex-col items-center px-2 pt-1 transition-all ${
-            location.pathname.startsWith(item.to)
-              ? "text-blue-400 font-bold"
-              : "text-blue-300 opacity-80"
-          }`}
-        >
-          {item.icon}
-          <span className="text-xs mt-1">{item.label}</span>
-        </Link>
-      ))}
+    <nav className="fixed bottom-0 left-0 w-full bg-zinc-950 border-t border-zinc-800 flex justify-around z-30 py-2 shadow-xl">
+      {tabs.map((tab, i) => {
+        const active = location.pathname.startsWith(tab.path);
+        const Icon = tab.icon;
+        return (
+          <button
+            key={tab.path}
+            onClick={() => navigate(tab.path)}
+            className={`
+              flex flex-col items-center justify-center flex-1 gap-0.5
+              transition-all duration-150
+              ${active ? "text-sky-400 font-bold" : "text-zinc-400"}
+              ${tab.highlight ? "bg-gradient-to-t from-sky-900/40 via-sky-900/10 rounded-xl" : ""}
+              ${active && tab.highlight ? "shadow-[0_2px_14px_#38bdf83a]" : ""}
+              py-1.5
+            `}
+            style={{
+              fontSize: 13.5,
+              ...(tab.highlight ? { minWidth: 90 } : {})
+            }}
+          >
+            <Icon size={tab.highlight ? 29 : 26} strokeWidth={2.2} />
+            <span style={{ marginTop: 2 }}>{tab.label}</span>
+          </button>
+        );
+      })}
     </nav>
   );
 }

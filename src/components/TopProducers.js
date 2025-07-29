@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import producers from '../data/producers';
 
 const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
-const CARD_SIZE = 182; // размер карточки
+const CARD_SIZE = 182; // размер карточки, можно менять под себя
 
 export default function TopProducers() {
   const [filter, setFilter] = useState(REGIONS[0]);
@@ -46,36 +46,42 @@ export default function TopProducers() {
         Назад
       </button>
 
-      {/* ФИЛЬТР */}
-      <div style={{
-        display: "flex",
-        gap: 9,
-        justifyContent: "center",
-        marginBottom: 22,
-        overflowX: "auto",      // если вдруг регионы не влезут, появится горизонтальный скролл
-        flexWrap: "nowrap"
-      }}>
+      {/* Ровный фильтр — всегда по центру, не прыгает */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 9,
+          marginBottom: 22,
+          paddingLeft: 6,
+          paddingRight: 6,
+          overflowX: 'auto',
+          flexWrap: 'nowrap',
+        }}
+      >
         {REGIONS.map(region => (
           <button
             key={region}
             onClick={() => setFilter(region)}
             style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: 36,
+              minWidth: 92,
               background: filter === region ? '#23232a' : 'none',
               color: filter === region ? '#20d978' : '#bababa',
               border: `2px solid ${filter === region ? '#20d978' : '#32323a'}`,
-              borderRadius: 11,
+              borderRadius: 12,
               fontWeight: 700,
               fontSize: 15,
-              minWidth: 82,
-              height: 38,
-              lineHeight: "36px",
-              padding: "0 14px",
-              textAlign: "center",
+              padding: '0 13px',
+              textAlign: 'center',
+              boxSizing: 'border-box',
+              outline: 'none',
+              userSelect: 'none',
               cursor: 'pointer',
-              transition: 'border .12s, color .16s, background .18s',
-              boxSizing: "border-box",
-              outline: "none",
-              userSelect: "none"
+              transition: 'border .13s, color .14s, background .17s'
             }}
           >
             {region}
@@ -103,7 +109,7 @@ export default function TopProducers() {
             }}
             onClick={() => !card.isPlaceholder && navigate(`/producer/${card.id}`)}
           >
-            {/* Квадратное фото/лого */}
+            {/* Фото/лого */}
             <div style={{
               width: CARD_SIZE,
               height: CARD_SIZE,
@@ -140,7 +146,7 @@ export default function TopProducers() {
                 </span>
               )}
             </div>
-            {/* Название ПОД карточкой */}
+            {/* Название */}
             <div
               style={{
                 marginTop: 9,

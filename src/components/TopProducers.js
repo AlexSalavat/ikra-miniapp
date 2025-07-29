@@ -46,20 +46,13 @@ export default function TopProducers() {
         Назад
       </button>
 
-      {/* Фильтр — всегда в одну строку */}
-      <div
-        style={{
-          display: "flex",
-          gap: 7,
-          overflowX: "auto",
-          whiteSpace: "nowrap",
-          marginBottom: 22,
-          paddingLeft: 7,
-          paddingRight: 7,
-          scrollbarWidth: "thin",
-          scrollbarColor: "#242831 #18181f"
-        }}
-      >
+      {/* РОВНЫЙ ФИЛЬТР */}
+      <div style={{
+        display: "flex",
+        gap: 10,
+        justifyContent: "center",
+        marginBottom: 22
+      }}>
         {REGIONS.map(region => (
           <button
             key={region}
@@ -67,13 +60,15 @@ export default function TopProducers() {
             style={{
               background: filter === region ? '#23232a' : 'none',
               color: filter === region ? '#20d978' : '#bababa',
-              border: `1.3px solid ${filter === region ? '#20d978' : '#23232a'}`,
+              border: `1.5px solid ${filter === region ? '#20d978' : '#23232a'}`,
               borderRadius: 9,
-              padding: '5px 15px',
               fontWeight: 700,
-              fontSize: 14,
-              minWidth: 73,
-              whiteSpace: "nowrap",
+              fontSize: 15,
+              minWidth: 90,
+              height: 38,
+              lineHeight: "36px",
+              padding: "0 17px",
+              textAlign: "center",
               cursor: 'pointer',
               transition: 'border .12s, color .16s, background .18s'
             }}
@@ -140,13 +135,13 @@ export default function TopProducers() {
                 </span>
               )}
             </div>
-            {/* Название */}
+            {/* Название ПОД карточкой */}
             <div
               style={{
                 marginTop: 9,
                 color: "#fff",
                 fontWeight: 700,
-                fontSize: 13.2,
+                fontSize: 13.7,
                 textAlign: "center",
                 maxHeight: 41,
                 minHeight: 26,

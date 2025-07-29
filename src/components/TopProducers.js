@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import producers from '../data/producers';
 
 const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
-const CARD_SIZE = 162; // СТАЛО МЕНЬШЕ (было 182)
+const CARD_SIZE = 182; // Как было
 
 export default function TopProducers() {
   const [filter, setFilter] = useState(REGIONS[0]);
@@ -18,7 +18,7 @@ export default function TopProducers() {
     window.scrollTo(0, 0);
   }, [filter]);
 
-  function trimName(name, maxLen = 48) {
+  function trimName(name, maxLen = 56) {
     if (name.length > maxLen) return name.slice(0, maxLen - 1) + '…';
     return name;
   }
@@ -46,15 +46,15 @@ export default function TopProducers() {
         Назад
       </button>
 
-      {/* Фильтр */}
+      {/* Компактный фильтр */}
       <div
         style={{
           display: 'flex',
           justifyContent: 'center',
-          gap: 9,
-          marginBottom: 22,
-          paddingLeft: 6,
-          paddingRight: 6,
+          gap: 6,
+          marginBottom: 20,
+          paddingLeft: 2,
+          paddingRight: 2,
           overflowX: 'auto',
           flexWrap: 'nowrap',
         }}
@@ -67,15 +67,15 @@ export default function TopProducers() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              height: 36,
-              minWidth: 88,
+              height: 29,                // ниже
+              minWidth: 62,              // чуть уже
               background: filter === region ? '#23232a' : 'none',
               color: filter === region ? '#20d978' : '#bababa',
-              border: `2px solid ${filter === region ? '#20d978' : '#32323a'}`,
-              borderRadius: 12,
+              border: `1.3px solid ${filter === region ? '#20d978' : '#23232a'}`,
+              borderRadius: 8,
               fontWeight: 700,
-              fontSize: 14.2,
-              padding: '0 11px',
+              fontSize: 12.2,            // меньше!
+              padding: '0 9px',
               textAlign: 'center',
               boxSizing: 'border-box',
               outline: 'none',
@@ -96,7 +96,7 @@ export default function TopProducers() {
         margin: "0 auto",
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        gap: 11
+        gap: 13 // обратно как было
       }}>
         {filtered.map(card => (
           <div
@@ -114,22 +114,22 @@ export default function TopProducers() {
               width: CARD_SIZE,
               height: CARD_SIZE,
               background: "#18181f",
-              borderRadius: 19,
+              borderRadius: 22,
               overflow: "hidden",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              boxShadow: "0 2px 14px #16181d44"
+              boxShadow: "0 2px 18px #16181d55"
             }}>
               {card.logo ? (
                 <img
                   src={card.logo}
                   alt={card.name}
                   style={{
-                    width: CARD_SIZE - 16,
-                    height: CARD_SIZE - 16,
+                    width: CARD_SIZE - 20,
+                    height: CARD_SIZE - 20,
                     objectFit: "contain",
-                    borderRadius: 14,
+                    borderRadius: 17,
                     background: "#fff",
                     display: "block"
                   }}
@@ -139,7 +139,7 @@ export default function TopProducers() {
                 <span style={{
                   color: "#bdbdbd",
                   fontWeight: 600,
-                  fontSize: 14,
+                  fontSize: 15,
                   textAlign: "center"
                 }}>
                   {card.isPlaceholder ? 'Место свободно' : 'Лого в разработке'}
@@ -149,19 +149,19 @@ export default function TopProducers() {
             {/* Название */}
             <div
               style={{
-                marginTop: 8,
+                marginTop: 9,
                 color: "#fff",
                 fontWeight: 700,
-                fontSize: 12.8,
+                fontSize: 13.7,
                 textAlign: "center",
-                maxHeight: 37,
-                minHeight: 22,
+                maxHeight: 41,
+                minHeight: 26,
                 overflow: "hidden",
                 display: "-webkit-box",
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
                 whiteSpace: "normal",
-                lineHeight: "1.15"
+                lineHeight: "1.18"
               }}
               title={card.name}
             >

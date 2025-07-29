@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import producers from '../data/producers';
 
 const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
-const CARD_SIZE = 182; // размер карточки, можно менять под себя
+const CARD_SIZE = 162; // СТАЛО МЕНЬШЕ (было 182)
 
 export default function TopProducers() {
   const [filter, setFilter] = useState(REGIONS[0]);
@@ -18,7 +18,7 @@ export default function TopProducers() {
     window.scrollTo(0, 0);
   }, [filter]);
 
-  function trimName(name, maxLen = 56) {
+  function trimName(name, maxLen = 48) {
     if (name.length > maxLen) return name.slice(0, maxLen - 1) + '…';
     return name;
   }
@@ -46,7 +46,7 @@ export default function TopProducers() {
         Назад
       </button>
 
-      {/* Ровный фильтр — всегда по центру, не прыгает */}
+      {/* Фильтр */}
       <div
         style={{
           display: 'flex',
@@ -68,14 +68,14 @@ export default function TopProducers() {
               alignItems: 'center',
               justifyContent: 'center',
               height: 36,
-              minWidth: 92,
+              minWidth: 88,
               background: filter === region ? '#23232a' : 'none',
               color: filter === region ? '#20d978' : '#bababa',
               border: `2px solid ${filter === region ? '#20d978' : '#32323a'}`,
               borderRadius: 12,
               fontWeight: 700,
-              fontSize: 15,
-              padding: '0 13px',
+              fontSize: 14.2,
+              padding: '0 11px',
               textAlign: 'center',
               boxSizing: 'border-box',
               outline: 'none',
@@ -96,7 +96,7 @@ export default function TopProducers() {
         margin: "0 auto",
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        gap: 13
+        gap: 11
       }}>
         {filtered.map(card => (
           <div
@@ -114,22 +114,22 @@ export default function TopProducers() {
               width: CARD_SIZE,
               height: CARD_SIZE,
               background: "#18181f",
-              borderRadius: 22,
+              borderRadius: 19,
               overflow: "hidden",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              boxShadow: "0 2px 18px #16181d55"
+              boxShadow: "0 2px 14px #16181d44"
             }}>
               {card.logo ? (
                 <img
                   src={card.logo}
                   alt={card.name}
                   style={{
-                    width: CARD_SIZE - 20,
-                    height: CARD_SIZE - 20,
+                    width: CARD_SIZE - 16,
+                    height: CARD_SIZE - 16,
                     objectFit: "contain",
-                    borderRadius: 17,
+                    borderRadius: 14,
                     background: "#fff",
                     display: "block"
                   }}
@@ -139,7 +139,7 @@ export default function TopProducers() {
                 <span style={{
                   color: "#bdbdbd",
                   fontWeight: 600,
-                  fontSize: 15,
+                  fontSize: 14,
                   textAlign: "center"
                 }}>
                   {card.isPlaceholder ? 'Место свободно' : 'Лого в разработке'}
@@ -149,19 +149,19 @@ export default function TopProducers() {
             {/* Название */}
             <div
               style={{
-                marginTop: 9,
+                marginTop: 8,
                 color: "#fff",
                 fontWeight: 700,
-                fontSize: 13.7,
+                fontSize: 12.8,
                 textAlign: "center",
-                maxHeight: 41,
-                minHeight: 26,
+                maxHeight: 37,
+                minHeight: 22,
                 overflow: "hidden",
                 display: "-webkit-box",
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
                 whiteSpace: "normal",
-                lineHeight: "1.18"
+                lineHeight: "1.15"
               }}
               title={card.name}
             >

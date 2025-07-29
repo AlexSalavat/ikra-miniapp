@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import producers from '../data/producers';
 
 const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
-const CARD_SIZE = 182;
+const CARD_SIZE = 182; // размер карточки
 
 export default function TopProducers() {
   const [filter, setFilter] = useState(REGIONS[0]);
@@ -46,12 +46,14 @@ export default function TopProducers() {
         Назад
       </button>
 
-      {/* РОВНЫЙ ФИЛЬТР */}
+      {/* ФИЛЬТР */}
       <div style={{
         display: "flex",
-        gap: 10,
+        gap: 9,
         justifyContent: "center",
-        marginBottom: 22
+        marginBottom: 22,
+        overflowX: "auto",      // если вдруг регионы не влезут, появится горизонтальный скролл
+        flexWrap: "nowrap"
       }}>
         {REGIONS.map(region => (
           <button
@@ -60,17 +62,20 @@ export default function TopProducers() {
             style={{
               background: filter === region ? '#23232a' : 'none',
               color: filter === region ? '#20d978' : '#bababa',
-              border: `1.5px solid ${filter === region ? '#20d978' : '#23232a'}`,
-              borderRadius: 9,
+              border: `2px solid ${filter === region ? '#20d978' : '#32323a'}`,
+              borderRadius: 11,
               fontWeight: 700,
               fontSize: 15,
-              minWidth: 90,
+              minWidth: 82,
               height: 38,
               lineHeight: "36px",
-              padding: "0 17px",
+              padding: "0 14px",
               textAlign: "center",
               cursor: 'pointer',
-              transition: 'border .12s, color .16s, background .18s'
+              transition: 'border .12s, color .16s, background .18s',
+              boxSizing: "border-box",
+              outline: "none",
+              userSelect: "none"
             }}
           >
             {region}

@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import producers from '../data/producers';
 
 const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
-
-// Квадратная большая карточка
-const CARD_SIZE = 182; // Можешь поставить 180-200 для мобильных
+const CARD_SIZE = 182;
 
 export default function TopProducers() {
   const [filter, setFilter] = useState(REGIONS[0]);
@@ -48,13 +46,20 @@ export default function TopProducers() {
         Назад
       </button>
 
-      <div style={{
-        display: "flex",
-        gap: 10,
-        justifyContent: "center",
-        marginBottom: 22,
-        flexWrap: "wrap"
-      }}>
+      {/* Фильтр — всегда в одну строку */}
+      <div
+        style={{
+          display: "flex",
+          gap: 7,
+          overflowX: "auto",
+          whiteSpace: "nowrap",
+          marginBottom: 22,
+          paddingLeft: 7,
+          paddingRight: 7,
+          scrollbarWidth: "thin",
+          scrollbarColor: "#242831 #18181f"
+        }}
+      >
         {REGIONS.map(region => (
           <button
             key={region}
@@ -64,10 +69,11 @@ export default function TopProducers() {
               color: filter === region ? '#20d978' : '#bababa',
               border: `1.3px solid ${filter === region ? '#20d978' : '#23232a'}`,
               borderRadius: 9,
-              padding: '5px 18px',
+              padding: '5px 15px',
               fontWeight: 700,
-              fontSize: 15,
-              minWidth: 85,
+              fontSize: 14,
+              minWidth: 73,
+              whiteSpace: "nowrap",
               cursor: 'pointer',
               transition: 'border .12s, color .16s, background .18s'
             }}
@@ -77,14 +83,14 @@ export default function TopProducers() {
         ))}
       </div>
 
-      {/* Сетка: максимально большие квадратные карточки */}
+      {/* Сетка карточек */}
       <div style={{
         width: "100%",
         maxWidth: 410,
         margin: "0 auto",
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        gap: 13 // Меньше расстояние между карточками
+        gap: 13
       }}>
         {filtered.map(card => (
           <div
@@ -134,13 +140,13 @@ export default function TopProducers() {
                 </span>
               )}
             </div>
-            {/* Название ПОД карточкой */}
+            {/* Название */}
             <div
               style={{
                 marginTop: 9,
                 color: "#fff",
                 fontWeight: 700,
-                fontSize: 13.7,
+                fontSize: 13.2,
                 textAlign: "center",
                 maxHeight: 41,
                 minHeight: 26,

@@ -2,49 +2,15 @@ import React from 'react';
 
 const Home = () => {
   return (
-    <div style={{
-      position: 'relative',
-      width: '100vw',
-      height: '100vh',
-      backgroundImage: 'url(/images/port-bg.webp)',
-      backgroundSize: '100% 100%',         // Фон всегда по размеру экрана!
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      color: '#fff',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      textAlign: 'center',
-      overflow: 'hidden'
-    }}>
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        backgroundColor: 'rgba(0,0,0,0.5)', // затемнение фона
-        zIndex: 1
-      }} />
-      <div style={{
-        zIndex: 2,
-        padding: '0 20px',
-        width: '100%',
-        position: 'relative'
-      }}>
-        <h1 style={{
-          fontSize: '2rem',
-          marginBottom: '16px',
-          textShadow: '0 2px 8px rgba(0,0,0,0.8)'
-        }}>
-          PORT MARKET
-        </h1>
-        <p style={{
-          fontSize: '1rem',
-          lineHeight: '1.4',
-          textShadow: '0 1px 4px rgba(0,0,0,0.6)'
-        }}>
-          Цифровой морской рынок: от вылова до продажи,<br />
-          от Камчатки до твоего склада
-        </p>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black">
+      {/* Тестовый блок Tailwind */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-500 text-white text-2xl p-6 rounded-2xl shadow-xl mb-5">
+        Tailwind работает!
       </div>
+      <h1 className="text-white text-3xl font-bold mb-3">Главная страница</h1>
+      <p className="text-white/80 text-lg text-center">
+        Если ты видишь этот градиентный блок выше — Tailwind настроен и работает!
+      </p>
     </div>
   );
 };

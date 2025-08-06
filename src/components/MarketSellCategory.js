@@ -38,7 +38,7 @@ const exampleAds = [
     region: "Владивосток",
     price: "850 ₽/кг"
   },
-  // ...добавляй свои
+  // ...ещё!
 ];
 
 const CATEGORY_LABELS = {
@@ -77,14 +77,14 @@ export default function MarketSellCategory() {
       <h2 className="font-extrabold text-[22px] text-[#23df81] mb-3 tracking-wide">
         {CATEGORY_LABELS[category] || "Объявления"}
       </h2>
-      {/* Поиск */}
+      {/* Поиск графитовый */}
       <div className="sticky top-3 z-10 w-full max-w-xl mb-4">
         <input
           type="text"
           placeholder="Поиск по названию, компании или региону..."
           value={query}
           onChange={e => setQuery(e.target.value)}
-          className="w-full text-lg rounded-xl px-5 py-3 bg-black text-white placeholder-white/60 outline-none focus:ring-2 focus:ring-cyan-400 shadow-lg transition"
+          className="w-full text-lg rounded-xl px-5 py-3 bg-white/10 backdrop-blur-md text-white placeholder-white/60 outline-none focus:ring-2 focus:ring-cyan-400 shadow-lg transition"
           autoFocus
         />
       </div>
@@ -101,7 +101,7 @@ export default function MarketSellCategory() {
         {filteredAds.map((ad) => (
           <div
             key={ad.id}
-            className="flex flex-col items-center rounded-xl bg-black shadow-lg p-2 border border-white/10 transition-all duration-200 hover:scale-[1.025] hover:shadow-2xl"
+            className="flex flex-col items-center rounded-xl bg-white/10 backdrop-blur-md shadow-lg p-2 border border-white/10 transition-all duration-200 hover:scale-[1.025] hover:shadow-2xl"
             style={{
               minHeight: 135,
               boxShadow: "0 4px 18px 0 rgba(0,0,0,0.13)",

@@ -38,7 +38,7 @@ const exampleAds = [
     region: "Владивосток",
     price: "850 ₽/кг"
   },
-  // ...добавь сколько угодно!
+  // ...добавляй сколько хочешь!
 ];
 
 const CATEGORY_LABELS = {
@@ -51,10 +51,8 @@ const CATEGORY_LABELS = {
 export default function MarketSellCategory() {
   const { category } = useParams();
   const navigate = useNavigate();
-
   const [query, setQuery] = useState('');
 
-  // Поиск сразу по названию, компании и региону
   const filteredAds = exampleAds.filter(ad =>
     ad.category === category &&
     (
@@ -66,7 +64,7 @@ export default function MarketSellCategory() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0a182a] via-[#1b2b40] to-[#221f4c] px-2 pt-4 pb-24 flex flex-col items-center">
-      {/* Кнопка Назад */}
+      {/* Назад */}
       <button
         onClick={() => navigate(-1)}
         className="mb-3 ml-2 flex items-center gap-2 text-[#23df81] font-semibold hover:text-white transition"
@@ -90,66 +88,52 @@ export default function MarketSellCategory() {
           autoFocus
         />
       </div>
-      {/* Сетка объявлений */}
-      <div className="w-full max-w-xl grid grid-cols-1 sm:grid-cols-2 gap-5 justify-center">
-        {filteredAds.length === 0 ? (
-          <div className="text-white text-center col-span-2 mt-20 text-lg flex flex-col items-center gap-3">
-            <svg className="w-12 h-12 text-white/50" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24">
+      {/* Сетка карточек 2 колонки */}
+      <div className="w-full max-w-xl grid grid-cols-2 gap-x-3 gap-y-4 justify-center">
+        {filteredAds.length === 0 && (
+          <div className="text-white text-center col-span-2 mt-20 text-base flex flex-col items-center gap-3">
+            <svg className="w-10 h-10 text-white/50" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24">
               <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
-            <span>Нет объявлений по вашему запросу</span>
+            Нет объявлений по вашему запросу
           </div>
-        ) : (
-          filteredAds.map((ad, i) => (
-            <div
-              key={ad.id}
-              className="flex flex-col items-center rounded-2xl bg-white/10 backdrop-blur-md shadow-xl p-3 border border-white/15 transition-all duration-200 hover:scale-105 hover:shadow-2xl animate-fade-in"
-              style={{
-                minHeight: 210,
-                boxShadow: "0 6px 24px 0 rgba(0,0,0,0.18)",
-                animationDelay: `${i * 50}ms`
-              }}
-            >
-              <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-2">
-                <img
-                  src={ad.images[0]}
-                  alt={ad.title}
-                  className="w-full h-full object-cover"
-                  onError={e => { e.target.src = '/images/no-image.webp'; }}
-                />
-                {/* Тег категории */}
-                <span className="absolute top-2 left-2 bg-gradient-to-r from-yellow-400 to-pink-500 text-xs text-black font-bold px-3 py-1 rounded-full shadow">
-                  {CATEGORY_LABELS[ad.category]}
-                </span>
-              </div>
-              <div className="text-lg font-bold text-white text-center mb-1">{ad.title}</div>
-              <div className="text-base font-extrabold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text mb-1">
-                {ad.price}
-              </div>
-              <div className="text-xs text-white/70 mb-1">{ad.company} {ad.region && `· ${ad.region}`}</div>
-              <button
-                className="mt-1 w-[92%] flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-semibold rounded-xl py-2 hover:scale-105 transition"
-                onClick={() => navigate(`/market/sell/detail/${ad.id}`)}
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="8"/></svg>
-                Подробнее
-              </button>
-            </div>
-          ))
         )}
+        {filteredAds.map((ad) => (
+          <div
+            key={ad.id}
+            className="flex flex-col items-center rounded-xl bg-white/10 backdrop-blur-md shadow-lg p-2 border border-white/10 transition-all duration-200 hover:scale-[1.025] hover:shadow-2xl"
+            style={{
+              minHeight: 135,
+              boxShadow: "0 4px 18px 0 rgba(0,0,0,0.13)",
+            }}
+          >
+            <div className="relative w-full aspect-square rounded-lg overflow-hidden mb-1.5">
+              <img
+                src={ad.images[0]}
+                alt={ad.title}
+                className="w-full h-full object-cover"
+                onError={e => { e.target.src = '/images/no-image.webp'; }}
+              />
+              {/* Тег категории */}
+              <span className="absolute top-1.5 left-1.5 bg-gradient-to-r from-yellow-400 to-pink-500 text-[10px] text-black font-bold px-2 py-0.5 rounded-full shadow">
+                {CATEGORY_LABELS[ad.category]}
+              </span>
+            </div>
+            <div className="text-sm font-bold text-white text-center mb-0.5 line-clamp-2">{ad.title}</div>
+            <div className="text-[13px] font-extrabold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text mb-0.5">
+              {ad.price}
+            </div>
+            <div className="text-[11px] text-white/70 mb-0.5">{ad.company} {ad.region && `· ${ad.region}`}</div>
+            <button
+              className="mt-0.5 w-[95%] flex items-center justify-center gap-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-semibold rounded-lg py-1.5 text-xs hover:scale-105 transition"
+              onClick={() => navigate(`/market/sell/detail/${ad.id}`)}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="8"/></svg>
+              Подробнее
+            </button>
+          </div>
+        ))}
       </div>
-      {/* Анимация появления */}
-      <style>
-        {`
-        .animate-fade-in {
-          animation: fadeIn 0.5s both;
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(32px);}
-          to { opacity: 1; transform: translateY(0);}
-        }
-        `}
-      </style>
     </div>
   );
 }

@@ -7,8 +7,9 @@ const Home = () => {
       width: '100%',
       height: '100vh',
       backgroundImage: 'url(/images/port-bg.webp)',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
+      backgroundSize: 'contain',           // Меняем cover на contain!
+      backgroundRepeat: 'no-repeat',       // Не повторять картинку
+      backgroundPosition: 'center',        // Центрировать
       color: '#fff',
       display: 'flex',
       alignItems: 'center',
@@ -33,3 +34,4 @@ const Home = () => {
 };
 
 export default Home;
+

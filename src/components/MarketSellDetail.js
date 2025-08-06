@@ -1,14 +1,13 @@
-// src/components/MarketSellDetail.js
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-// Обновлённый массив объявлений
+// Моковые данные (можешь вынести)
 const exampleAds = [
   {
     id: 1,
     title: "Икра кеты солёная, 2024",
     images: [
-      "/images/more-i-sol-1.webp", // ← Новое фото
+      "/images/more-i-sol-1.webp",
       "/images/ikra1.webp",
       "/images/ikra2.webp"
     ],
@@ -39,142 +38,93 @@ const exampleAds = [
   // ...ещё объявления
 ];
 
+const CATEGORY_LABELS = {
+  ikra: "Икра",
+  ryba: "Рыба",
+  krab: "Краб",
+  mor: "Морепродукты",
+};
+
 export default function MarketSellDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Найти объявление по id (id может быть строкой)
   const ad = exampleAds.find(ad => String(ad.id) === String(id));
-
   if (!ad) return (
-    <div style={{ color: "#fff", padding: 30 }}>Объявление не найдено</div>
+    <div className="text-white p-10">Объявление не найдено</div>
   );
 
   return (
-    <div style={{
-      background: "#000",
-      minHeight: "100vh",
-      color: "#fff",
-      padding: 22,
-      fontFamily: "inherit",
-      maxWidth: 420,
-      margin: "0 auto"
-    }}>
-      {/* Кнопка назад */}
-      <button onClick={() => navigate(-1)}
-        style={{
-          marginBottom: 18,
-          padding: "6px 16px",
-          borderRadius: 11,
-          background: "none",
-          color: '#357cff',
-          border: 'none',
-          fontWeight: 500,
-          fontSize: 15,
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          gap: 5
-        }}>
-        <svg width="18" height="18" fill="none" style={{ verticalAlign: '-3px', marginRight: 3 }}>
-          <path d="M12 4l-6 5 6 5" stroke="#357cff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <div className="min-h-screen flex flex-col items-center bg-gradient-to-br from-[#0a182a] via-[#1b2b40] to-[#221f4c] px-1 pb-10 pt-6">
+      {/* Назад */}
+      <button
+        onClick={() => navigate(-1)}
+        className="mb-4 flex items-center gap-2 text-[#23df81] font-semibold hover:text-white transition self-start ml-2"
+      >
+        <svg width="20" height="20" fill="none">
+          <path d="M13 5l-5 5 5 5" stroke="#23df81" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
         Назад
       </button>
-      {/* Галерея фото — если фото несколько, покажи все (в ряд) */}
-      <div style={{
-        width: "100%",
-        aspectRatio: "1/1",
-        background: "#191a1f",
-        borderRadius: 19,
-        overflow: "hidden",
-        marginBottom: 11,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        boxShadow: "0 2px 14px #16181d66"
-      }}>
-        <img
-          src={ad.images[0]}
-          alt={ad.title}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            borderRadius: 19,
-            display: "block"
-          }}
-          onError={e => { e.target.src = '/images/no-image.webp'; }}
-        />
+      <div className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 p-4 relative">
+        {/* Галерея фото */}
+        <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-4 flex gap-2">
+          {ad.images.map((img, idx) => (
+            <img
+              key={idx}
+              src={img}
+              alt={ad.title}
+              className="w-1/3 h-full object-cover rounded-xl border border-white/10 shadow-md"
+              onError={e => { e.target.src = '/images/no-image.webp'; }}
+            />
+          ))}
+        </div>
+        {/* Тег категории и цена */}
+        <div className="flex items-center justify-between mb-2">
+          <span className="bg-gradient-to-r from-yellow-400 to-pink-500 text-black px-3 py-1 rounded-full text-xs font-bold shadow">
+            {CATEGORY_LABELS[ad.category]}
+          </span>
+          <span className="text-xl font-extrabold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
+            {ad.price}
+          </span>
+        </div>
+        {/* Название */}
+        <div className="text-xl text-white font-bold mb-2">{ad.title}</div>
+        {/* Описание */}
+        <div className="text-base text-white/90 mb-3">{ad.description}</div>
+        {/* Компания и регион */}
+        <div className="text-sm text-white/70 mb-2">{ad.company}{ad.region ? ` · ${ad.region}` : ""}</div>
+        {/* Склад */}
+        {ad.warehouse && (
+          <div className="text-xs text-[#8fe3b9] mb-2">Склад: {ad.warehouse}</div>
+        )}
+        {/* Оплата */}
+        {ad.payment && (
+          <div className="text-xs text-[#bbffcc] mb-2">Оплата: {ad.payment}</div>
+        )}
+        {/* Документы */}
+        {ad.documents && ad.documents.length > 0 && (
+          <div className="flex gap-2 items-center text-xs text-blue-200 mb-3">
+            {ad.documents.map((doc, i) => (
+              <span key={i} className="bg-blue-900/50 px-3 py-1 rounded-full">
+                📄 {doc}
+              </span>
+            ))}
+          </div>
+        )}
+        {/* Контакты */}
+        {ad.contact && (
+          <div className="mt-4 flex flex-col items-center gap-3">
+            <a
+              href={`tel:${ad.contact.replace(/[^+\d]/g, '')}`}
+              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-bold rounded-xl py-3 shadow-lg hover:scale-105 transition text-base"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 2 4.18 2 2 0 0 1 4 2.09h3a2 2 0 0 1 2 1.72 13 13 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.18-1.18a2 2 0 0 1 2.11-.45 13 13 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              Позвонить: {ad.contact}
+            </a>
+          </div>
+        )}
       </div>
-      {/* Название и цена */}
-      <div style={{
-        fontWeight: 800,
-        fontSize: 17,
-        color: "#fff",
-        marginBottom: 4
-      }}>{ad.title}</div>
-      <div style={{
-        color: "#23df81",
-        fontWeight: 700,
-        fontSize: 15,
-        marginBottom: 7
-      }}>{ad.price}</div>
-      {/* Описание */}
-      <div style={{
-        fontWeight: 400,
-        color: "#bdbdbd",
-        fontSize: 14,
-        marginBottom: 13
-      }}>{ad.description}</div>
-      {/* Компания, регион */}
-      <div style={{
-        color: "#a0f0c0",
-        fontWeight: 500,
-        fontSize: 13,
-        marginBottom: 8
-      }}>{ad.company}{ad.region ? ` · ${ad.region}` : ""}</div>
-      {/* Контакты */}
-      {ad.contact && (
-        <div style={{
-          color: "#23df81",
-          fontWeight: 700,
-          fontSize: 14,
-          marginBottom: 11
-        }}>
-          Контакты: {ad.contact}
-        </div>
-      )}
-      {/* Документы */}
-      {ad.documents && ad.documents.length > 0 && (
-        <div style={{
-          color: "#eaeaea",
-          fontSize: 12.5,
-          marginBottom: 7
-        }}>
-          Документы: {ad.documents.join(", ")}
-        </div>
-      )}
-      {/* Склад */}
-      {ad.warehouse && (
-        <div style={{
-          color: "#8fe3b9",
-          fontSize: 12.5,
-          marginBottom: 7
-        }}>
-          Склад: {ad.warehouse}
-        </div>
-      )}
-      {/* Оплата */}
-      {ad.payment && (
-        <div style={{
-          color: "#bbffcc",
-          fontSize: 12.5,
-          marginBottom: 2
-        }}>
-          Оплата: {ad.payment}
-        </div>
-      )}
     </div>
   );
 }

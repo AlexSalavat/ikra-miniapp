@@ -4,27 +4,43 @@ const Home = () => {
   return (
     <div style={{
       position: 'relative',
-      width: '100%',
+      width: '100vw',
       height: '100vh',
       backgroundImage: 'url(/images/port-bg.webp)',
-      backgroundSize: 'contain',           // Меняем cover на contain!
-      backgroundRepeat: 'no-repeat',       // Не повторять картинку
-      backgroundPosition: 'center',        // Центрировать
+      backgroundSize: '100% 100%',         // Фон всегда по размеру экрана!
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
       color: '#fff',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      textAlign: 'center'
+      textAlign: 'center',
+      overflow: 'hidden'
     }}>
       <div style={{
         position: 'absolute',
         inset: 0,
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        backgroundColor: 'rgba(0,0,0,0.5)', // затемнение фона
         zIndex: 1
       }} />
-      <div style={{ zIndex: 2, padding: '0 20px' }}>
-        <h1 style={{ fontSize: '2rem', marginBottom: '16px' }}>PORT MARKET</h1>
-        <p style={{ fontSize: '1rem', lineHeight: '1.4' }}>
+      <div style={{
+        zIndex: 2,
+        padding: '0 20px',
+        width: '100%',
+        position: 'relative'
+      }}>
+        <h1 style={{
+          fontSize: '2rem',
+          marginBottom: '16px',
+          textShadow: '0 2px 8px rgba(0,0,0,0.8)'
+        }}>
+          PORT MARKET
+        </h1>
+        <p style={{
+          fontSize: '1rem',
+          lineHeight: '1.4',
+          textShadow: '0 1px 4px rgba(0,0,0,0.6)'
+        }}>
           Цифровой морской рынок: от вылова до продажи,<br />
           от Камчатки до твоего склада
         </p>
@@ -34,4 +50,3 @@ const Home = () => {
 };
 
 export default Home;
-

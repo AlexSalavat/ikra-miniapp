@@ -38,7 +38,7 @@ const exampleAds = [
     region: "Владивосток",
     price: "850 ₽/кг"
   },
-  // ...добавляй сколько хочешь!
+  // ...добавляй свои
 ];
 
 const CATEGORY_LABELS = {
@@ -63,7 +63,7 @@ export default function MarketSellCategory() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a182a] via-[#1b2b40] to-[#221f4c] px-2 pt-4 pb-24 flex flex-col items-center">
+    <div className="min-h-screen bg-black px-2 pt-4 pb-24 flex flex-col items-center">
       {/* Назад */}
       <button
         onClick={() => navigate(-1)}
@@ -84,7 +84,7 @@ export default function MarketSellCategory() {
           placeholder="Поиск по названию, компании или региону..."
           value={query}
           onChange={e => setQuery(e.target.value)}
-          className="w-full text-lg rounded-xl px-5 py-3 bg-white/10 text-white placeholder-white/60 outline-none focus:ring-2 focus:ring-cyan-400 shadow-lg backdrop-blur-md transition"
+          className="w-full text-lg rounded-xl px-5 py-3 bg-black text-white placeholder-white/60 outline-none focus:ring-2 focus:ring-cyan-400 shadow-lg transition"
           autoFocus
         />
       </div>
@@ -101,7 +101,7 @@ export default function MarketSellCategory() {
         {filteredAds.map((ad) => (
           <div
             key={ad.id}
-            className="flex flex-col items-center rounded-xl bg-white/10 backdrop-blur-md shadow-lg p-2 border border-white/10 transition-all duration-200 hover:scale-[1.025] hover:shadow-2xl"
+            className="flex flex-col items-center rounded-xl bg-black shadow-lg p-2 border border-white/10 transition-all duration-200 hover:scale-[1.025] hover:shadow-2xl"
             style={{
               minHeight: 135,
               boxShadow: "0 4px 18px 0 rgba(0,0,0,0.13)",

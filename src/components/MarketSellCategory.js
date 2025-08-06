@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-// Массив объявлений (лучше вынести в data/ads.js)
+// Пример данных (можешь вынести в data/ads.js)
 const exampleAds = [
   {
     id: 1,
@@ -55,155 +55,57 @@ export default function MarketSellCategory() {
   const filteredAds = exampleAds.filter(ad => ad.category === category);
 
   return (
-    <div style={{
-      background: "#000",
-      minHeight: "100vh",
-      padding: "20px 0 60px 0",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center"
-    }}>
+    <div className="min-h-screen bg-gradient-to-br from-[#0a182a] via-[#1b2b40] to-[#221f4c] px-2 pt-4 pb-24 flex flex-col items-center">
       {/* Кнопка Назад */}
       <button
         onClick={() => navigate(-1)}
-        style={{
-          alignSelf: "flex-start",
-          marginLeft: 12,
-          marginBottom: 9,
-          padding: "6px 16px",
-          borderRadius: 11,
-          background: "none",
-          color: '#357cff',
-          border: 'none',
-          fontWeight: 500,
-          fontSize: 15,
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          gap: 5
-        }}>
-        <svg width="18" height="18" fill="none" style={{ verticalAlign: '-3px', marginRight: 3 }}>
-          <path d="M12 4l-6 5 6 5" stroke="#357cff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        className="mb-3 ml-2 flex items-center gap-2 text-[#23df81] font-semibold hover:text-white transition"
+      >
+        <svg width="20" height="20" fill="none">
+          <path d="M13 5l-5 5 5 5" stroke="#23df81" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
         Назад
       </button>
-      <h2 style={{
-        fontWeight: 800,
-        fontSize: 21,
-        color: "#23df81",
-        marginBottom: 16,
-        letterSpacing: ".03em"
-      }}>
+      <h2 className="font-extrabold text-[22px] text-[#23df81] mb-5 tracking-wide">
         {CATEGORY_LABELS[category] || "Объявления"}
       </h2>
-      <div style={{
-        width: "100%",
-        maxWidth: 440,
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 15,
-        justifyContent: "center"
-      }}>
+      <div className="w-full max-w-xl grid grid-cols-1 sm:grid-cols-2 gap-5 justify-center">
         {filteredAds.length === 0 && (
-          <div style={{
-            color: "#fff",
-            fontSize: 15,
-            gridColumn: "1/-1",
-            textAlign: "center",
-            marginTop: 25
-          }}>Нет объявлений в этой категории</div>
+          <div className="text-white text-center col-span-2 mt-12 text-base">
+            Нет объявлений в этой категории
+          </div>
         )}
         {filteredAds.map((ad) => (
-          <div key={ad.id}
+          <div
+            key={ad.id}
+            className="flex flex-col items-center rounded-2xl bg-white/10 backdrop-blur-md shadow-xl p-3 border border-white/15 transition-all duration-200 hover:scale-105 hover:shadow-2xl"
             style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              background: "none"
+              minHeight: 210,
+              boxShadow: "0 6px 24px 0 rgba(0,0,0,0.18)",
             }}
           >
-            {/* Фото карточки */}
-            <div style={{
-              width: "100%",
-              aspectRatio: "1/1",
-              background: "#191a1f",
-              borderRadius: 19,
-              overflow: "hidden",
-              boxShadow: "0 2px 14px #16181d66",
-              marginBottom: 7,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center"
-            }}>
+            <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-2">
               <img
                 src={ad.images[0]}
                 alt={ad.title}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: 19,
-                  display: "block"
-                }}
+                className="w-full h-full object-cover"
                 onError={e => { e.target.src = '/images/no-image.webp'; }}
               />
+              {/* Тег категории */}
+              <span className="absolute top-2 left-2 bg-gradient-to-r from-yellow-400 to-pink-500 text-xs text-black font-bold px-3 py-1 rounded-full shadow">
+                {CATEGORY_LABELS[ad.category]}
+              </span>
             </div>
-            {/* Название под карточкой */}
-            <div
-              style={{
-                color: "#fff",
-                fontWeight: 700,
-                fontSize: 13.3,
-                marginBottom: 1,
-                textAlign: "center",
-                maxHeight: 44,
-                minHeight: 28,
-                overflow: "hidden",
-                display: "-webkit-box",
-                WebkitLineClamp: 3,
-                WebkitBoxOrient: "vertical",
-                whiteSpace: "normal",
-                lineHeight: "1.14"
-              }}
-              title={ad.title}
-            >
-              {ad.title}
-            </div>
-            {/* Цена и компания */}
-            <div style={{
-              color: "#23df81",
-              fontWeight: 600,
-              fontSize: 12.1,
-              textAlign: "center",
-              marginTop: 2,
-            }}>
+            <div className="text-lg font-bold text-white text-center mb-1">{ad.title}</div>
+            <div className="text-base font-extrabold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text mb-1">
               {ad.price}
             </div>
-            <div style={{
-              color: "#a0f0c0",
-              fontWeight: 500,
-              fontSize: 11.3,
-              textAlign: "center",
-              marginBottom: 3
-            }}>
-              {ad.company} {ad.region && `· ${ad.region}`}
-            </div>
-            {/* Кнопка Подробнее */}
+            <div className="text-xs text-white/70 mb-1">{ad.company} {ad.region && `· ${ad.region}`}</div>
             <button
-              style={{
-                background: "#23df81",
-                color: "#131513",
-                fontWeight: 700,
-                borderRadius: 11,
-                padding: "7px 0",
-                fontSize: 13,
-                margin: "3px 0 10px 0",
-                border: "none",
-                cursor: "pointer",
-                width: "82%"
-              }}
-              onClick={() => navigate(`/market/sell/${category}/${ad.id}`)}
+              className="mt-1 w-[92%] flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-semibold rounded-xl py-2 hover:scale-105 transition"
+              onClick={() => navigate(`/market/sell/detail/${ad.id}`)}
             >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="8"/></svg>
               Подробнее
             </button>
           </div>

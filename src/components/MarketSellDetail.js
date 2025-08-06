@@ -1,7 +1,9 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
 
-// Моковые данные (можешь вынести)
+// Моковые данные (пример)
 const exampleAds = [
   {
     id: 1,
@@ -20,20 +22,6 @@ const exampleAds = [
     documents: ["Меркурий", "Честный знак"],
     warehouse: "Петропавловск-Камчатский, ул. Морская, 5",
     payment: "Безналичный, наличный",
-  },
-  {
-    id: 2,
-    title: "Горбуша свежемороженая, опт",
-    images: ["/images/ryba1.webp"],
-    category: "ryba",
-    company: "ООО РыбСнаб",
-    region: "Сахалин",
-    price: "от 180 ₽/кг",
-    contact: "+7 900 000-00-00",
-    description: "Оптовые поставки. Супер качество.",
-    documents: ["Меркурий"],
-    warehouse: "Южно-Сахалинск, рыбный порт",
-    payment: "Безналичный",
   },
   // ...ещё объявления
 ];
@@ -67,19 +55,27 @@ export default function MarketSellDetail() {
         Назад
       </button>
       <div className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 p-4 relative">
-        {/* Галерея фото */}
-        <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-4 flex gap-2">
-          {ad.images.map((img, idx) => (
-            <img
-              key={idx}
-              src={img}
-              alt={ad.title}
-              className="w-1/3 h-full object-cover rounded-xl border border-white/10 shadow-md"
-              onError={e => { e.target.src = '/images/no-image.webp'; }}
-            />
-          ))}
+        {/* Галерея фото — свайп */}
+        <div className="w-full aspect-square rounded-xl overflow-hidden mb-4">
+          <Swiper
+            spaceBetween={12}
+            slidesPerView={1}
+            pagination={{ clickable: true }}
+            style={{ borderRadius: 18 }}
+          >
+            {ad.images.map((img, idx) => (
+              <SwiperSlide key={idx}>
+                <img
+                  src={img}
+                  alt={ad.title}
+                  className="w-full h-full object-cover rounded-xl"
+                  onError={e => { e.target.src = '/images/no-image.webp'; }}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
-        {/* Тег категории и цена */}
+        {/* Категория и цена */}
         <div className="flex items-center justify-between mb-2">
           <span className="bg-gradient-to-r from-yellow-400 to-pink-500 text-black px-3 py-1 rounded-full text-xs font-bold shadow">
             {CATEGORY_LABELS[ad.category]}

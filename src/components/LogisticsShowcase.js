@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import logistics from "../data/logistics";
+import { useNavigate } from "react-router-dom";
 
 const FILTERS = [
   { label: "Камчатка", keys: ["Камчатка", "Камчатский"] },
@@ -8,156 +9,95 @@ const FILTERS = [
   { label: "Хабаровск", keys: ["Хабаровск"] },
 ];
 
-const CARDS_PER_ROW = 2;
-const GAP = 7;
+const getInitials = (name = "") =>
+  name.replace(/["«»]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]?.toUpperCase()).join("") || "??";
 
-function isMatchByKeys(item, keys) {
-  if (!keys || keys.length === 0) return true;
-  const addr = (item.address || "") + " " + (item.name || "");
-  return keys.some(key => addr.toLowerCase().includes(key.toLowerCase()));
-}
+const stringHue = (s = "") => { let h = 0; for (let i = 0; i < s.length; i++) h = (h*31 + s.charCodeAt(i)) % 360; return h; };
+
+const matchKeys = (item, keys) => {
+  if (!keys?.length) return true;
+  const text = `${item.address || ""} ${item.name || ""} ${item.region || ""}`;
+  return keys.some(k => text.toLowerCase().includes(k.toLowerCase()));
+};
 
 export default function LogisticsShowcase() {
   const [filter, setFilter] = useState(FILTERS[0].label);
+  const navigate = useNavigate();
 
   const activeKeys = FILTERS.find(f => f.label === filter)?.keys || [];
-  const filtered = logistics.filter(item => isMatchByKeys(item, activeKeys));
-  const cards = filtered.concat(Array(Math.max(0, 10 - filtered.length)).fill({ isEmpty: true }));
-
-  // Размер вычисляем по ширине экрана (чтобы квадраты!)
-  const CARD_SIZE = `calc((100vw - 26px - ${GAP}px) / 2)`;
+  const filtered = useMemo(() => logistics.filter(x => matchKeys(x, activeKeys)), [activeKeys]);
 
   return (
-    <div className="bg-black min-h-screen pt-2 pb-20 flex flex-col items-center">
-      {/* Кнопка назад */}
-      <button
-        onClick={() => window.history.back()}
-        style={{
-          color: "#2678f3",
-          background: "none",
-          border: "none",
-          fontWeight: 500,
-          fontSize: 18,
-          cursor: "pointer",
-          marginBottom: 8,
-          display: "flex",
-          alignItems: "center",
-          gap: 4,
-          alignSelf: "flex-start",
-          marginLeft: 13,
-        }}
-      >
-        <svg width="17" height="17" fill="none" style={{ verticalAlign: "-3px" }}>
-          <path d="M12 4l-6 5 6 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-        Назад
-      </button>
-      {/* Фильтр */}
-      <div style={{
-        display: "flex",
-        gap: 6,
-        marginBottom: 9,
-        width: "100vw",
-        maxWidth: "100vw",
-        overflowX: "auto",
-        whiteSpace: "nowrap",
-        paddingLeft: 10,
-        paddingRight: 6,
-        scrollbarWidth: "none",
-        msOverflowStyle: "none"
-      }}>
-        {FILTERS.map(f => (
-          <button
-            key={f.label}
-            onClick={() => setFilter(f.label)}
-            style={{
-              background: filter === f.label ? "#0a1918" : "none",
-              color: filter === f.label ? "#23df81" : "#d3d3d7",
-              border: `1.2px solid ${filter === f.label ? "#22b978" : "#20222b"}`,
-              borderRadius: 10,
-              fontWeight: 600,
-              fontSize: 13.3,
-              minWidth: 92,
-              maxWidth: 110,
-              padding: "4px 10px",
-              cursor: "pointer",
-              outline: "none",
-              overflow: "hidden",
-              textOverflow: "ellipsis"
-            }}
-          >
-            <span style={{whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}}>{f.label}</span>
+    <div className="bg-black min-h-screen pb-24">
+      {/* Header */}
+      <div className="sticky top-0 z-20 w-full bg-black/70 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-md mx-auto px-4 py-3 flex items-center gap-3">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-[#23df81] hover:text-white transition">
+            <svg width="20" height="20" fill="none"><path d="M13 5l-5 5 5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <span className="font-semibold">Назад</span>
           </button>
-        ))}
-      </div>
-      {/* Сетка карточек */}
-      <div style={{
-        width: "100%",
-        maxWidth: `calc(2 * ${CARD_SIZE} + ${GAP}px)`,
-        display: "grid",
-        gridTemplateColumns: `repeat(${CARDS_PER_ROW}, minmax(0, 1fr))`,
-        gap: GAP,
-        justifyContent: "center",
-        padding: "0 10px"
-      }}>
-        {cards.map((item, idx) => (
-          <div
-            key={idx}
-            style={{
-              background: "#212127",
-              borderRadius: 19,
-              width: "100%",
-              aspectRatio: "1 / 1",
-              overflow: "hidden",
-              position: "relative",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              minHeight: 0,
-              minWidth: 0,
-            }}>
-            {/* Фото/лого */}
-            {!item.isEmpty && item.logo
-              ? <img
-                  src={item.logo}
-                  alt={item.name}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",    // Или попробуй 'contain' если только логотипы
-                    background: "#18191c",
-                  }}
-                  onError={e => { e.target.src = "/images/no-logo.webp"; }}
-                />
-              : <span style={{
-                  color: "#86868d",
-                  fontSize: 15.5,
-                  fontWeight: 600,
-                  textAlign: "center",
-                  width: "100%"
-                }}>{item.isEmpty ? "Место\nсвободно" : "Лого в разработке"}</span>
-            }
-            {/* Название компании — под карточкой! */}
-            {!item.isEmpty && (
-              <div style={{
-                position: "absolute",
-                left: 0, right: 0, bottom: 0,
-                background: "rgba(0,0,0,0.46)",
-                color: "#fff",
-                fontWeight: 700,
-                fontSize: 13.2,
-                textAlign: "center",
-                padding: "6px 5px 5px 5px",
-                width: "100%",
-                lineHeight: "1.11",
-                letterSpacing: ".02em",
-                textShadow: "0 2px 10px #0009"
-              }}>
-                {item.name}
-              </div>
-            )}
+          <h2 className="ml-auto mr-auto text-white font-bold text-lg">Логистика ДВ</h2>
+          <span className="w-16" />
+        </div>
+        {/* Filters */}
+        <div className="max-w-md mx-auto px-3 pb-3">
+          <div className="flex gap-2 overflow-x-auto no-scrollbar">
+            {FILTERS.map(f => {
+              const active = f.label === filter;
+              return (
+                <button
+                  key={f.label}
+                  onClick={() => setFilter(f.label)}
+                  className={[
+                    "px-3 py-1.5 rounded-lg text-[12.5px] font-semibold whitespace-nowrap transition",
+                    active ? "text-[#23df81] border border-[#22b978] bg-[#0a1918]" : "text-[#d3d3d7] border border-[#20222b]"
+                  ].join(" ")}
+                >
+                  {f.label}
+                </button>
+              );
+            })}
           </div>
-        ))}
+        </div>
+      </div>
+
+      {/* Grid */}
+      <div className="max-w-md mx-auto px-3 pt-3 grid grid-cols-2 gap-3">
+        {filtered.map(item => <Card key={item.id} item={item} />)}
+        {filtered.length === 0 && Array.from({ length: 4 }).map((_, i) => <div key={i} className="glass-card aspect-square animate-pulse" />)}
+      </div>
+    </div>
+  );
+}
+
+function Card({ item }) {
+  const img = item.logo?.trim() ? item.logo : null;
+  const bg = useMemo(() => {
+    const h = stringHue(item.name || item.region || "x");
+    return `linear-gradient(135deg,hsl(${h} 80% 20% / .85),hsl(${(h+40)%360} 80% 30% / .85))`;
+  }, [item.name, item.region]);
+
+  return (
+    <div className="glass-card p-2">
+      <div className="relative aspect-square rounded-lg overflow-hidden border border-white/10">
+        {img ? (
+          <img src={img} alt={item.name} loading="lazy" onError={(e)=>{ e.currentTarget.remove(); }} className="w-full h-full object-cover img-fade-in" />
+        ) : (
+          <div className="w-full h-full grid place-items-center text-white/95 font-extrabold text-xl" style={{ background: bg }}>
+            {getInitials(item.name || item.region || "??")}
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/45" />
+        {item.region && (
+          <div className="absolute top-1 left-1">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold text-white border border-white/20 bg-black/35 backdrop-blur-sm">
+              {item.region}
+            </span>
+          </div>
+        )}
+      </div>
+      <div className="mt-2 text-center">
+        <div className="text-white font-semibold text-sm truncate" title={item.name}>{item.name}</div>
       </div>
     </div>
   );

@@ -1,90 +1,80 @@
-import React from "react";
-import production from "../data/production";
+import React, { useMemo } from "react";
+import producers from "../data/production";
+import { useNavigate } from "react-router-dom";
+
+const getInitials = (name = "") =>
+  name.replace(/["«»]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]?.toUpperCase()).join("") || "??";
+
+const stringHue = (s = "") => { let h = 0; for (let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))%360; return h; };
 
 export default function ProductionShowcase() {
+  const navigate = useNavigate();
+
   return (
-    <div className="bg-black min-h-screen pb-20 pt-4 flex flex-col items-center">
-      <button
-        onClick={() => window.history.back()}
-        style={{
-          color: "#357cff",
-          background: "none",
-          border: "none",
-          fontWeight: 500,
-          fontSize: 16,
-          cursor: "pointer",
-          marginBottom: 8,
-          display: "flex",
-          alignItems: "center",
-          gap: 5,
-          alignSelf: "flex-start",
-          marginLeft: 10,
-        }}
-      >
-        <svg width="18" height="18" fill="none" style={{ verticalAlign: "-3px" }}>
-          <path d="M12 4l-6 5 6 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-        Назад
-      </button>
-      <div
-        className="grid"
-        style={{
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: 16,
-          width: "100%",
-          maxWidth: 400,
-        }}
-      >
-        {production.slice(0, 10).map(item => (
-          <div
-            key={item.id}
-            className="relative bg-[#16181e] rounded-[15px] overflow-hidden aspect-[1.13/1] flex items-end justify-center"
-            style={{ minHeight: 128, boxShadow: "0 2px 10px #19192416" }}
-          >
-            {item.logo ? (
-              <img
-                src={item.logo}
-                alt={item.name}
-                className="absolute inset-0 w-full h-full object-cover"
-                onError={e => { e.target.src = "/images/no-image.webp"; }}
-              />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#262632] to-[#23232a]">
-                <span className="text-[#bababa] font-semibold text-[13.5px] text-center opacity-90 whitespace-pre-line leading-snug">
-                  Лого в разработке
-                </span>
-              </div>
-            )}
-            <div
-              style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                width: "100%",
-                padding: "6px 0 5px 0",
-                background: "linear-gradient(0deg,#18181b 92%,transparent)",
-                textAlign: "center",
-                zIndex: 2,
-              }}
-            >
-              <span
-                style={{
-                  color: "#fff",
-                  fontWeight: 700,
-                  fontSize: 13,
-                  textShadow: "0 1.5px 7px #191b21",
-                  letterSpacing: "0.01em",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  display: "block",
-                }}
-              >
-                {item.name}
-              </span>
-            </div>
+    <div className="bg-black min-h-screen pb-24">
+      {/* Header */}
+      <div className="sticky top-0 z-20 w-full bg-black/70 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-md mx-auto px-4 py-3 flex items-center gap-3">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-[#23df81] hover:text-white transition">
+            <svg width="20" height="20" fill="none"><path d="M13 5l-5 5 5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <span className="font-semibold">Назад</span>
+          </button>
+          <h2 className="ml-auto mr-auto text-white font-bold text-lg">Производство</h2>
+          <span className="w-16" />
+        </div>
+      </div>
+
+      {/* Grid */}
+      <div className="max-w-md mx-auto px-3 pt-3 grid grid-cols-2 gap-3">
+        {producers.map(item => <Card key={item.id} item={item} />)}
+        {producers.length === 0 && Array.from({length:4}).map((_,i)=>(<div key={i} className="glass-card aspect-square animate-pulse" />))}
+      </div>
+    </div>
+  );
+}
+
+function Card({ item }) {
+  const img = item.logo?.trim() ? item.logo : null;
+  const bg = useMemo(() => {
+    const h = stringHue(item.name || item.region || "x");
+    return `linear-gradient(135deg,hsl(${h} 80% 20% / .85),hsl(${(h+40)%360} 80% 30% / .85))`;
+  }, [item.name, item.region]);
+
+  const verified = item.badges?.includes("Проверенный");
+  const premium = item.badges?.includes("Честный знак") && item.badges?.includes("Меркурий");
+
+  return (
+    <div className={`glass-card p-2 ${premium ? "premium" : ""}`}>
+      <div className="relative aspect-square rounded-lg overflow-hidden border border-white/10">
+        {img ? (
+          <img src={img} alt={item.name} loading="lazy" onError={(e)=>{ e.currentTarget.remove(); }} className="w-full h-full object-cover img-fade-in" />
+        ) : (
+          <div className="w-full h-full grid place-items-center text-white/95 font-extrabold text-xl" style={{ background: bg }}>
+            {getInitials(item.name)}
           </div>
-        ))}
+        )}
+
+        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/45" />
+
+        {verified && (
+          <div className="absolute top-1 left-1">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold text-white border border-white/20 bg-green-600/60 backdrop-blur-sm">
+              ✅ Проверенный
+            </span>
+          </div>
+        )}
+
+        {premium && (
+          <div className="absolute top-1 right-1 w-5 h-5 rounded-full border border-[rgba(59,175,218,.7)] bg-white/10 grid place-items-center backdrop-blur-sm" title="Premium">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="rgb(59,175,218)">
+              <path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7l3-7z"/>
+            </svg>
+          </div>
+        )}
+      </div>
+
+      <div className="mt-2 text-center">
+        <div className="text-white font-semibold text-sm truncate" title={item.name}>{item.name}</div>
       </div>
     </div>
   );

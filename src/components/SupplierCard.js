@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
-/* Инициалы при отсутствии фото */
 const getInitials = (name = "") =>
   name.replace(/["«»]/g, "")
       .split(/\s+/).filter(Boolean)
@@ -59,11 +58,6 @@ export default function SupplierCard({ company }) {
           )}
           <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/40" />
 
-          {/* Город по центру */}
-          {(city || region) && (
-            <div className="city-overlay">{city || region}</div>
-          )}
-
           {/* Бейджи */}
           <div className="absolute top-1 left-1 flex gap-1">
             {verified && (
@@ -85,12 +79,23 @@ export default function SupplierCard({ company }) {
         </div>
 
         {/* Текст */}
-        <div className="mt-2">
+        <div className="mt-2 text-center">
           <div className="text-white font-semibold text-sm truncate" title={name}>
             {name}
           </div>
+
+          {(city || region) && (
+            <div className="flex items-center justify-center gap-1 text-xs text-white/80 mt-0.5">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <path d="M12 2C8 2 4 6 4 11c0 5.5 7 11 8 11s8-5.5 8-11c0-5-4-9-8-9z"/>
+                <circle cx="12" cy="11" r="3"/>
+              </svg>
+              <span className="truncate">{city || region}</span>
+            </div>
+          )}
+
           {!!products?.length && (
-            <div className="mt-1 flex flex-wrap gap-1">
+            <div className="mt-1 flex flex-wrap justify-center gap-1">
               {products.slice(0, 2).map((p, i) => (
                 <span key={i} className="px-2 py-0.5 rounded-full text-[10px] font-semibold text-white/90 border border-white/15 bg-white/[0.06] backdrop-blur-sm">
                   {p}

@@ -59,6 +59,11 @@ export default function SupplierCard({ company }) {
           )}
           <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/40" />
 
+          {/* Город по центру */}
+          {(city || region) && (
+            <div className="city-overlay">{city || region}</div>
+          )}
+
           {/* Бейджи */}
           <div className="absolute top-1 left-1 flex gap-1">
             {verified && (
@@ -72,7 +77,7 @@ export default function SupplierCard({ company }) {
           </div>
           {isPremium && (
             <div className="absolute top-1 right-1 badge-premium" title="Premium">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="gold">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill={`rgb(var(--rk-blue))`}>
                 <path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7l3-7z"/>
               </svg>
             </div>
@@ -84,14 +89,6 @@ export default function SupplierCard({ company }) {
           <div className="text-white font-semibold text-sm truncate" title={name}>
             {name}
           </div>
-          <div className="flex items-center gap-1 text-xs text-white/80 mt-0.5">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-              <path d="M12 2C8 2 4 6 4 11c0 5.5 7 11 8 11s8-5.5 8-11c0-5-4-9-8-9z"/>
-              <circle cx="12" cy="11" r="3"/>
-            </svg>
-            <span className="truncate">{city || region || "—"}</span>
-          </div>
-
           {!!products?.length && (
             <div className="mt-1 flex flex-wrap gap-1">
               {products.slice(0, 2).map((p, i) => (

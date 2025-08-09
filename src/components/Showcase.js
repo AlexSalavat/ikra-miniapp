@@ -1,4 +1,3 @@
-// src/components/Showcase.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +8,6 @@ const showcaseItems = [
     desc: "Проверенные компании — прямые контакты.",
     image: "/images/suppliers.webp",
     to: "/catalog/suppliers",
-    glow: "from-cyan-400 to-blue-500",
   },
   {
     key: "logistics",
@@ -17,7 +15,6 @@ const showcaseItems = [
     desc: "Вся информация по логистике Дальнего Востока.",
     image: "/images/logistics.webp",
     to: "/logistics",
-    glow: "from-amber-400 to-orange-500",
   },
   {
     key: "production",
@@ -25,7 +22,6 @@ const showcaseItems = [
     desc: "Рыбные и икорные производства.",
     image: "/images/production.webp",
     to: "/production",
-    glow: "from-emerald-400 to-green-500",
   },
   {
     key: "neirobiz",
@@ -33,7 +29,6 @@ const showcaseItems = [
     desc: "AI-сервисы для бизнеса.",
     image: "/images/neirobiz.webp",
     to: "/neirobiz",
-    glow: "from-pink-400 to-fuchsia-500",
   },
 ];
 
@@ -51,20 +46,12 @@ export default function Showcase() {
             aria-label="Назад"
           >
             <svg width="20" height="20" fill="none">
-              <path
-                d="M13 5l-5 5 5 5"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              <path d="M13 5l-5 5 5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             <span className="font-semibold">Назад</span>
           </button>
-          <h2 className="ml-auto mr-auto text-white font-bold text-lg">
-            Категории
-          </h2>
-          <span className="w-16" />{/* балансируем сетку */}
+          <h2 className="ml-auto mr-auto text-white font-bold text-lg">Категории</h2>
+          <span className="w-16" />
         </div>
       </div>
 
@@ -77,31 +64,25 @@ export default function Showcase() {
             className={[
               "relative overflow-hidden rounded-2xl group text-left",
               "bg-white/8 backdrop-blur-xl border border-white/10",
-              "shadow-[0_0_0_1px_rgba(255,255,255,.06)_inset,0_24px_60px_-24px_rgba(0,255,200,.25)]",
-              "transition-transform duration-200 ease-out hover:scale-[1.03] active:scale-[0.99]",
+              "shadow-[0_0_0_1px_rgba(255,255,255,.06)_inset,0_24px_60px_-24px_rgba(0,255,200,.18)]",
+              "transition-all duration-200 ease-out",
+              "hover:scale-[1.02] active:scale-[0.99]",
+              "hover:shadow-[0_0_0_1px_rgba(255,255,255,.1)_inset,0_28px_80px_-24px_rgba(0,255,200,.35)]",
+              "hover:border-cyan-300/30 focus-visible:border-cyan-300/40",
             ].join(" ")}
             style={{ aspectRatio: "1 / 1" }}
             aria-label={item.title}
           >
-            {/* Image */}
-            <div className="absolute inset-0">
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.src = "/images/no-image.webp";
-                }}
-              />
-              {/* Dark overlay for readability */}
-              <div className="absolute inset-0 bg-black/45" />
-              {/* Subtle top-to-bottom gradient */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/50" />
-              {/* Glow accent at bottom */}
-              <div
-                className={`absolute -bottom-6 left-1/2 -translate-x-1/2 w-40 h-14 blur-2xl opacity-60 bg-gradient-to-r ${item.glow}`}
-              />
-            </div>
+            {/* Image (без цветных бликов) */}
+            <img
+              src={item.image}
+              alt={item.title}
+              className="absolute inset-0 w-full h-full object-cover"
+              onError={(e) => { e.currentTarget.src = "/images/no-image.webp"; }}
+            />
+            {/* Нейтральное затемнение для читаемости */}
+            <div className="absolute inset-0 bg-black/40" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/50" />
 
             {/* Content */}
             <div className="relative z-10 h-full p-3 flex flex-col justify-end">
@@ -113,8 +94,8 @@ export default function Showcase() {
               </div>
             </div>
 
-            {/* Focus ring for a11y */}
-            <span className="absolute inset-0 rounded-2xl ring-0 ring-cyan-400/0 group-focus-visible:ring-2 group-focus-visible:ring-cyan-400/60 transition" />
+            {/* Подсветка именно карточки (контур) */}
+            <span className="pointer-events-none absolute inset-0 rounded-2xl ring-0 ring-cyan-300/0 group-hover:ring-2 group-hover:ring-cyan-300/40 transition-all duration-200" />
           </button>
         ))}
       </div>

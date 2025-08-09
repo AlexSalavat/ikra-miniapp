@@ -2,13 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 const getInitials = (name = "") =>
-  name
-    .replace(/["«»]/g, "")
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map(w => w[0]?.toUpperCase())
-    .join("") || "??";
+  name.replace(/["«»]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]?.toUpperCase()).join("") || "??";
 
 const stringHue = (s = "") => {
   let h = 0;
@@ -16,8 +10,8 @@ const stringHue = (s = "") => {
   return h;
 };
 
-export default function SupplierCard({ company, isAddCard }) {
-  // Хуки ВСЕГДА здесь, в начале
+export default function SupplierCard({ company }) {
+  // Хуки — всегда первыми
   const [imgLoaded, setImgLoaded] = useState(false);
 
   const fallbackStyle = useMemo(() => {
@@ -28,30 +22,6 @@ export default function SupplierCard({ company, isAddCard }) {
     };
   }, [company?.name, company?.id]);
 
-  // === Карточка "Разместить компанию" ===
-  if (isAddCard) {
-    return (
-      <Link to="/add-company" className="block">
-        <div className="relative group rounded-[22px] p-3 bg-gradient-to-br from-cyan-400 to-blue-500 shadow-lg border border-white/10 transition-transform duration-200 ease-out hover:scale-[1.02] active:scale-[0.99]">
-          <div className="relative rounded-[16px] overflow-hidden aspect-square grid place-items-center bg-white/10 backdrop-blur-md">
-            <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center">
-              <svg width="28" height="28" fill="none" stroke="white" strokeWidth="2">
-                <path d="M12 5v14M5 12h14" />
-              </svg>
-            </div>
-          </div>
-          <div className="mt-2 text-white font-semibold text-[14px] leading-snug">
-            Разместить компанию
-          </div>
-          <div className="mt-1 text-[12px] text-white/80">
-            Ваш бренд в каталоге
-          </div>
-        </div>
-      </Link>
-    );
-  }
-
-  // === Обычная карточка ===
   const {
     id,
     name,
@@ -78,37 +48,47 @@ export default function SupplierCard({ company, isAddCard }) {
           "card-glow",
         ].join(" ")}
       >
-        {/* Бейджи */}
+        {/* Левый верх — «Проверенный» (уменьшили) */}
         <div className="absolute top-2 left-2 z-10 flex gap-1.5">
           {verified && (
-            <span className="px-2 py-1 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 backdrop-blur-sm">
-              ✅ Проверенный
-            </span>
-          )}
-        </div>
-        <div className="absolute top-2 right-2 z-10 flex gap-1.5">
-          {isPremium && (
-            <span className="px-2 py-1 rounded-full text-[10px] font-semibold text-white border border-white/20 backdrop-blur-sm"
-              style={{ background: "linear-gradient(90deg,#ffb703,#ff7a7a,#a07cff,#30d5c8)" }}>
-              PREMIUM
+            <span className="px-1.5 py-0.5 rounded-full text-[9.5px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 backdrop-blur-sm">
+              ✓ Проверенный
             </span>
           )}
         </div>
 
-        {/* Лого */}
-        <div className="relative rounded-[16px] overflow-hidden border border-white/10 bg-white/5 aspect-square grid place-items-center">
-          {!imgLoaded && logo && (
-            <div className="absolute inset-0 animate-pulse bg-white/[.06]" />
+        {/* Правый верх — значок «Премиум» (только иконка) */}
+        <div className="absolute top-2 right-2 z-10">
+          {isPremium && (
+            <span
+              className="inline-flex items-center justify-center w-6 h-6 rounded-full border border-white/25 bg-white/10 backdrop-blur-sm"
+              title="Premium"
+            >
+              {/* Корона */}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="url(#g)">
+                <defs>
+                  <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#ffd166" />
+                    <stop offset="100%" stopColor="#ff7a7a" />
+                  </linearGradient>
+                </defs>
+                <path d="M3 7l5 4 4-6 4 6 5-4v10H3z" />
+              </svg>
+            </span>
           )}
+        </div>
+
+        {/* Логотип */}
+        <div className="relative rounded-[16px] overflow-hidden border border-white/10 bg-white/5 aspect-square grid place-items-center">
+          {!imgLoaded && logo && <div className="absolute inset-0 animate-pulse bg-white/[.06]" />}
+
           {logo ? (
             <img
               src={logo}
               alt={name}
               loading="lazy"
               onLoad={() => setImgLoaded(true)}
-              onError={(e) => {
-                e.currentTarget.remove();
-              }}
+              onError={(e) => { e.currentTarget.remove(); }}
               className={[
                 "max-w-[80%] max-h-[80%] object-contain",
                 "drop-shadow-[0_6px_16px_rgba(0,255,200,.22)]",
@@ -116,24 +96,18 @@ export default function SupplierCard({ company, isAddCard }) {
               ].join(" ")}
             />
           ) : null}
+
+          {/* Fallback инициалы */}
           {!imgLoaded && (
-            <div
-              className="absolute inset-0 grid place-items-center text-white font-extrabold text-3xl"
-              style={fallbackStyle}
-            >
-              <span className="drop-shadow-[0_6px_18px_rgba(0,0,0,.35)]">
-                {getInitials(name)}
-              </span>
+            <div className="absolute inset-0 grid place-items-center text-white font-extrabold text-3xl" style={fallbackStyle}>
+              <span className="drop-shadow-[0_6px_18px_rgba(0,0,0,.35)]">{getInitials(name)}</span>
             </div>
           )}
         </div>
 
         {/* Текст */}
         <div className="mt-2">
-          <div
-            className="text-white font-semibold text-[14px] leading-snug truncate"
-            title={name}
-          >
+          <div className="text-white font-semibold text-[14px] leading-snug truncate" title={name}>
             {name}
           </div>
           <div className="mt-1 flex items-center gap-1.5 text-[12px] text-white/70">
@@ -145,10 +119,7 @@ export default function SupplierCard({ company, isAddCard }) {
           {!!products?.length && (
             <div className="mt-1.5 flex flex-wrap gap-1">
               {products.slice(0, 2).map((p, i) => (
-                <span
-                  key={i}
-                  className="px-2 py-0.5 rounded-full text-[10px] font-semibold text-white/90 border border-white/15 bg-white/5 backdrop-blur-sm"
-                >
+                <span key={i} className="px-2 py-0.5 rounded-full text-[10px] font-semibold text-white/90 border border-white/15 bg-white/5 backdrop-blur-sm">
                   {p}
                 </span>
               ))}

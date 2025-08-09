@@ -1,8 +1,15 @@
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
+/* Инициалы на случай отсутствующего лого */
 const getInitials = (name = "") =>
-  name.replace(/["«»]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]?.toUpperCase()).join("") || "??";
+  name
+    .replace(/["«»]/g, "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(w => w[0]?.toUpperCase())
+    .join("") || "??";
 
 const stringHue = (s = "") => {
   let h = 0;
@@ -11,16 +18,7 @@ const stringHue = (s = "") => {
 };
 
 export default function SupplierCard({ company }) {
-  // Хуки — всегда первыми
   const [imgLoaded, setImgLoaded] = useState(false);
-
-  const fallbackStyle = useMemo(() => {
-    if (!company?.name && !company?.id) return {};
-    const h = stringHue(company.name || company.id || "fallback");
-    return {
-      background: `linear-gradient(135deg, hsl(${h} 80% 25% / .9), hsl(${(h + 40) % 360} 80% 35% / .9))`,
-    };
-  }, [company?.name, company?.id]);
 
   const {
     id,
@@ -35,51 +33,42 @@ export default function SupplierCard({ company }) {
 
   const isPremium = certs?.includes("Честный знак") && certs?.includes("Меркурий");
 
+  const fallbackStyle = useMemo(() => {
+    const h = stringHue(name || id || "fallback");
+    return {
+      background: `linear-gradient(135deg, hsl(${h} 80% 25% / .9), hsl(${(h + 40) % 360} 80% 35% / .9))`,
+    };
+  }, [name, id]);
+
   return (
     <Link to={`/supplier/${id}`} className="block">
+      {/* ВНЕШНЯЯ СТЕКЛЯННАЯ КАРТОЧКА (как на макете) */}
       <div
         className={[
-          "relative group rounded-[22px] p-3",
-          "bg-white/8 backdrop-blur-xl",
-          "border border-white/10",
-          "shadow-[0_0_0_1px_rgba(255,255,255,.06)_inset,0_24px_60px_-24px_rgba(0,255,200,.35)]",
+          "glass-card",         // кастомный класс из index.css (контур + свечение снизу)
+          "group",              // для hover-эффектов
+          "p-3 rounded-[22px]",
           "transition-transform duration-200 ease-out",
           "hover:scale-[1.02] active:scale-[0.99]",
-          "card-glow",
         ].join(" ")}
       >
-        {/* Левый верх — «Проверенный» (уменьшили) */}
-        <div className="absolute top-2 left-2 z-10 flex gap-1.5">
-          {verified && (
-            <span className="px-1.5 py-0.5 rounded-full text-[9.5px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 backdrop-blur-sm">
-              ✓ Проверенный
-            </span>
-          )}
-        </div>
+        {/* ЛЕВЫЙ ВЕРХ: Проверенный (зелёный как на макете) */}
+        {verified && (
+          <div className="absolute top-2 left-2 z-20">
+            <span className="badge-verified">✅ Проверенный</span>
+          </div>
+        )}
 
-        {/* Правый верх — значок «Премиум» (только иконка) */}
-        <div className="absolute top-2 right-2 z-10">
-          {isPremium && (
-            <span
-              className="inline-flex items-center justify-center w-6 h-6 rounded-full border border-white/25 bg-white/10 backdrop-blur-sm"
-              title="Premium"
-            >
-              {/* Корона */}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="url(#g)">
-                <defs>
-                  <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#ffd166" />
-                    <stop offset="100%" stopColor="#ff7a7a" />
-                  </linearGradient>
-                </defs>
-                <path d="M3 7l5 4 4-6 4 6 5-4v10H3z" />
-              </svg>
-            </span>
-          )}
-        </div>
+        {/* ПРАВЫЙ ВЕРХ: PREMIUM (градиентный бейдж, текст как на макете) */}
+        {isPremium && (
+          <div className="absolute top-2 right-2 z-20">
+            <span className="badge-premium">PREMIUM</span>
+          </div>
+        )}
 
-        {/* Логотип */}
-        <div className="relative rounded-[16px] overflow-hidden border border-white/10 bg-white/5 aspect-square grid place-items-center">
+        {/* ВНУТРЕННЯЯ ПЛИТА (логотип на тёмном стекле) */}
+        <div className="relative rounded-[18px] overflow-hidden border border-white/10 bg-white/[0.05] aspect-square grid place-items-center">
+          {/* skeleton */}
           {!imgLoaded && logo && <div className="absolute inset-0 animate-pulse bg-white/[.06]" />}
 
           {logo ? (
@@ -88,9 +77,9 @@ export default function SupplierCard({ company }) {
               alt={name}
               loading="lazy"
               onLoad={() => setImgLoaded(true)}
-              onError={(e) => { e.currentTarget.remove(); }}
+              onError={(e) => e.currentTarget.remove()}
               className={[
-                "max-w-[80%] max-h-[80%] object-contain",
+                "max-w-[76%] max-h-[76%] object-contain",
                 "drop-shadow-[0_6px_16px_rgba(0,255,200,.22)]",
                 imgLoaded ? "img-fade-in" : "opacity-0",
               ].join(" ")}
@@ -99,27 +88,40 @@ export default function SupplierCard({ company }) {
 
           {/* Fallback инициалы */}
           {!imgLoaded && (
-            <div className="absolute inset-0 grid place-items-center text-white font-extrabold text-3xl" style={fallbackStyle}>
-              <span className="drop-shadow-[0_6px_18px_rgba(0,0,0,.35)]">{getInitials(name)}</span>
+            <div
+              className="absolute inset-0 grid place-items-center text-white font-extrabold text-3xl"
+              style={fallbackStyle}
+            >
+              <span className="drop-shadow-[0_6px_18px_rgba(0,0,0,.35)]">
+                {getInitials(name)}
+              </span>
             </div>
           )}
         </div>
 
-        {/* Текст */}
+        {/* ТЕКСТОВОЕ ДНО КАРТОЧКИ (как на макете) */}
         <div className="mt-2">
-          <div className="text-white font-semibold text-[14px] leading-snug truncate" title={name}>
+          <div
+            className="text-white font-semibold text-[14px] leading-snug truncate"
+            title={name}
+          >
             {name}
           </div>
-          <div className="mt-1 flex items-center gap-1.5 text-[12px] text-white/70">
+          <div className="mt-1 flex items-center gap-1.5 text-[12px] text-white/80">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
               <path d="M12 2C8 2 4 6 4 11c0 5.5 7 11 8 11s8-5.5 8-11c0-5-4-9-8-9z"/><circle cx="12" cy="11" r="3"/>
             </svg>
             <span className="truncate">{city || region || "—"}</span>
           </div>
+
+          {/* чипы продуктов — максимум 2 (по желанию) */}
           {!!products?.length && (
             <div className="mt-1.5 flex flex-wrap gap-1">
               {products.slice(0, 2).map((p, i) => (
-                <span key={i} className="px-2 py-0.5 rounded-full text-[10px] font-semibold text-white/90 border border-white/15 bg-white/5 backdrop-blur-sm">
+                <span
+                  key={i}
+                  className="px-2 py-0.5 rounded-full text-[10px] font-semibold text-white/90 border border-white/15 bg-white/[0.06] backdrop-blur-sm"
+                >
                   {p}
                 </span>
               ))}

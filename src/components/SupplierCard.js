@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
-/* Инициалы, если нет лого */
+/* Инициалы при отсутствии фото */
 const getInitials = (name = "") =>
   name.replace(/["«»]/g, "")
       .split(/\s+/).filter(Boolean)
@@ -22,7 +22,7 @@ export default function SupplierCard({ company }) {
     name,
     region,
     city,
-    logo,              // используем как фото; если это именно логотип — тоже ок
+    logo,
     verified,
     products = [],
     certs = [],
@@ -39,83 +39,63 @@ export default function SupplierCard({ company }) {
 
   return (
     <Link to={`/supplier/${id}`} className="block">
-      {/* Внешняя стеклянная карточка */}
-      <div
-        className={[
-          "relative glass-card group p-3 rounded-[22px]",
-          "transition-transform duration-200 ease-out",
-          "hover:scale-[1.02] active:scale-[0.99]",
-        ].join(" ")}
-      >
-        {/* Квадратное фото (full-bleed) */}
-        <div className="relative rounded-[18px] overflow-hidden border border-white/10 bg-white/[0.05] aspect-square">
-          {/* Фото */}
-          {logo ? (
+      <div className={`glass-card ${isPremium ? "premium" : ""} p-2`}>
+        {/* Фото */}
+        <div className="relative aspect-square rounded-lg overflow-hidden">
+          {logo && (
             <img
               src={logo}
               alt={name}
               loading="lazy"
               onLoad={() => setImgLoaded(true)}
               onError={(e) => e.currentTarget.remove()}
-              className={[
-                "absolute inset-0 w-full h-full object-cover",
-                imgLoaded ? "img-fade-in" : "opacity-0",
-              ].join(" ")}
+              className={`w-full h-full object-cover ${imgLoaded ? "img-fade-in" : "opacity-0"}`}
             />
-          ) : null}
-
-          {/* Fallback (инициалы) если фото/лого нет или не загрузилось */}
-          {!logo || !imgLoaded ? (
-            <div
-              className="absolute inset-0 grid place-items-center text-white font-extrabold text-3xl"
-              style={fallbackStyle}
-            >
-              <span className="drop-shadow-[0_6px_18px_rgba(0,0,0,.35)]">
-                {getInitials(name)}
-              </span>
+          )}
+          {(!logo || !imgLoaded) && (
+            <div className="w-full h-full grid place-items-center text-white text-xl font-bold" style={fallbackStyle}>
+              {getInitials(name)}
             </div>
-          ) : null}
-
-          {/* Затемнение для читаемости бейджей */}
+          )}
           <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/40" />
 
-          {/* Бейджи поверх фото (по углам) */}
-          {verified && (
-            <div className="absolute top-2 left-2 z-10">
+          {/* Бейджи */}
+          <div className="absolute top-1 left-1 flex gap-1">
+            {verified && (
               <span className="badge-verified">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                   <path d="M20 6L9 17l-5-5" />
                 </svg>
                 Проверенный
               </span>
-            </div>
-          )}
+            )}
+          </div>
           {isPremium && (
-            <div className="absolute top-2 right-2 z-10">
-              <span className="badge-premium">PREMIUM</span>
+            <div className="absolute top-1 right-1 badge-premium" title="Premium">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="gold">
+                <path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7l3-7z"/>
+              </svg>
             </div>
           )}
         </div>
 
-        {/* Подпись под фото */}
+        {/* Текст */}
         <div className="mt-2">
-          <div className="text-white font-semibold text-[14px] leading-snug truncate" title={name}>
+          <div className="text-white font-semibold text-sm truncate" title={name}>
             {name}
           </div>
-          <div className="mt-1 flex items-center gap-1.5 text-[12px] text-white/80">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-              <path d="M12 2C8 2 4 6 4 11c0 5.5 7 11 8 11s8-5.5 8-11c0-5-4-9-8-9z"/><circle cx="12" cy="11" r="3"/>
+          <div className="flex items-center gap-1 text-xs text-white/80 mt-0.5">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <path d="M12 2C8 2 4 6 4 11c0 5.5 7 11 8 11s8-5.5 8-11c0-5-4-9-8-9z"/>
+              <circle cx="12" cy="11" r="3"/>
             </svg>
             <span className="truncate">{city || region || "—"}</span>
           </div>
 
           {!!products?.length && (
-            <div className="mt-1.5 flex flex-wrap gap-1">
+            <div className="mt-1 flex flex-wrap gap-1">
               {products.slice(0, 2).map((p, i) => (
-                <span
-                  key={i}
-                  className="px-2 py-0.5 rounded-full text-[10px] font-semibold text-white/90 border border-white/15 bg-white/[0.06] backdrop-blur-sm"
-                >
+                <span key={i} className="px-2 py-0.5 rounded-full text-[10px] font-semibold text-white/90 border border-white/15 bg-white/[0.06] backdrop-blur-sm">
                   {p}
                 </span>
               ))}

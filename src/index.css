@@ -6,15 +6,12 @@
 /* ===== Базовые настройки под mini‑app (dark) ===== */
 :root {
   color-scheme: dark;
-  --rk-bg: #000;               /* фон приложения */
-  --rk-fg: 255,255,255;        /* белый в формате RGB */
-  --rk-accent: 0,255,200;      /* морской бирюзовый */
+  --rk-bg: #000;
+  --rk-fg: 255,255,255;
+  --rk-accent: 0,255,200;
 }
 
-html, body, #root {
-  height: 100%;
-  background: var(--rk-bg);
-}
+html, body, #root { height: 100%; background: var(--rk-bg); }
 
 body {
   @apply antialiased;
@@ -25,109 +22,22 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Убираем дергание при появлении скролла в iOS webview */
-html {
-  overflow-y: scroll;
-}
+/* Плавность скролла в iOS webview */
+html { overflow-y: scroll; }
 
-/* ===== Ссылки и тексты по умолчанию ===== */
-a {
-  color: rgba(var(--rk-fg), 0.92);
-  text-decoration: none;
-}
-a:hover {
-  color: rgba(var(--rk-fg), 1);
-}
+/* Ссылки */
+a { color: rgba(var(--rk-fg), .92); text-decoration: none; }
+a:hover { color: rgba(var(--rk-fg), 1); }
 
-/* ===== Вспомогательные классы под Glass Dock ===== */
-
-/* Плавное проявление картинок (используется в карточках логотипов) */
-.img-fade-in {
-  animation: imgFade .25s ease-out both;
-}
+/* ===== Анимация проявления изображений ===== */
+.img-fade-in { animation: imgFade .25s ease-out both; }
 @keyframes imgFade {
   from { opacity: 0; transform: translateY(2px) scale(.98); filter: saturate(.9); }
-  to   { opacity: 1; transform: translateY(0) scale(1);     filter: saturate(1); }
+  to   { opacity: 1; transform: translateY(0) scale(1);   filter: saturate(1); }
 }
 
-/* Неоновый «блик» под карточкой (подчёркивает стекло) */
-.card-glow {
-  position: relative;
-}
-.card-glow::after {
-  content: "";
-  position: absolute;
-  left: 10%;
-  right: 10%;
-  bottom: -6px;
-  height: 14px;
-  filter: blur(10px);
-  background: radial-gradient(60% 100% at 50% 0%, rgba(var(--rk-accent), .45), rgba(0,0,0,0));
-  pointer-events: none;
-}
-
-/* «Стеклянная» тонкая внутренняя кайма (если захочешь где-то вручную добавить) */
-.glass-border {
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.08),
-    0 24px 60px -24px rgba(var(--rk-accent), .35);
-  backdrop-filter: blur(12px);
-}
-
-/* Скелетон с шиммером (если понадобится для других списков) */
-.skeleton {
-  position: relative;
-  overflow: hidden;
-  background: rgba(255,255,255,.06);
-}
-.skeleton::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  transform: translateX(-100%);
-  background: linear-gradient(90deg,
-    rgba(255,255,255,0) 0%,
-    rgba(255,255,255,.06) 40%,
-    rgba(255,255,255,0) 80%);
-  animation: shimmer 1.2s infinite;
-}
-@keyframes shimmer {
-  100% { transform: translateX(100%); }
-}
-
-/* Тихие скроллбары (Firefox/Chrome/Edge) */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,.15) transparent;
-}
-*::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-*::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,.15);
-  border-radius: 8px;
-}
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Ограничитель кликабельной области без визуального эффекта iOS */
-button, a {
-  -webkit-touch-callout: none;
-}
-
-/* Без фокуса-обводки по умолчанию в iOS WebView (Tailwind ring оставит нужные) */
-:focus-visible {
-  outline: none;
-}
-
-/* ======================================================================= */
-/* =====================  ЛОКАЛЬНЫЕ (SCOPED) КЛАССЫ  ===================== */
-/* ===== Эти классы используются ТОЛЬКО в наших карточках и ничто больше ===== */
-
-/* Карточка с бирюзовым контуром и мягким свечением снизу */
-.zs-glass-card {
+/* ===== Стеклянная карточка с неон‑контуром и свечением снизу ===== */
+.glass-card {
   position: relative;
   background: rgba(255,255,255,0.06);
   border-radius: 22px;
@@ -136,19 +46,9 @@ button, a {
   -webkit-backdrop-filter: blur(14px);
   box-shadow:
     inset 0 0 0 1px rgba(255,255,255,0.06),
-    0 28px 80px -28px rgba(0,255,200,0.30);
+    0 28px 80px -28px rgba(var(--rk-accent),0.30);
 }
-.zs-glass-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 22px;
-  pointer-events: none;
-  box-shadow:
-    0 0 0 1px rgba(0, 216, 255, 0.18),
-    0 0 24px rgba(0, 216, 255, 0.18) inset;
-}
-.zs-glass-card::after {
+.glass-card::after {
   content: "";
   position: absolute;
   left: 12%;
@@ -156,50 +56,68 @@ button, a {
   bottom: -8px;
   height: 16px;
   border-radius: 999px;
-  background: radial-gradient(60% 100% at 50% 0%, rgba(0,255,200,0.50), rgba(0,0,0,0));
+  background: radial-gradient(60% 100% at 50% 0%, rgba(var(--rk-accent),0.50), rgba(0,0,0,0));
   filter: blur(10px);
   pointer-events: none;
 }
-.zs-glass-card:hover::before {
-  box-shadow:
-    0 0 0 1px rgba(0, 216, 255, 0.28),
-    0 0 28px rgba(0, 216, 255, 0.28) inset;
-}
 
-/* Плавное проявление изображений */
-.zs-img-fade-in {
-  animation: zsImgFade .25s ease-out both;
-}
-@keyframes zsImgFade {
-  from { opacity: 0; transform: translateY(2px) scale(.98); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* Бейджи */
-.zs-badge-verified {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
+/* ===== Бейджи ===== */
+.badge-verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 600;
   color: #e8fff4;
-  background: rgba(35, 223, 129, 0.85);
-  box-shadow: 0 4px 14px rgba(35,223,129,0.35);
+  background: rgba(35, 223, 129, 0.9);
+  border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.18);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 }
-.zs-badge-premium {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: .04em;
-  color: white;
+
+.badge-premium {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: .03em;
+  color: #fff;
   background: linear-gradient(90deg, #ffb703, #ff7a7a, #a07cff, #30d5c8);
-  box-shadow: 0 4px 16px rgba(160,124,255,0.35);
+  border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.22);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 4px 16px rgba(160,124,255,0.35);
+}
+
+/* ===== Скелетон ===== */
+.skeleton { position: relative; overflow: hidden; background: rgba(255,255,255,.06); }
+.skeleton::after {
+  content: "";
+  position: absolute; inset: 0; transform: translateX(-100%);
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.06) 40%, rgba(255,255,255,0) 80%);
+  animation: shimmer 1.2s infinite;
+}
+@keyframes shimmer { 100% { transform: translateX(100%); } }
+
+/* ===== Скроллбары ===== */
+* { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.15) transparent; }
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+
+button, a { -webkit-touch-callout: none; }
+:focus-visible { outline: none; }
+
+/* ===== Мобильные до 420px — уменьшаем бейджи и внутренние отступы ===== */
+@media (max-width: 420px) {
+  .glass-card { border-radius: 20px; }
+  .badge-verified { padding: 2px 5px; font-size: 9.5px; }
+  .badge-premium  { padding: 2px 7px; font-size: 9.5px; }
 }

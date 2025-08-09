@@ -3,13 +3,10 @@ import { Link } from "react-router-dom";
 
 /* Инициалы на случай отсутствующего лого */
 const getInitials = (name = "") =>
-  name
-    .replace(/["«»]/g, "")
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map(w => w[0]?.toUpperCase())
-    .join("") || "??";
+  name.replace(/["«»]/g, "")
+      .split(/\s+/).filter(Boolean)
+      .slice(0, 2).map(w => w[0]?.toUpperCase())
+      .join("") || "??";
 
 const stringHue = (s = "") => {
   let h = 0;
@@ -42,33 +39,30 @@ export default function SupplierCard({ company }) {
 
   return (
     <Link to={`/supplier/${id}`} className="block">
-      {/* ВНЕШНЯЯ СТЕКЛЯННАЯ КАРТОЧКА (как на макете) */}
+      {/* Внешняя стеклянная карточка */}
       <div
         className={[
-          "glass-card",         // кастомный класс из index.css (контур + свечение снизу)
-          "group",              // для hover-эффектов
-          "p-3 rounded-[22px]",
+          "relative",           // важно для позиционирования бейджей
+          "glass-card",
+          "group p-3 rounded-[22px]",
           "transition-transform duration-200 ease-out",
           "hover:scale-[1.02] active:scale-[0.99]",
         ].join(" ")}
       >
-        {/* ЛЕВЫЙ ВЕРХ: Проверенный (зелёный как на макете) */}
+        {/* Бейджи */}
         {verified && (
           <div className="absolute top-2 left-2 z-20">
             <span className="badge-verified">✅ Проверенный</span>
           </div>
         )}
-
-        {/* ПРАВЫЙ ВЕРХ: PREMIUM (градиентный бейдж, текст как на макете) */}
         {isPremium && (
           <div className="absolute top-2 right-2 z-20">
             <span className="badge-premium">PREMIUM</span>
           </div>
         )}
 
-        {/* ВНУТРЕННЯЯ ПЛИТА (логотип на тёмном стекле) */}
+        {/* Плитка с логотипом */}
         <div className="relative rounded-[18px] overflow-hidden border border-white/10 bg-white/[0.05] aspect-square grid place-items-center">
-          {/* skeleton */}
           {!imgLoaded && logo && <div className="absolute inset-0 animate-pulse bg-white/[.06]" />}
 
           {logo ? (
@@ -99,12 +93,9 @@ export default function SupplierCard({ company }) {
           )}
         </div>
 
-        {/* ТЕКСТОВОЕ ДНО КАРТОЧКИ (как на макете) */}
+        {/* Подпись */}
         <div className="mt-2">
-          <div
-            className="text-white font-semibold text-[14px] leading-snug truncate"
-            title={name}
-          >
+          <div className="text-white font-semibold text-[14px] leading-snug truncate" title={name}>
             {name}
           </div>
           <div className="mt-1 flex items-center gap-1.5 text-[12px] text-white/80">
@@ -114,7 +105,6 @@ export default function SupplierCard({ company }) {
             <span className="truncate">{city || region || "—"}</span>
           </div>
 
-          {/* чипы продуктов — максимум 2 (по желанию) */}
           {!!products?.length && (
             <div className="mt-1.5 flex flex-wrap gap-1">
               {products.slice(0, 2).map((p, i) => (

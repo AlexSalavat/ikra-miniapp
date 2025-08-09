@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
-/* Инициалы на случай отсутствующего лого */
+/* Инициалы, если нет лого */
 const getInitials = (name = "") =>
   name.replace(/["«»]/g, "")
       .split(/\s+/).filter(Boolean)
@@ -22,7 +22,7 @@ export default function SupplierCard({ company }) {
     name,
     region,
     city,
-    logo,
+    logo,              // используем как фото; если это именно логотип — тоже ок
     verified,
     products = [],
     certs = [],
@@ -42,29 +42,14 @@ export default function SupplierCard({ company }) {
       {/* Внешняя стеклянная карточка */}
       <div
         className={[
-          "relative",           // важно для позиционирования бейджей
-          "glass-card",
-          "group p-3 rounded-[22px]",
+          "relative glass-card group p-3 rounded-[22px]",
           "transition-transform duration-200 ease-out",
           "hover:scale-[1.02] active:scale-[0.99]",
         ].join(" ")}
       >
-        {/* Бейджи */}
-        {verified && (
-          <div className="absolute top-2 left-2 z-20">
-            <span className="badge-verified">✅ Проверенный</span>
-          </div>
-        )}
-        {isPremium && (
-          <div className="absolute top-2 right-2 z-20">
-            <span className="badge-premium">PREMIUM</span>
-          </div>
-        )}
-
-        {/* Плитка с логотипом */}
-        <div className="relative rounded-[18px] overflow-hidden border border-white/10 bg-white/[0.05] aspect-square grid place-items-center">
-          {!imgLoaded && logo && <div className="absolute inset-0 animate-pulse bg-white/[.06]" />}
-
+        {/* Квадратное фото (full-bleed) */}
+        <div className="relative rounded-[18px] overflow-hidden border border-white/10 bg-white/[0.05] aspect-square">
+          {/* Фото */}
           {logo ? (
             <img
               src={logo}
@@ -73,15 +58,14 @@ export default function SupplierCard({ company }) {
               onLoad={() => setImgLoaded(true)}
               onError={(e) => e.currentTarget.remove()}
               className={[
-                "max-w-[76%] max-h-[76%] object-contain",
-                "drop-shadow-[0_6px_16px_rgba(0,255,200,.22)]",
+                "absolute inset-0 w-full h-full object-cover",
                 imgLoaded ? "img-fade-in" : "opacity-0",
               ].join(" ")}
             />
           ) : null}
 
-          {/* Fallback инициалы */}
-          {!imgLoaded && (
+          {/* Fallback (инициалы) если фото/лого нет или не загрузилось */}
+          {!logo || !imgLoaded ? (
             <div
               className="absolute inset-0 grid place-items-center text-white font-extrabold text-3xl"
               style={fallbackStyle}
@@ -90,10 +74,30 @@ export default function SupplierCard({ company }) {
                 {getInitials(name)}
               </span>
             </div>
+          ) : null}
+
+          {/* Затемнение для читаемости бейджей */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/40" />
+
+          {/* Бейджи поверх фото (по углам) */}
+          {verified && (
+            <div className="absolute top-2 left-2 z-10">
+              <span className="badge-verified">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                  <path d="M20 6L9 17l-5-5" />
+                </svg>
+                Проверенный
+              </span>
+            </div>
+          )}
+          {isPremium && (
+            <div className="absolute top-2 right-2 z-10">
+              <span className="badge-premium">PREMIUM</span>
+            </div>
           )}
         </div>
 
-        {/* Подпись */}
+        {/* Подпись под фото */}
         <div className="mt-2">
           <div className="text-white font-semibold text-[14px] leading-snug truncate" title={name}>
             {name}

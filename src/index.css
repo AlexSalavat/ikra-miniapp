@@ -3,40 +3,31 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===== Базовые настройки под mini‑app (dark) ===== */
+/* ===== Dark base for mini‑app ===== */
 :root {
   color-scheme: dark;
   --rk-bg: #000;
   --rk-fg: 255,255,255;
   --rk-accent: 0,255,200;
 }
-
 html, body, #root { height: 100%; background: var(--rk-bg); }
+body { @apply antialiased; -webkit-tap-highlight-color: transparent; }
 
-body {
-  @apply antialiased;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Плавность скролла в iOS webview */
-html { overflow-y: scroll; }
-
-/* Ссылки */
+/* Links */
 a { color: rgba(var(--rk-fg), .92); text-decoration: none; }
 a:hover { color: rgba(var(--rk-fg), 1); }
 
-/* ===== Анимация проявления изображений ===== */
+/* Smooth scroll fix for iOS webview */
+html { overflow-y: scroll; }
+
+/* ===== Animations ===== */
 .img-fade-in { animation: imgFade .25s ease-out both; }
 @keyframes imgFade {
   from { opacity: 0; transform: translateY(2px) scale(.98); filter: saturate(.9); }
   to   { opacity: 1; transform: translateY(0) scale(1);   filter: saturate(1); }
 }
 
-/* ===== Стеклянная карточка с неон‑контуром и свечением снизу ===== */
+/* ===== Glass card (контур + подсветка снизу) ===== */
 .glass-card {
   position: relative;
   background: rgba(255,255,255,0.06);
@@ -50,72 +41,48 @@ a:hover { color: rgba(var(--rk-fg), 1); }
 }
 .glass-card::after {
   content: "";
-  position: absolute;
-  left: 12%;
-  right: 12%;
-  bottom: -8px;
-  height: 16px;
+  position: absolute; left: 12%; right: 12%; bottom: -8px; height: 16px;
   border-radius: 999px;
   background: radial-gradient(60% 100% at 50% 0%, rgba(var(--rk-accent),0.50), rgba(0,0,0,0));
-  filter: blur(10px);
-  pointer-events: none;
+  filter: blur(10px); pointer-events: none;
 }
 
-/* ===== Бейджи ===== */
+/* ===== Badges (маленькие, премиальные) ===== */
 .badge-verified {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 6px;
-  font-size: 10px;
-  line-height: 1;
-  font-weight: 600;
-  color: #e8fff4;
-  background: rgba(35, 223, 129, 0.9);
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.18);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 6px; font-size: 10px; line-height: 1; font-weight: 600;
+  color: #e8fff4; background: rgba(35,223,129,.9);
+  border: 1px solid rgba(255,255,255,.18); border-radius: 999px;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
 }
-
 .badge-premium {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px 8px;
-  font-size: 10px;
-  line-height: 1;
-  font-weight: 700;
-  letter-spacing: .03em;
-  color: #fff;
-  background: linear-gradient(90deg, #ffb703, #ff7a7a, #a07cff, #30d5c8);
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.22);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  box-shadow: 0 4px 16px rgba(160,124,255,0.35);
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 2px 8px; font-size: 10px; line-height: 1; font-weight: 700; letter-spacing: .03em;
+  color: #fff; border: 1px solid rgba(255,255,255,.22); border-radius: 999px;
+  background: linear-gradient(90deg,#ffb703,#ff7a7a,#a07cff,#30d5c8);
+  box-shadow: 0 4px 16px rgba(160,124,255,.35);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
 }
 
-/* ===== Скелетон ===== */
+/* Skeleton */
 .skeleton { position: relative; overflow: hidden; background: rgba(255,255,255,.06); }
 .skeleton::after {
-  content: "";
-  position: absolute; inset: 0; transform: translateX(-100%);
-  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.06) 40%, rgba(255,255,255,0) 80%);
+  content:""; position:absolute; inset:0; transform:translateX(-100%);
+  background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.06) 40%,rgba(255,255,255,0) 80%);
   animation: shimmer 1.2s infinite;
 }
 @keyframes shimmer { 100% { transform: translateX(100%); } }
 
-/* ===== Скроллбары ===== */
+/* Quiet scrollbars */
 * { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.15) transparent; }
-*::-webkit-scrollbar { width: 8px; height: 8px; }
-*::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 8px; }
-*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar { width:8px; height:8px; }
+*::-webkit-scrollbar-thumb { background:rgba(255,255,255,.15); border-radius:8px; }
+*::-webkit-scrollbar-track { background:transparent; }
 
 button, a { -webkit-touch-callout: none; }
 :focus-visible { outline: none; }
 
-/* ===== Мобильные до 420px — уменьшаем бейджи и внутренние отступы ===== */
+/* Mobile tweaks */
 @media (max-width: 420px) {
   .glass-card { border-radius: 20px; }
   .badge-verified { padding: 2px 5px; font-size: 9.5px; }

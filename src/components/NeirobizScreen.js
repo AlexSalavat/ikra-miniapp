@@ -1,281 +1,103 @@
-import React, { useState } from 'react';
+// src/components/NeirobizScreen.js
+import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import neirobizServices from '../data/neirobizServices';
-import services from '../data/neirobiz';
+import services from "../data/neirobiz";
+import neirobizServices from "../data/neirobizServices";
 
-const CARD_HEIGHT = 145;
-const CARD_RADIUS = 19;
-const TG_LINK = "https://t.me/NeuroBiz_GPT"; // <-- подставь свой username
+// Компактные квадратные карточки в стиле Glass Dock
+const CARD = 172;
+const RADIUS = 20;
 
-const NeirobizScreen = () => {
-  const [modalService, setModalService] = useState(null);
+function mergeServices() {
+  // Склеиваем описания/иконки из services (текстовые данные)
+  // к карточкам из neirobizServices (с картинками)
+  const map = Object.fromEntries(services.map((s) => [s.id, s]));
+  return neirobizServices.map((card) => ({
+    ...card,
+    icon: map[card.id]?.icon || "✨",
+    short: map[card.id]?.short || card.description || "",
+  }));
+}
+
+export default function NeirobizScreen() {
   const navigate = useNavigate();
-
-  // Найти полную инфу по id
-  const getFullService = (id) => services.find(
-    s => s.id.includes(id) || id.includes(s.id)
-  );
+  const items = useMemo(mergeServices, []);
 
   return (
-    <div className="bg-black min-h-screen py-7 px-1 flex flex-col items-center">
-      {/* Кнопка назад */}
-      <div style={{ width: '100%', maxWidth: 490, marginBottom: 14 }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 7,
-            background: '#192542',
-            color: '#3B82F6',
-            fontWeight: 600,
-            fontSize: 15,
-            padding: '7px 17px 7px 14px',
-            borderRadius: 11,
-            border: 'none',
-            cursor: 'pointer',
-            boxShadow: '0 1px 4px #24305a11',
-            transition: 'background .15s',
-          }}
-        >
-          <svg width="20" height="20" fill="none">
-            <path d="M13 4l-6 6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          Назад
-        </button>
-      </div>
-      <h1 style={{
-        color: '#fff',
-        fontWeight: 700,
-        fontSize: 21,
-        marginBottom: 15,
-        letterSpacing: 0.13
-      }}>
-        NeiroBiz: AI-сервисы
-      </h1>
-      <div style={{
-        width: '100%',
-        maxWidth: 490,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 18
-      }}>
-        {neirobizServices.map((svc, idx) => {
-          const full = getFullService(svc.id) || {};
-          return (
-            <div
-              key={idx}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                background: '#1d1c21',
-                borderRadius: CARD_RADIUS,
-                boxShadow: '0 2px 10px #16141a44',
-                minHeight: CARD_HEIGHT,
-                overflow: 'hidden',
-                padding: 0,
-                position: 'relative',
-              }}
-            >
-              {/* Фото */}
-              <div style={{
-                flex: '0 0 auto',
-                width: CARD_HEIGHT,
-                height: CARD_HEIGHT,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                overflow: 'hidden',
-                borderTopLeftRadius: CARD_RADIUS,
-                borderBottomLeftRadius: CARD_RADIUS,
-                background: '#19191d'
-              }}>
-                <img
-                  src={svc.image}
-                  alt={svc.title}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    display: 'block'
-                  }}
-                  onError={e => { e.target.src = '/images/no-image.webp'; }}
-                />
-              </div>
-              {/* Контент */}
-              <div style={{
-                flex: 1,
-                minWidth: 0,
-                padding: '17px 14px 17px 16px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                height: '100%',
-              }}>
-                <div style={{
-                  fontWeight: 700,
-                  color: '#fff',
-                  fontSize: 14.3,
-                  marginBottom: 4,
-                  lineHeight: '1.15',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  maxWidth: 230,
-                }}>
-                  {svc.title}
-                </div>
-                <div style={{
-                  color: '#b5b5b5',
-                  fontWeight: 400,
-                  fontSize: 11.6,
-                  lineHeight: '1.19',
-                  marginBottom: 8,
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  maxHeight: 34,
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical'
-                }}>
-                  {full.short || svc.description}
-                </div>
-                <div style={{
-                  display: 'flex',
-                  gap: 6,
-                  marginTop: 3
-                }}>
-                  <button
-                    style={{
-                      background: '#2678f3',
-                      color: '#fff',
-                      fontWeight: 700,
-                      fontSize: 11.2,
-                      borderRadius: 7,
-                      border: 'none',
-                      padding: '5px 0',
-                      width: 90,
-                      cursor: 'pointer'
-                    }}
-                    onClick={() => setModalService(full)}
-                  >
-                    Подробнее
-                  </button>
-                  <a
-                    href={TG_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      background: '#1db768',
-                      color: '#fff',
-                      fontWeight: 700,
-                      fontSize: 11.2,
-                      borderRadius: 7,
-                      border: 'none',
-                      padding: '5px 0',
-                      width: 124,
-                      textAlign: 'center',
-                      textDecoration: 'none',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Консультация
-                  </a>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+    <div className="bg-black min-h-screen pb-20 pt-6 flex flex-col items-center">
+      {/* Заголовок экрана */}
+      <div className="w-full max-w-[420px] px-4">
+        <h1 className="text-white font-extrabold text-[22px] tracking-[.02em]">NeiroBiz</h1>
+        <div className="text-[#b5e0fe] text-[14.5px] mt-1 font-semibold">
+          AI‑сервисы и генерация упаковки
+        </div>
+        <div className="text-white/70 text-[13px] mt-1">
+          Автоматизируйте бизнес через ботов, мини‑приложения, дизайн и аналитику.{" "}
+          <span className="text-[#23df81] font-semibold">Оформите заявку — результат быстрее.</span>
+        </div>
       </div>
 
-      {/* Модальное окно подробнее */}
-      {modalService && (
-        <div
-          onClick={() => setModalService(null)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 99,
-            background: 'rgba(0,0,0,0.83)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <div
-            onClick={e => e.stopPropagation()}
+      {/* Сетка карточек */}
+      <div
+        className="mt-4 grid justify-center gap-4"
+        style={{
+          gridTemplateColumns: `repeat(2, min(${CARD}px, 44vw))`,
+        }}
+      >
+        {items.map((svc) => (
+          <button
+            key={svc.id}
+            onClick={() => navigate(`/neirobiz/service/${svc.id}`)}
+            className="card-glow glass-card group relative text-left"
             style={{
-              background: '#16161a',
-              borderRadius: 18,
-              boxShadow: '0 8px 30px #000b',
-              padding: '25px 18px 18px 18px',
-              maxWidth: 390,
-              width: '96%',
-              color: '#fff',
-              textAlign: 'left',
-              position: 'relative'
+              width: CARD,
+              maxWidth: "44vw",
+              borderRadius: RADIUS,
+              padding: 8,
             }}
           >
-            <button
-              onClick={() => setModalService(null)}
+            {/* Верхний квадрат с изображением */}
+            <div
+              className="relative w-full aspect-square overflow-hidden border border-white/10"
               style={{
-                position: 'absolute',
-                top: 11,
-                right: 17,
-                color: '#aaa',
-                background: 'none',
-                border: 'none',
-                fontSize: 28,
-                cursor: 'pointer'
-              }}
-            >×</button>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 13 }}>
-              <span style={{
-                fontSize: 26,
-                marginRight: 11,
-                flexShrink: 0
-              }}>{modalService.icon}</span>
-              <div style={{ fontWeight: 700, fontSize: 17.3, lineHeight: '1.1' }}>
-                {modalService.title}
-              </div>
-            </div>
-            <div style={{ color: '#bbb', fontSize: 13.6, marginBottom: 8 }}>
-              {modalService.full ? modalService.full : "Описание скоро появится!"}
-            </div>
-            {modalService.checklist && modalService.checklist.length > 0 && (
-              <ul style={{ color: '#32e0aa', fontSize: 12.9, marginBottom: 12, paddingLeft: 18 }}>
-                {modalService.checklist.map((item, i) => (
-                  <li key={i} style={{ marginBottom: 2 }}>{item}</li>
-                ))}
-              </ul>
-            )}
-            <a
-              href={TG_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                background: '#1db768',
-                color: '#fff',
-                fontWeight: 700,
-                fontSize: 13,
-                borderRadius: 9,
-                border: 'none',
-                padding: '9px 0',
-                width: '100%',
-                marginTop: 2,
-                display: 'block',
-                textAlign: 'center',
-                textDecoration: 'none',
-                cursor: 'pointer'
+                borderRadius: RADIUS - 6,
+                background: "#11141a",
               }}
             >
-              Получить консультацию
-            </a>
-          </div>
-        </div>
-      )}
+              <img
+                src={svc.image}
+                alt={svc.title}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                onError={(e) => (e.currentTarget.src = "/images/no-image.webp")}
+              />
+
+              {/* Затемнение снизу + иконка‑«пилюля» */}
+              <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              <div className="absolute top-2 left-2">
+                <span className="px-2.5 py-1 rounded-full text-[12px] font-bold text-white border border-white/15 bg-white/10 backdrop-blur-sm">
+                  {svc.icon}
+                </span>
+              </div>
+            </div>
+
+            {/* Текст под фото */}
+            <div className="mt-2 px-0.5">
+              <div className="text-white font-bold text-[14px] leading-tight truncate" title={svc.title}>
+                {svc.title}
+              </div>
+              <div className="text-white/70 text-[11.5px] leading-snug mt-1 line-clamp-2">
+                {svc.short}
+              </div>
+            </div>
+
+            {/* Лёгкий ховер-контур */}
+            <div
+              className="pointer-events-none absolute inset-0 rounded-[20px] transition-opacity duration-200 opacity-0 group-hover:opacity-100"
+              style={{ boxShadow: "0 0 0 1px rgba(255,255,255,.08) inset" }}
+            />
+          </button>
+        ))}
+      </div>
     </div>
   );
-};
-
-export default NeirobizScreen;
+}

@@ -23,48 +23,85 @@ export default function NeirobizServiceDetail() {
     );
   }
 
-  const title = svc.title || visual?.title || "Сервис";
-  const text =
-    svc.full || svc.short || visual?.description || "Описание скоро появится.";
-
   return (
     <div className="bg-black min-h-screen pb-20">
-      <div className="sticky top-0 z-20 bg-black/70 backdrop-blur-md border-b border-white/10 p-3 flex items-center gap-3">
-        <button onClick={() => navigate(-1)} className="text-[#23df81] font-semibold">
-          ← Назад
-        </button>
-        <h1 className="text-white font-bold line-clamp-1">{title}</h1>
+      {/* Header */}
+      <div className="sticky top-0 z-20 bg-black/70 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-[420px] mx-auto w-full px-4 py-3 flex items-center gap-3">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-1.5 text-[#23df81] hover:text-white transition"
+            aria-label="Назад"
+          >
+            <svg width="20" height="20" fill="none">
+              <path
+                d="M13 5l-5 5 5 5"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span className="font-semibold">Назад</span>
+          </button>
+          <h1 className="ml-auto mr-auto text-white font-bold text-lg line-clamp-1">
+            {svc.title || visual?.title}
+          </h1>
+          <span className="w-16" />
+        </div>
       </div>
 
-      <div className="max-w-[420px] mx-auto p-4">
+      {/* Контент */}
+      <div className="max-w-[420px] mx-auto p-4 space-y-4">
+        {/* Обложка */}
         {visual?.image && (
-          <img
-            src={visual.image}
-            alt={title}
-            className="w-full rounded-xl border border-white/10 mb-4"
-            onError={(e) => (e.currentTarget.src = "/images/no-image.webp")}
-          />
+          <div className="glass-card p-2">
+            <div className="relative w-full rounded-xl overflow-hidden border border-white/10">
+              <div className="w-full aspect-[16/10] bg-black/40">
+                <img
+                  src={visual.image}
+                  alt={svc.title || visual?.title}
+                  className="w-full h-full object-cover"
+                  onError={(e) => (e.currentTarget.src = "/images/no-image.webp")}
+                />
+              </div>
+            </div>
+          </div>
         )}
 
-        <div className="text-white text-lg font-bold mb-2">{title}</div>
-        <div className="text-white/80 mb-4">{text}</div>
+        {/* Текстовый блок */}
+        <div className="glass-card p-3">
+          <div className="text-white font-extrabold text-[18px] mb-1">
+            {svc.title || visual?.title}
+          </div>
+          <div className="text-white/90 text-[14px] leading-relaxed">
+            {svc.full || svc.short || visual?.description}
+          </div>
 
-        {svc.checklist?.length > 0 && (
-          <ul className="list-disc list-inside text-white/90 space-y-1 mb-4">
-            {svc.checklist.map((item, idx) => (
-              <li key={idx}>{item}</li>
-            ))}
-          </ul>
-        )}
+          {svc.checklist?.length > 0 && (
+            <ul className="list-disc list-inside text-white/90 space-y-1 mt-3">
+              {svc.checklist.map((item, idx) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+          )}
+        </div>
 
-        <a
-          href="https://t.me/your_contact_here"
-          target="_blank"
-          rel="noreferrer"
-          className="w-full inline-flex items-center justify-center bg-gradient-to-r from-[#2678f3] to-[#44e2ff] text-white font-bold py-2 rounded-lg"
-        >
-          Связаться
-        </a>
+        {/* CTA — связаться */}
+        <div className="glass-card p-3">
+          <div className="text-white font-semibold text-[15px] mb-2">Связаться</div>
+          <a
+            href="https://t.me/your_contact_here"
+            target="_blank"
+            rel="noreferrer"
+            className="w-full inline-flex items-center justify-center bg-gradient-to-r from-[#2678f3] to-[#44e2ff] text-white font-bold py-2.5 rounded-xl hover:brightness-110 transition"
+          >
+            Написать в Telegram
+          </a>
+          <div className="text-white/60 text-[12px] mt-2">
+            Укажем стоимость, сроки, покажем примеры и соберём ТЗ.
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,253 +1,191 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import producers from '../data/producers';
+// src/components/ProducerDetail.js
+import React, { useMemo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import producers from "../data/producers";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 
-const accent = "#38d8ff";
-const bgBlock = "#181a23";
-const shadow = "0 4px 22px #19283d44";
-const round = 22;
+const getInitials = (name = "") =>
+  name.replace(/["«»]/g, "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(w => w[0]?.toUpperCase())
+    .join("") || "??";
 
-// --- SVG Icons ---
-const IconPhone = () => (
-  <svg width="20" height="20" style={{marginRight:8}} viewBox="0 0 20 20">
-    <path d="M3.5 2.8A2.1 2.1 0 0 1 6.5 2l1.6 1.7c.6.6.6 1.5 0 2.1l-.7.7a12 12 0 0 0 5.2 5.2l.7-.7c.6-.6 1.5-.6 2.1 0L18 13.5a2.1 2.1 0 0 1 0 3c-.9.9-2.3 1.1-3.4.7A16.2 16.2 0 0 1 4 7.3c-.4-1.1-.2-2.5.7-3.4z"
-      stroke="#61e7ee" strokeWidth="1.4" fill="none" strokeLinecap="round"/>
-  </svg>
-);
-const IconMail = () => (
-  <svg width="19" height="19" style={{marginRight:8}} viewBox="0 0 20 20">
-    <rect x="2.8" y="4.5" width="14.5" height="10.5" rx="2.2"
-      stroke="#82aaff" strokeWidth="1.3" fill="none"/>
-    <path d="M4.4 6l5.6 4 5.6-4" stroke="#82aaff" strokeWidth="1.1" fill="none"/>
-  </svg>
-);
+const stringHue = (s = "") => { let h = 0; for (let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))%360; return h; };
 
-// --- MODAL PREVIEW ---
-function GalleryModal({ images, idx, onClose }) {
-  const [current, setCurrent] = useState(idx);
-
-  const goLeft = () => setCurrent((current - 1 + images.length) % images.length);
-  const goRight = () => setCurrent((current + 1) % images.length);
-
-  React.useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") goLeft();
-      if (e.key === "ArrowRight") goRight();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [current]);
-
-  return (
-    <div
-      style={{
-        position: "fixed", inset: 0, zIndex: 1001,
-        background: "rgba(15,17,22,0.98)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        animation: "fadeIn .25s"
-      }}
-      onClick={onClose}
-    >
-      {/* Left Arrow */}
-      {images.length > 1 && (
-        <button onClick={e => {e.stopPropagation(); goLeft();}}
-          style={{
-            position: "absolute", left: 22, top: "50%", transform: "translateY(-50%)",
-            background: "rgba(34,38,52,0.6)", border: "none", borderRadius: "50%",
-            width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer"
-          }}>
-          <svg width="22" height="22"><path d="M14.2 5.7L8.5 11l5.7 5.3" stroke="#fff" strokeWidth="2.4" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
-        </button>
-      )}
-      {/* Image */}
-      <img
-        src={images[current]}
-        alt=""
-        style={{
-          maxWidth: "96vw", maxHeight: "92vh",
-          borderRadius: 22, boxShadow: "0 8px 50px #000c",
-          objectFit: "contain", background: "#15181d"
-        }}
-        onClick={e => e.stopPropagation()}
-      />
-      {/* Right Arrow */}
-      {images.length > 1 && (
-        <button onClick={e => {e.stopPropagation(); goRight();}}
-          style={{
-            position: "absolute", right: 22, top: "50%", transform: "translateY(-50%)",
-            background: "rgba(34,38,52,0.6)", border: "none", borderRadius: "50%",
-            width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer"
-          }}>
-          <svg width="22" height="22"><path d="M8.2 5.7L14 11l-5.8 5.3" stroke="#fff" strokeWidth="2.4" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
-        </button>
-      )}
-      {/* Close */}
-      <button onClick={onClose}
-        style={{
-          position: "absolute", top: 36, right: 32,
-          background: "rgba(20,22,32,0.72)", border: "none", borderRadius: "50%",
-          width: 38, height: 38, display: "flex", alignItems: "center", justifyContent: "center",
-          cursor: "pointer"
-        }}>
-        <svg width="19" height="19"><path d="M5 5l9 9m-9 0l9-9" stroke="#fff" strokeWidth="2.1" strokeLinecap="round"/></svg>
-      </button>
-    </div>
-  );
-}
-
-const ProducerDetail = () => {
+export default function ProducerDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [modal, setModal] = useState({ open: false, idx: 0 });
-  const producer = producers.find(p => String(p.id) === id || Number(p.id) === Number(id));
-  if (!producer) return <div style={{ color: '#fff', padding: 30 }}>Завод не найден</div>;
+  const producer = producers.find(p => String(p.id) === String(id));
 
-  // Контакты
-  let phones = [], emails = [];
-  if (producer.contacts) {
-    Object.values(producer.contacts).forEach(val => {
-      if (typeof val === "string") {
-        if (/^[-+()\d\s]{7,}$/.test(val)) phones.push(val);
-        else if (/@/.test(val)) emails.push(val);
-      }
-    });
-  }
+  if (!producer) return <div className="bg-black text-white p-6">Завод не найден</div>;
+
+  const {
+    name, logo, region, fullDescription, description, address,
+    categories = [], badges = [], site, contacts = {}, gallery = []
+  } = producer;
+
+  const verified = badges?.includes("Проверенный");
+  const premium  = badges?.includes("Честный знак") && badges?.includes("Меркурий");
+
+  // phones/emails из разнородного contacts
+  const phones = Object.values(contacts).filter(v => typeof v === "string" && /^[-+()\d\s]{7,}$/.test(v));
+  const emails = Object.values(contacts).filter(v => typeof v === "string" && /@/.test(v));
+
+  const initialsBG = useMemo(() => {
+    const h = stringHue(name || region || "x");
+    return `linear-gradient(135deg,hsl(${h} 80% 20% / .9),hsl(${(h+40)%360} 80% 30% / .9))`;
+  }, [name, region]);
+
+  const safeSite = site ? (site.startsWith("http") ? site : `https://${site}`) : null;
 
   return (
-    <div style={{
-      background: "#11141a",
-      minHeight: "100vh",
-      paddingBottom: 20,
-      fontFamily: "inherit"
-    }}>
-      {/* BACK */}
-      <button onClick={() => navigate(-1)}
-        style={{
-          margin: "0 0 0 8px",
-          background: "none",
-          border: "none",
-          color: accent,
-          display: "flex",
-          alignItems: "center",
-          fontSize: 18,
-          fontWeight: 700,
-          gap: 7,
-          cursor: "pointer",
-          marginTop: 16,
-          marginBottom: 10
-        }}>
-        <svg width="21" height="21"><path d="M13.5 5.5L8.7 11L13.5 16.5" stroke={accent} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round"/></svg>
-        Назад
-      </button>
+    <div className="bg-black min-h-screen pb-24">
+      {/* Header */}
+      <div className="sticky top-0 z-20 w-full bg-black/75 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-md mx-auto px-4 py-3 flex items-center gap-3">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-[#23df81] hover:text-white transition">
+            <svg width="20" height="20" fill="none"><path d="M13 5l-5 5 5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <span className="font-semibold">Назад</span>
+          </button>
+          <h2 className="ml-auto mr-auto text-white font-bold text-lg">Производитель</h2>
+          <span className="w-16" />
+        </div>
+      </div>
 
-      {/* CARD */}
-      <div style={{
-        background: bgBlock,
-        borderRadius: round,
-        margin: "0 auto",
-        boxShadow: shadow,
-        maxWidth: 430,
-        padding: "22px 22px 18px 22px",
-        marginBottom: 26
-      }}>
-        {/* Название и регион */}
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16
-        }}>
-          <img src={producer.logo} alt="logo"
-            style={{
-              width: 62, height: 62, borderRadius: 16, background: "#181b20",
-              objectFit: "cover", boxShadow: "0 1px 5px #19223b33"
-            }}
-          />
-          <div>
-            <div style={{ fontWeight: 700, fontSize: 18, color: "#fff" }}>{producer.name}</div>
-            <div style={{ color: "#1edc80", fontWeight: 500, fontSize: 13 }}>{producer.region}</div>
+      <div className="max-w-md mx-auto px-3 pt-3">
+        {/* Основная стеклянная карточка */}
+        <div className={`glass-card p-3 ${premium ? "premium" : ""}`}>
+          {/* Верхний блок: лого + инфо */}
+          <div className="flex gap-3 items-start">
+            <div className="relative w-20 h-20 rounded-xl overflow-hidden border border-white/10 shrink-0">
+              {logo ? (
+                <img
+                  src={logo}
+                  alt={name}
+                  className="w-full h-full object-cover img-fade-in"
+                  onError={(e)=>{ e.currentTarget.remove(); }}
+                />
+              ) : (
+                <div className="w-full h-full grid place-items-center text-white font-extrabold text-xl" style={{ background: initialsBG }}>
+                  {getInitials(name)}
+                </div>
+              )}
+
+              {/* бейджи в углах лого */}
+              {verified && (
+                <div className="absolute top-1 left-1">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold text-white border border-white/20 bg-green-600/65 backdrop-blur-sm">
+                    ✅ Проверенный
+                  </span>
+                </div>
+              )}
+              {premium && (
+                <div className="absolute top-1 right-1 w-5 h-5 rounded-full border border-[rgba(59,175,218,.7)] bg-white/10 grid place-items-center backdrop-blur-sm" title="Premium">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="rgb(59,175,218)"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7l3-7z"/></svg>
+                </div>
+              )}
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <div className="text-white font-bold text-[18px] leading-snug truncate" title={name}>{name}</div>
+              {region && (
+                <div className="mt-1 inline-flex items-center gap-1 text-white/80 text-sm">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M12 2C8 2 4 6 4 11c0 5.5 7 11 8 11s8-5.5 8-11c0-5-4-9-8-9z"/><circle cx="12" cy="11" r="3"/></svg>
+                  <span>{region}</span>
+                </div>
+              )}
+              {!!categories.length && (
+                <div className="mt-1.5 flex flex-wrap gap-1">
+                  {categories.slice(0,3).map((c,i)=>(
+                    <span key={i} className="px-2 py-0.5 rounded-full text-[10px] font-semibold text-white/90 border border-white/15 bg-white/10 backdrop-blur-sm">{c}</span>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
+
+          {/* Описание */}
+          {(fullDescription || description) && (
+            <div className="mt-3 text-white/90 text-[14px] leading-relaxed">
+              {fullDescription || description}
+            </div>
+          )}
+
+          {/* Адрес */}
+          {address && (
+            <div className="mt-3 text-white/85 text-sm">
+              <span className="text-white/60">Адрес: </span>
+              <span className="font-semibold">{address}</span>
+            </div>
+          )}
+
+          {/* Контакты */}
+          {(phones.length || emails.length) > 0 && (
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {phones.length > 0 && (
+                <a
+                  href={`tel:${phones[0].replace(/[^+\d]/g,'')}`}
+                  className="flex items-center justify-center gap-2 rounded-lg py-2 bg-white/10 text-white font-semibold border border-white/10 hover:bg-white/15 transition"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.72 19.72 0 01-8.63-3.12A19.72 19.72 0 013.2 6.18 2 2 0 015.09 4h3a2 2 0 012 1.72c.07.64.2 1.28.39 1.9a2 2 0 01-.45 2.11L9.09 10.9a16 16 0 006 6l1.18-1.18a2 2 0 012.11-.45c.62.19 1.26.32 1.9.39A2 2 0 0122 16.92z"/></svg>
+                  Позвонить
+                </a>
+              )}
+              {emails.length > 0 && (
+                <a
+                  href={`mailto:${emails[0]}`}
+                  className="flex items-center justify-center gap-2 rounded-lg py-2 bg-white/10 text-white font-semibold border border-white/10 hover:bg-white/15 transition"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+                  Написать
+                </a>
+              )}
+            </div>
+          )}
+
+          {/* Сайт */}
+          {safeSite && (
+            <div className="mt-2">
+              <a
+                href={safeSite}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-[rgba(59,175,218,0.95)] font-bold"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3z"/><path d="M5 5h7v2H7v10h10v-5h2v7H5z"/></svg>
+                {safeSite.replace(/^https?:\/\//, "")}
+              </a>
+            </div>
+          )}
         </div>
 
-        {/* Описание */}
-        <div style={{
-          color: "#e3e3e3", fontSize: 15.1, marginBottom: 16, fontWeight: 400, lineHeight: 1.45
-        }}>{producer.fullDescription || producer.description}</div>
-
-        {/* Адрес */}
-        {producer.address && (
-          <div style={{
-            color: "#e7edff", fontWeight: 600, fontSize: 14.1, marginBottom: 8
-          }}>Адрес: <span style={{ color: "#fff", fontWeight: 500 }}>{producer.address}</span></div>
-        )}
-
-        {/* Контакты */}
-        {phones.length > 0 && (
-          <div style={{ display: 'flex', alignItems: 'center', color: '#79e6e6', fontWeight: 600, marginBottom: 4 }}>
-            <IconPhone />
-            {phones.join(", ")}
-          </div>
-        )}
-        {emails.length > 0 && (
-          <div style={{ display: 'flex', alignItems: 'center', color: '#97b5f7', fontWeight: 600, marginBottom: 5 }}>
-            <IconMail />
-            {emails.join(", ")}
-          </div>
-        )}
-
-        {/* Продукция */}
-        {producer.categories && producer.categories.length > 0 && (
-          <div style={{ color: "#1edc80", fontWeight: 700, fontSize: 13.7, margin: "10px 0 4px 0" }}>
-            Продукция: <span style={{ color: "#e3ffe2" }}>{producer.categories.join(", ")}</span>
-          </div>
-        )}
-
-        {/* Сайт */}
-        {producer.site && (
-          <div style={{ fontSize: 14, margin: "5px 0 5px 0" }}>
-            <a href={producer.site.startsWith('http') ? producer.site : `https://${producer.site}`}
-              target="_blank" rel="noopener noreferrer"
-              style={{
-                color: "#38d8ff", fontWeight: 700,
-                textDecoration: "none", borderBottom: "1.5px dashed #36d8ff", paddingBottom: 1
-              }}>
-              {producer.site.replace(/^https?:\/\//, "")}
-            </a>
-          </div>
-        )}
-
-        {/* Галерея */}
-        {producer.gallery && producer.gallery.length > 0 && (
-          <div style={{ marginTop: 13 }}>
-            <div style={{ color: "#abb8cc", fontSize: 13, marginBottom: 5, fontWeight: 600 }}>Фото</div>
-            <div style={{ display: 'flex', gap: 8, overflowX: 'auto' }}>
-              {producer.gallery.map((img, i) => (
-                <img
-                  key={i}
-                  src={img}
-                  alt="фото"
-                  style={{
-                    width: 98, height: 68, objectFit: 'cover', borderRadius: 12, border: '1px solid #19223a',
-                    cursor: "pointer", transition: "transform .14s", boxShadow: "0 2px 9px #17181f33"
-                  }}
-                  onClick={() => setModal({ open: true, idx: i })}
-                />
-              ))}
+        {/* Большая карусель фото внизу */}
+        {gallery?.length > 0 && (
+          <div className="mt-3 glass-card p-2">
+            <div className="text-white/90 text-sm font-semibold mb-2 px-1">Фото</div>
+            <div className="relative w-full rounded-xl overflow-hidden border border-white/10">
+              {/* делаем крупнее: аспект 4/3 (или 3/2 по желанию) */}
+              <div className="w-full aspect-[4/3]">
+                <Swiper spaceBetween={10} slidesPerView={1} style={{ borderRadius: 12 }}>
+                  {gallery.map((src, i) => (
+                    <SwiperSlide key={i}>
+                      <img
+                        src={src}
+                        alt={`${name} фото ${i+1}`}
+                        className="w-full h-full object-cover"
+                        onError={(e)=>{ e.currentTarget.src="/images/no-image.webp"; }}
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
             </div>
           </div>
         )}
       </div>
-
-      {/* Gallery Modal */}
-      {modal.open && (
-        <GalleryModal
-          images={producer.gallery}
-          idx={modal.idx}
-          onClose={() => setModal({ open: false, idx: 0 })}
-        />
-      )}
     </div>
   );
-};
-
-export default ProducerDetail;
+}

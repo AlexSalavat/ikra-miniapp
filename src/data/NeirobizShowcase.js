@@ -7,7 +7,6 @@ import neirobizServices from "../data/neirobizServices";
 const CARD = 172;
 const RADIUS = 20;
 
-// склеиваем тексты/иконки из services к карточкам с картинками
 function mergeServices() {
   const map = Object.fromEntries(services.map((s) => [s.id, s]));
   return neirobizServices.map((card) => ({
@@ -23,7 +22,6 @@ export default function NeirobizShowcase() {
 
   return (
     <div className="bg-black min-h-screen pb-20 pt-6 flex flex-col items-center">
-      {/* Заголовок экрана */}
       <div className="w-full max-w-[420px] px-4">
         <h1 className="text-white font-extrabold text-[22px] tracking-[.02em]">
           NeiroBiz
@@ -39,7 +37,6 @@ export default function NeirobizShowcase() {
         </div>
       </div>
 
-      {/* Сетка карточек */}
       <div
         className="mt-4 grid justify-center gap-4"
         style={{ gridTemplateColumns: `repeat(2, min(${CARD}px, 44vw))` }}
@@ -51,7 +48,6 @@ export default function NeirobizShowcase() {
             className="glass-card group relative text-left"
             style={{ width: CARD, maxWidth: "44vw", borderRadius: RADIUS, padding: 8 }}
           >
-            {/* Визуал */}
             <div
               className="relative w-full aspect-square overflow-hidden border border-white/10"
               style={{ borderRadius: RADIUS - 6, background: "#11141a" }}
@@ -70,7 +66,6 @@ export default function NeirobizShowcase() {
               </div>
             </div>
 
-            {/* Текст */}
             <div className="mt-2 px-0.5">
               <div
                 className="text-white font-bold text-[14px] leading-tight truncate"

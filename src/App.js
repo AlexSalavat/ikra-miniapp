@@ -1,3 +1,4 @@
+// src/App.js
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -8,6 +9,7 @@ import SupplierDetail from "./components/SupplierDetail";
 import LogisticsShowcase from "./components/LogisticsShowcase";
 import ProductionShowcase from "./components/ProductionShowcase";
 import NeirobizScreen from "./components/NeirobizScreen";
+import NeirobizServiceDetail from "./components/NeirobizServiceDetail";
 import News from "./components/News";
 import Market from "./components/Market";
 import MarketSell from "./components/MarketSell";
@@ -19,7 +21,7 @@ import BottomNav from "./components/BottomNav";
 import TopProducers from "./components/TopProducers";
 import ProducerDetail from "./components/ProducerDetail";
 import CaviarWarBoard from "./components/CaviarWarBoard";
-import AddAdForm from "./components/AddAdForm"; // <--- новый импорт
+import AddAdForm from "./components/AddAdForm";
 
 function App() {
   return (
@@ -28,26 +30,44 @@ function App() {
         <div className="flex-1">
           <Routes>
             <Route path="/" element={<Home />} />
+
+            {/* Каталог */}
             <Route path="/catalog" element={<Showcase />} />
             <Route path="/catalog/suppliers" element={<Catalog />} />
+
+            {/* Поставщики */}
             <Route path="/supplier/:id" element={<SupplierDetail />} />
+
+            {/* Логистика / Производство */}
             <Route path="/logistics" element={<LogisticsShowcase />} />
             <Route path="/production" element={<ProductionShowcase />} />
+
+            {/* Производители (топ + деталка) */}
             <Route path="/producers" element={<TopProducers />} />
             <Route path="/producer/:id" element={<ProducerDetail />} />
+
+            {/* NeiroBiz */}
             <Route path="/neirobiz" element={<NeirobizScreen />} />
+            <Route path="/neirobiz/service/:id" element={<NeirobizServiceDetail />} />
+
+            {/* Новости */}
             <Route path="/news" element={<News />} />
             <Route path="/news/ikra-wars" element={<CaviarWarBoard />} />
             <Route path="/news/top-producers" element={<TopProducers />} />
+
+            {/* Маркет */}
             <Route path="/market" element={<Market />} />
             <Route path="/market/sell" element={<MarketSell />} />
             <Route path="/market/buy" element={<MarketBuy />} />
             <Route path="/market/sell/:category" element={<MarketSellCategory />} />
             <Route path="/market/sell/detail/:id" element={<MarketSellDetail />} />
+            <Route path="/market/add" element={<AddAdForm />} />
+
+            {/* Профиль */}
             <Route path="/profile" element={<Profile />} />
-            <Route path="/market/add" element={<AddAdForm />} /> {/* Новая страница размещения объявления */}
           </Routes>
         </div>
+
         <BottomNav />
       </div>
     </Router>

@@ -5,23 +5,31 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Showcase from "./components/Showcase";
 import Catalog from "./components/Catalog";
+
 import SupplierDetail from "./components/SupplierDetail";
+
 import LogisticsShowcase from "./components/LogisticsShowcase";
 import ProductionShowcase from "./components/ProductionShowcase";
+
 import NeirobizScreen from "./components/NeirobizScreen";
 import NeirobizServiceDetail from "./components/NeirobizServiceDetail";
+
 import News from "./components/News";
+
 import Market from "./components/Market";
 import MarketSell from "./components/MarketSell";
 import MarketBuy from "./components/MarketBuy";
 import MarketSellCategory from "./components/MarketSellCategory";
 import MarketSellDetail from "./components/MarketSellDetail";
-import Profile from "./components/Profile";
-import BottomNav from "./components/BottomNav";
+
 import TopProducers from "./components/TopProducers";
 import ProducerDetail from "./components/ProducerDetail";
+
 import CaviarWarBoard from "./components/CaviarWarBoard";
 import AddAdForm from "./components/AddAdForm";
+
+import Profile from "./components/Profile";
+import BottomNav from "./components/BottomNav";
 
 function App() {
   return (
@@ -29,24 +37,23 @@ function App() {
       <div className="min-h-screen bg-black flex flex-col pb-20">
         <div className="flex-1">
           <Routes>
+            {/* Главная */}
             <Route path="/" element={<Home />} />
 
             {/* Каталог */}
             <Route path="/catalog" element={<Showcase />} />
             <Route path="/catalog/suppliers" element={<Catalog />} />
-
-            {/* Поставщики */}
             <Route path="/supplier/:id" element={<SupplierDetail />} />
 
             {/* Логистика / Производство */}
             <Route path="/logistics" element={<LogisticsShowcase />} />
             <Route path="/production" element={<ProductionShowcase />} />
 
-            {/* Производители (топ + деталка) */}
+            {/* Производители (ТОП) */}
             <Route path="/producers" element={<TopProducers />} />
             <Route path="/producer/:id" element={<ProducerDetail />} />
 
-            {/* NeiroBiz */}
+            {/* Neirobiz */}
             <Route path="/neirobiz" element={<NeirobizScreen />} />
             <Route path="/neirobiz/service/:id" element={<NeirobizServiceDetail />} />
 

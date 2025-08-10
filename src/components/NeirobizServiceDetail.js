@@ -3,17 +3,18 @@ import { useParams, useNavigate } from "react-router-dom";
 import servicesMeta from "../data/neirobiz";
 import servicesCards from "../data/neirobizServices";
 
-// Заполни при желании, иначе кнопки отключатся
 const CONTACTS = {
-  tgUser: "",           // например: "ikra_port"
-  whatsappNumber: "",   // в формате +79991234567
-  email: "",            // например: "hello@domain.ru"
+  tgUser: "",            // например: "ikra_port"
+  whatsappNumber: "",    // например: "+79991234567"
+  email: "",             // например: "hello@domain.ru"
 };
+
+function toArray(x){return Array.isArray(x)?x:[];}
 
 function useService(id) {
   return useMemo(() => {
-    const meta = servicesMeta.find(s => s.id === id);
-    const card = servicesCards.find(c => c.id === id);
+    const meta = toArray(servicesMeta).find(s => s.id === id);
+    const card = toArray(servicesCards).find(c => c.id === id);
     if (!meta && !card) return null;
     return {
       id,
@@ -82,15 +83,12 @@ export default function NeirobizServiceDetail() {
     );
   }
 
-  // ссылки контактов
   const tgLink = CONTACTS.tgUser ? `https://t.me/${CONTACTS.tgUser}` : "";
   const waLink = CONTACTS.whatsappNumber
     ? `https://wa.me/${CONTACTS.whatsappNumber.replace(/[^\d]/g, "")}`
     : "";
   const mailto = CONTACTS.email
-    ? `mailto:${CONTACTS.email}?subject=${encodeURIComponent(
-        `Заявка: ${svc.title}`
-      )}&body=${encodeURIComponent("Опишите задачу...")}`
+    ? `mailto:${CONTACTS.email}?subject=${encodeURIComponent(`Заявка: ${svc.title}`)}&body=${encodeURIComponent("Опишите задачу...")}`
     : "";
 
   return (
@@ -102,14 +100,10 @@ export default function NeirobizServiceDetail() {
             onClick={() => navigate(-1)}
             className="flex items-center gap-1.5 text-[#23df81] hover:text-white transition"
           >
-            <svg width="20" height="20" fill="none">
-              <path d="M13 5l-5 5 5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <svg width="20" height="20" fill="none"><path d="M13 5l-5 5 5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
             <span className="font-semibold">Назад</span>
           </button>
-          <h2 className="ml-auto mr-auto text-white font-bold text-lg line-clamp-1">
-            {svc.title}
-          </h2>
+          <h2 className="ml-auto mr-auto text-white font-bold text-lg line-clamp-1">{svc.title}</h2>
           <span className="w-16" />
         </div>
       </div>
@@ -127,39 +121,29 @@ export default function NeirobizServiceDetail() {
                 onError={(e) => (e.currentTarget.src = "/images/no-image.webp")}
               />
             </div>
-            {/* тайтл и иконка */}
             <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/60 via-black/10 to-transparent">
               <div className="flex items-center gap-2">
                 <Pill>{svc.icon}</Pill>
-                <div className="text-white font-extrabold text-[18px] leading-tight truncate">
-                  {svc.title}
-                </div>
+                <div className="text-white font-extrabold text-[18px] leading-tight truncate">{svc.title}</div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Коротко о сервисе */}
         {svc.short && (
           <div className="glass-card p-3">
             <div className="text-white font-semibold text-[15px] mb-1">Коротко</div>
-            <div className="text-white/90 text-[14px] leading-relaxed">
-              {svc.short}
-            </div>
+            <div className="text-white/90 text-[14px] leading-relaxed">{svc.short}</div>
           </div>
         )}
 
-        {/* Полное описание */}
         {svc.full && (
           <div className="glass-card p-3">
             <div className="text-white font-semibold text-[15px] mb-1">Что получите</div>
-            <div className="text-white/90 text-[14px] leading-relaxed whitespace-pre-line">
-              {svc.full}
-            </div>
+            <div className="text-white/90 text-[14px] leading-relaxed whitespace-pre-line">{svc.full}</div>
           </div>
         )}
 
-        {/* Чеклист/выгоды */}
         {!!svc.checklist?.length && (
           <div className="glass-card p-3">
             <div className="text-white font-semibold text-[15px] mb-1">Преимущества</div>
@@ -169,18 +153,16 @@ export default function NeirobizServiceDetail() {
           </div>
         )}
 
-        {/* Контакты/заявка */}
         <div className="glass-card p-3">
           <div className="text-white font-semibold text-[15px] mb-2">Связаться</div>
           <div className="grid grid-cols-2 gap-2">
             <ActionBtn href={tgLink} label="Telegram" icon="tg" disabled={!tgLink} />
             <ActionBtn href={waLink} label="WhatsApp" icon="wa" disabled={!waLink} />
             <ActionBtn href={mailto} label="Email" icon="mail" disabled={!mailto} />
-            {/* Заявка через почту без мыла тоже допустима, но тогда кнопка будет disabled */}
           </div>
           {!tgLink && !waLink && !mailto && (
             <div className="text-white/60 text-[12px] mt-2">
-              Укажи контакты в <code>CONTACTS</code> внутри <b>NeirobizServiceDetail.js</b>, чтобы включить кнопки.
+              Заполни контакты в <code>CONTACTS</code> внутри <b>NeirobizServiceDetail.js</b>, чтобы включить кнопки.
             </div>
           )}
         </div>

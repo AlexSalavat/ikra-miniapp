@@ -1,4 +1,4 @@
-// src/components/NeirobizShowcase.js
+// src/components/NeirobizShowcase.jsx
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import services from "../data/neirobiz";
@@ -25,38 +25,28 @@ export default function NeirobizShowcase() {
       <div className="w-full max-w-[420px] px-4">
         <h1 className="text-white font-extrabold text-[22px] tracking-[.02em]">NeiroBiz</h1>
         <div className="text-[#b5e0fe] text-[14.5px] mt-1 font-semibold">
-          AI-сервисы и генерация упаковки
+          AI‑сервисы и генерация упаковки
         </div>
         <div className="text-white/70 text-[13px] mt-1">
-          Автоматизируйте бизнес через ботов, мини-приложения, дизайн и аналитику.{" "}
+          Автоматизируйте бизнес через ботов, мини‑приложения, дизайн и аналитику.{" "}
           <span className="text-[#23df81] font-semibold">Оформите заявку — результат быстрее.</span>
         </div>
       </div>
 
       <div
         className="mt-4 grid justify-center gap-4"
-        style={{
-          gridTemplateColumns: `repeat(2, min(${CARD}px, 44vw))`,
-        }}
+        style={{ gridTemplateColumns: `repeat(2, min(${CARD}px, 44vw))` }}
       >
         {items.map((svc) => (
           <button
             key={svc.id}
             onClick={() => navigate(`/neirobiz/service/${svc.id}`)}
             className="glass-card group relative text-left"
-            style={{
-              width: CARD,
-              maxWidth: "44vw",
-              borderRadius: RADIUS,
-              padding: 8,
-            }}
+            style={{ width: CARD, maxWidth: "44vw", borderRadius: RADIUS, padding: 8 }}
           >
             <div
               className="relative w-full aspect-square overflow-hidden border border-white/10"
-              style={{
-                borderRadius: RADIUS - 6,
-                background: "#11141a",
-              }}
+              style={{ borderRadius: RADIUS - 6, background: "#11141a" }}
             >
               <img
                 src={svc.image}
@@ -71,6 +61,7 @@ export default function NeirobizShowcase() {
                 </span>
               </div>
             </div>
+
             <div className="mt-2 px-0.5">
               <div className="text-white font-bold text-[14px] leading-tight truncate" title={svc.title}>
                 {svc.title}

@@ -1,4 +1,4 @@
-// src/components/NeirobizShowcase.jsx
+// src/components/NeirobizShowcase.js
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import services from "../data/neirobiz";
@@ -7,9 +7,10 @@ import neirobizServices from "../data/neirobizServices";
 const CARD = 172;
 const RADIUS = 20;
 
+// склеиваем тексты/иконки из services к карточкам с картинками
 function mergeServices() {
-  const map = Object.fromEntries(services.map(s => [s.id, s]));
-  return neirobizServices.map(card => ({
+  const map = Object.fromEntries(services.map((s) => [s.id, s]));
+  return neirobizServices.map((card) => ({
     ...card,
     icon: map[card.id]?.icon || "✨",
     short: map[card.id]?.short || card.description || "",
@@ -22,17 +23,23 @@ export default function NeirobizShowcase() {
 
   return (
     <div className="bg-black min-h-screen pb-20 pt-6 flex flex-col items-center">
+      {/* Заголовок экрана */}
       <div className="w-full max-w-[420px] px-4">
-        <h1 className="text-white font-extrabold text-[22px] tracking-[.02em]">NeiroBiz</h1>
+        <h1 className="text-white font-extrabold text-[22px] tracking-[.02em]">
+          NeiroBiz
+        </h1>
         <div className="text-[#b5e0fe] text-[14.5px] mt-1 font-semibold">
           AI‑сервисы и генерация упаковки
         </div>
         <div className="text-white/70 text-[13px] mt-1">
           Автоматизируйте бизнес через ботов, мини‑приложения, дизайн и аналитику.{" "}
-          <span className="text-[#23df81] font-semibold">Оформите заявку — результат быстрее.</span>
+          <span className="text-[#23df81] font-semibold">
+            Оформите заявку — результат быстрее.
+          </span>
         </div>
       </div>
 
+      {/* Сетка карточек */}
       <div
         className="mt-4 grid justify-center gap-4"
         style={{ gridTemplateColumns: `repeat(2, min(${CARD}px, 44vw))` }}
@@ -44,6 +51,7 @@ export default function NeirobizShowcase() {
             className="glass-card group relative text-left"
             style={{ width: CARD, maxWidth: "44vw", borderRadius: RADIUS, padding: 8 }}
           >
+            {/* Визуал */}
             <div
               className="relative w-full aspect-square overflow-hidden border border-white/10"
               style={{ borderRadius: RADIUS - 6, background: "#11141a" }}
@@ -62,8 +70,12 @@ export default function NeirobizShowcase() {
               </div>
             </div>
 
+            {/* Текст */}
             <div className="mt-2 px-0.5">
-              <div className="text-white font-bold text-[14px] leading-tight truncate" title={svc.title}>
+              <div
+                className="text-white font-bold text-[14px] leading-tight truncate"
+                title={svc.title}
+              >
                 {svc.title}
               </div>
               <div className="text-white/70 text-[11.5px] leading-snug mt-1 line-clamp-2">

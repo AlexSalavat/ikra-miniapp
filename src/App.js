@@ -8,8 +8,8 @@ import Catalog from "./components/Catalog";
 import SupplierDetail from "./components/SupplierDetail";
 import LogisticsShowcase from "./components/LogisticsShowcase";
 import ProductionShowcase from "./components/ProductionShowcase";
-import NeirobizShowcase from "./components/NeirobizShowcase";          // <— точное имя файла
-import NeirobizServiceDetail from "./components/NeirobizServiceDetail"; // <— точное имя файла
+import NeirobizShowcase from "./components/NeirobizShowcase";
+import NeirobizServiceDetail from "./components/NeirobizServiceDetail";
 import News from "./components/News";
 import Market from "./components/Market";
 import MarketSell from "./components/MarketSell";
@@ -37,16 +37,23 @@ function App() {
             <Route path="/production" element={<ProductionShowcase />} />
             <Route path="/producers" element={<TopProducers />} />
             <Route path="/producer/:id" element={<ProducerDetail />} />
+
+            {/* NeiroBiz */}
             <Route path="/neirobiz" element={<NeirobizShowcase />} />
             <Route path="/neirobiz/service/:id" element={<NeirobizServiceDetail />} />
+
+            {/* News */}
             <Route path="/news" element={<News />} />
             <Route path="/news/ikra-wars" element={<CaviarWarBoard />} />
             <Route path="/news/top-producers" element={<TopProducers />} />
+
+            {/* Market */}
             <Route path="/market" element={<Market />} />
             <Route path="/market/sell" element={<MarketSell />} />
             <Route path="/market/buy" element={<MarketBuy />} />
             <Route path="/market/sell/:category" element={<MarketSellCategory />} />
             <Route path="/market/sell/detail/:id" element={<MarketSellDetail />} />
+
             <Route path="/profile" element={<Profile />} />
             <Route path="/market/add" element={<AddAdForm />} />
           </Routes>

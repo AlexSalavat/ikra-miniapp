@@ -2,10 +2,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const items = [
-  { key: "coast",  title: "Новости побережья",  desc: "Сводка уловов и рынков", image: "/images/news-coast.webp", to: "/news/coast" },
-  { key: "wars",   title: "Икорные войны",      desc: "Цены и движения",       image: "/images/news-wars.webp",  to: "/news/ikra-wars" },
-  { key: "top",    title: "Топ производители",  desc: "Рейтинг и обзоры",      image: "/images/news-top.webp",   to: "/news/top-producers" },
-  { key: "inside", title: "Инсайдерский доступ",desc: "Закрытая аналитика",    image: "/images/news-insider.webp", to: "/news/insider", locked: true },
+  { key: "coast",  title: "Новости побережья",  desc: "Сводка уловов и рынков", image: "/images/new.webp",     to: "/news/coast" },
+  { key: "wars",   title: "Икорные войны",      desc: "Цены и движения",       image: "/images/war.webp",     to: "/news/ikra-wars" },
+  { key: "top",    title: "Топ производители",  desc: "Рейтинг и обзоры",      image: "/images/pk.webp",      to: "/news/top-producers" },
+  { key: "inside", title: "Инсайдерский доступ",desc: "Закрытая аналитика",    image: "/images/insider.webp", to: "/news/insider", locked: true },
 ];
 
 export default function News() {

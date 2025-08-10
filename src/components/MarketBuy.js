@@ -1,98 +1,38 @@
-import React, { useState } from "react";
-import BackButton from './BackButton';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const exampleBuy = [
-  {
-    id: 101,
-    title: "Куплю свежую икру лососевых",
-    quantity: "100-300 кг",
-    desc: "Ищу надёжного поставщика, Самовывоз Владивосток.",
-    contact: "@buyer_fish"
-  },
-  {
-    id: 102,
-    title: "Ищу оптом краба, живого/варёного",
-    quantity: "до 1 тонны",
-    desc: "Постоянный контракт, рассмотрю предложения.",
-    contact: "+7 999 888-77-66"
-  },
+  { id: 101, title: "Куплю свежую икру лососевых", quantity: "100–300 кг", desc: "Ищу надёжного поставщика, Самовывоз Владивосток.", contact: "@buyer_fish" },
+  { id: 102, title: "Ищу оптом краба, живого/варёного", quantity: "до 1 тонны", desc: "Постоянный контракт, рассмотрю предложения.", contact: "+7 999 888-77-66" },
 ];
 
-function MarketBuy() {
-  const [items] = useState(exampleBuy);
+export default function MarketBuy() {
+  const navigate = useNavigate();
 
   return (
-    <div
-      style={{
-        background: "#101018",
-        minHeight: "100vh",
-        padding: "22px 0 80px 0",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center"
-      }}
-    >
-      <div style={{ width: "100%", maxWidth: 350, marginBottom: 8, paddingLeft: 2 }}>
-        <BackButton />
+    <div className="bg-black min-h-screen pb-24">
+      {/* Header */}
+      <div className="sticky top-0 z-20 w-full bg-black/70 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-md mx-auto px-4 py-3 flex items-center gap-3">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-[#23df81] hover:text-white transition">
+            <svg width="20" height="20" fill="none"><path d="M13 5l-5 5 5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <span className="font-semibold">Назад</span>
+          </button>
+          <h2 className="ml-auto mr-auto text-white font-bold text-lg">Забирай!</h2>
+          <span className="w-16" />
+        </div>
       </div>
-      <h2 style={{
-        color: "#e7f2ff",
-        fontWeight: 500,
-        fontSize: 19,
-        marginBottom: 16,
-        letterSpacing: 0.09
-      }}>
-        На охоте за уловом — ищу товар
-      </h2>
-      <div style={{
-        width: "100%",
-        maxWidth: 350,
-        display: "flex",
-        flexDirection: "column",
-        gap: 14
-      }}>
-        {items.map((item) => (
-          <div
-            key={item.id}
-            style={{
-              background: "#19192b",
-              borderRadius: 19,
-              padding: "14px 15px 13px 15px",
-              border: "1px solid #273764",
-              boxShadow: "0 2px 10px #1e263a33",
-              marginBottom: 0,
-              display: "flex",
-              flexDirection: "column"
-            }}
-          >
-            <h3 style={{
-              fontWeight: 600,
-              color: "#3fa6ff",
-              fontSize: 15.7,
-              marginBottom: 2
-            }}>{item.title}</h3>
-            <div style={{
-              color: "#88c4ff",
-              fontWeight: 500,
-              fontSize: 13.2,
-              marginBottom: 3
-            }}>{item.quantity}</div>
-            <p style={{
-              color: "#c0cbe4",
-              fontSize: 12.2,
-              marginBottom: 3
-            }}>{item.desc}</p>
-            <div style={{
-              fontSize: 11.3,
-              color: "#7ebfff"
-            }}>
-              Контакты: {item.contact}
-            </div>
+
+      <div className="max-w-md mx-auto px-3 pt-3 flex flex-col gap-3">
+        {exampleBuy.map((item) => (
+          <div key={item.id} className="glass-card p-3 border border-white/10 rounded-xl">
+            <div className="text-[#3fa6ff] font-semibold text-sm mb-1">{item.title}</div>
+            <div className="text-[#88c4ff] font-semibold text-xs mb-1">{item.quantity}</div>
+            <div className="text-white/85 text-xs mb-1">{item.desc}</div>
+            <div className="text-white/70 text-[11px]">Контакты: {item.contact}</div>
           </div>
         ))}
       </div>
     </div>
   );
 }
-
-export default MarketBuy;

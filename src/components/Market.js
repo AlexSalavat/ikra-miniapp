@@ -1,4 +1,3 @@
-// src/components/Market.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -19,134 +18,55 @@ const CARDS = [
   },
 ];
 
-const CARD_SIZE = 170;
-const CARD_GAP = 22;
-
 export default function Market() {
   const navigate = useNavigate();
-  const [hover, setHover] = React.useState(false);
 
   return (
-    <div className="bg-black min-h-screen pb-20 pt-6 flex flex-col items-center">
-      <div style={{
-        width: "100%",
-        maxWidth: 410,
-        margin: "0 auto",
-        marginTop: 8,
-      }}>
-        <h1 style={{
-          color: "#fff",
-          fontWeight: 700,
-          fontSize: 22,
-          margin: "0 0 19px 0",
-          letterSpacing: 0.13,
-          textAlign: "center",
-        }}>
-          Объявления
-        </h1>
+    <div className="bg-black min-h-screen pb-24">
+      {/* Header */}
+      <div className="sticky top-0 z-20 w-full bg-black/70 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-md mx-auto px-4 py-3 flex items-center gap-3">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-[#23df81] hover:text-white transition">
+            <svg width="20" height="20" fill="none"><path d="M13 5l-5 5 5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <span className="font-semibold">Назад</span>
+          </button>
+          <h2 className="ml-auto mr-auto text-white font-bold text-lg">Объявления</h2>
+          <span className="w-16" />
+        </div>
+      </div>
 
-        {/* Сетка карточек */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: `repeat(2, ${CARD_SIZE}px)`,
-          gap: CARD_GAP,
-          justifyContent: "center",
-          marginBottom: 28,
-        }}>
-          {CARDS.map((card) => (
-            <a
-              key={card.key}
-              href={card.link}
-              style={{
-                borderRadius: 21,
-                background: "#19191d",
-                overflow: "hidden",
-                width: CARD_SIZE,
-                height: CARD_SIZE,
-                boxShadow: "0 4px 16px #181b2455",
-                textDecoration: "none",
-                transition: "box-shadow .13s,transform .12s",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                position: "relative"
-              }}
-            >
+      {/* Grid */}
+      <div className="max-w-md mx-auto px-3 pt-3 grid grid-cols-2 gap-5">
+        {CARDS.map((card) => (
+          <div
+            key={card.key}
+            className="glass-card p-2 cursor-pointer transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
+            onClick={() => navigate(card.link)}
+            title={card.title}
+          >
+            <div className="relative aspect-square rounded-lg overflow-hidden border border-white/10">
               <img
                 src={card.image}
                 alt={card.title}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: 21,
-                  display: "block"
-                }}
-                onError={e => { e.target.src = "/images/no-image.webp"; }}
+                className="w-full h-full object-cover"
+                onError={(e)=>{ e.currentTarget.src="/images/no-image.webp"; }}
               />
-            </a>
-          ))}
-        </div>
-
-        {/* Названия и описания ПОД карточками */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: `repeat(2, ${CARD_SIZE}px)`,
-          gap: CARD_GAP,
-          justifyContent: "center",
-          marginTop: -14,
-          marginBottom: 32
-        }}>
-          {CARDS.map((card) => (
-            <div key={card.key} style={{textAlign: "center"}}>
-              <div style={{
-                fontWeight: 800,
-                color: "#fff",
-                fontSize: 15.6,
-                marginBottom: 2,
-                marginTop: 2,
-                lineHeight: 1.13,
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                letterSpacing: "0.01em"
-              }}>{card.title}</div>
-              <div style={{
-                fontSize: 11.2,
-                color: "#38d8ff",
-                minHeight: 17,
-                fontWeight: 500,
-                whiteSpace: "normal",
-                lineHeight: "1.14"
-              }}>{card.description}</div>
+              <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/45" />
             </div>
-          ))}
-        </div>
+            <div className="mt-2 text-center">
+              <div className="text-white font-semibold text-sm truncate">{card.title}</div>
+              <div className="text-white/70 text-xs mt-0.5">{card.description}</div>
+            </div>
+          </div>
+        ))}
+      </div>
 
-        {/* Кнопка разместить объявление — синий/голубой градиент */}
+      {/* CTA */}
+      <div className="max-w-md mx-auto px-3 mt-4">
         <button
-          style={{
-            background: hover
-              ? "linear-gradient(92deg,#44e2ff 0%,#2678f3 100%)"
-              : "linear-gradient(92deg,#2678f3 0%,#44e2ff 100%)",
-            color: "#fff",
-            fontWeight: 700,
-            borderRadius: 14,
-            padding: "11px 0",
-            fontSize: 15.4,
-            width: "100%",
-            border: "none",
-            cursor: "pointer",
-            marginTop: 10,
-            marginBottom: 4,
-            boxShadow: "0 2px 8px #2678f355",
-            transition: "background 0.18s, box-shadow .15s",
-            letterSpacing: ".01em",
-          }}
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-          onClick={() => navigate("/market/add")} // вот здесь правильный путь!
+          onClick={() => navigate("/market/add")}
+          className="w-full py-3 rounded-xl font-bold text-white transition shadow-lg"
+          style={{ background: "linear-gradient(92deg,#2678f3 0%,#44e2ff 100%)" }}
         >
           Разместить объявление
         </button>

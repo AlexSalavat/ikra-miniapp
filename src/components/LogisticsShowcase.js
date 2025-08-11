@@ -9,7 +9,7 @@ const FILTERS = [
   { label: "Хабаровск", keys: ["Хабаровск"] },
 ];
 
-const GAP = 8;
+const GAP = 10;
 
 function isMatchByKeys(item, keys) {
   if (!keys?.length) return true;
@@ -30,7 +30,7 @@ export default function LogisticsShowcase() {
     [activeKeys]
   );
 
-  // для ровных квадратов — считаем размер от ширины экрана
+  // вычисляем квадрат под мобиль
   const CARD_SIZE = `calc((100vw - 26px - ${GAP}px) / 2)`;
 
   return (
@@ -61,10 +61,10 @@ export default function LogisticsShowcase() {
               key={f.label}
               onClick={() => setFilter(f.label)}
               className={[
-                "px-3 py-1 rounded-lg border text-sm font-bold whitespace-nowrap",
+                "px-3 py-1 rounded-lg border text-sm font-bold whitespace-nowrap transition",
                 active
                   ? "bg-[#0a1918] text-[#23df81] border-[#22b978]"
-                  : "bg-transparent text-[#d3d3d7] border-[#20222b]",
+                  : "bg-transparent text-[#d3d3d7] border-[#20222b] hover:border-white/20",
               ].join(" ")}
             >
               {f.label}
@@ -73,7 +73,7 @@ export default function LogisticsShowcase() {
         })}
       </div>
 
-      {/* Сетка */}
+      {/* Сетка карточек в стиле «glass» как у поставщиков */}
       <div
         className="w-full grid justify-center px-2"
         style={{
@@ -83,42 +83,38 @@ export default function LogisticsShowcase() {
           gap: GAP,
         }}
       >
-        {filtered.map((item, idx) => (
+        {filtered.map((item) => (
           <div
-            key={`${item.id}-${idx}`}
-            className="relative rounded-[19px] overflow-hidden"
-            style={{
-              width: "100%",
-              aspectRatio: "1 / 1",
-              background: "#212127",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 2px 14px #16181d66",
-            }}
+            key={item.id}
+            className="glass-card card-glow p-2 rounded-[22px] transition-transform duration-200 ease-out hover:scale-[1.02] active:scale-[0.99]"
+            style={{ width: "100%" }}
           >
-            {/* Фото/лого */}
-            {item.logo ? (
-              <img
-                src={item.logo}
-                alt={item.name}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.src = "/images/no-logo.webp";
-                }}
-              />
-            ) : (
-              <span
-                className="text-center font-semibold"
-                style={{ color: "#86868d", fontSize: 15.5 }}
-              >
-                Лого в разработке
-              </span>
-            )}
+            {/* внутренняя стеклянная плитка */}
+            <div className="relative rounded-[18px] overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md aspect-square">
+              {/* skeleton-фон */}
+              {!item.logo && (
+                <div className="absolute inset-0 bg-white/5" />
+              )}
 
-            {/* НАЗВАНИЕ (адрес НЕ выводим) */}
-            <div className="absolute left-0 right-0 bottom-0 bg-black/45 text-white font-bold text-[13.2px] text-center py-1.5 px-2 tracking-wide">
-              {item.name}
+              {item.logo ? (
+                <img
+                  src={item.logo}
+                  alt={item.name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => (e.currentTarget.src = "/images/no-logo.webp")}
+                />
+              ) : (
+                <div className="w-full h-full grid place-items-center text-white/70 text-sm font-semibold">
+                  Лого в разработке
+                </div>
+              )}
+
+              {/* НАЗВАНИЕ — стеклянная плашка, адрес НЕ показываем */}
+              <div className="absolute inset-x-1 bottom-1 rounded-lg overflow-hidden">
+                <div className="px-2.5 py-1.5 text-center text-white font-bold text-[12.8px] leading-tight border border-white/10 bg-black/45 backdrop-blur-md">
+                  {item.name}
+                </div>
+              </div>
             </div>
           </div>
         ))}

@@ -1,35 +1,30 @@
 // src/components/NeirobizScreen.js
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import servicesRaw from "../data/neirobiz";
-import cardsRaw from "../data/neirobizServices";
+import services from "../data/neirobiz";
+import neirobizServices from "../data/neirobizServices";
 
-// Безопасно приводим к массивам
-const services = Array.isArray(servicesRaw) ? servicesRaw : [];
-const cards = Array.isArray(cardsRaw) ? cardsRaw : [];
-
-// Сборка карточек: к визуальным карточкам подмешиваем icon/short из services
-function buildItems() {
-  const byId = Object.fromEntries(services.map(s => [s.id, s]));
-  return cards
-    .map(c => ({
-      ...c,
-      icon: byId[c.id]?.icon || "✨",
-      short: byId[c.id]?.short || c.description || "",
-    }))
-    .filter(c => c && c.id && (c.image || c.title));
-}
-
+// размер карточки (мобайл-первый)
 const CARD = 172;
 const RADIUS = 20;
 
+function mergeServices() {
+  // склеиваем: визуальные карточки + описания из services
+  const byId = Object.fromEntries(services.map(s => [s.id, s]));
+  return neirobizServices.map(card => ({
+    ...card,
+    // эмодзи НЕ выводим — по просьбе клиента
+    short: byId[card.id]?.short || card.description || "",
+  }));
+}
+
 export default function NeirobizScreen() {
   const navigate = useNavigate();
-  const items = useMemo(buildItems, []);
+  const items = useMemo(mergeServices, []);
 
   return (
-    <div className="bg-black min-h-screen pb-20 pt-6 flex flex-col items-center">
-      {/* Шапка */}
+    <div className="bg-black min-h-screen pb-24 pt-6 flex flex-col items-center">
+      {/* Заголовок */}
       <div className="w-full max-w-[420px] px-4">
         <h1 className="text-white font-extrabold text-[22px] tracking-[.02em]">
           NeiroBiz
@@ -50,46 +45,46 @@ export default function NeirobizScreen() {
         className="mt-4 grid justify-center gap-4"
         style={{ gridTemplateColumns: `repeat(2, min(${CARD}px, 44vw))` }}
       >
-        {items.length === 0 && (
-          <div className="text-white/70 text-sm col-span-2 px-4">
-            Карточки пока пустые. Проверь файлы <code>/src/data/neirobiz.js</code> и{" "}
-            <code>/src/data/neirobizServices.js</code> — там должны быть массивы.
-          </div>
-        )}
-
         {items.map((svc) => (
           <button
             key={svc.id}
             onClick={() => navigate(`/neirobiz/service/${svc.id}`)}
-            className="group relative text-left bg-white/5 border border-white/10 backdrop-blur-md"
-            style={{
-              width: CARD,
-              maxWidth: "44vw",
-              borderRadius: RADIUS,
-              padding: 8,
-              boxShadow: "0 2px 14px rgba(0,0,0,.25)",
-              transition: "transform .15s ease",
-            }}
+            className={[
+              // стекло
+              "relative text-left bg-white/10 border border-white/10 backdrop-blur-md",
+              // форма
+              "rounded-2xl p-2",
+              // эффект/свечение
+              "shadow-[0_10px_30px_rgba(14,129,255,0.18)]",
+              "hover:shadow-[0_14px_40px_rgba(14,129,255,0.26)]",
+              "transition-transform duration-200 ease-out hover:scale-[1.02] active:scale-[.99]"
+            ].join(" ")}
+            style={{ width: CARD, maxWidth: "44vw" }}
           >
-            {/* Визуал */}
+            {/* Медиа */}
             <div
-              className="relative w-full aspect-square overflow-hidden border border-white/10"
-              style={{ borderRadius: RADIUS - 6, background: "#11141a" }}
+              className="relative w-full overflow-hidden border border-white/10"
+              style={{ borderRadius: RADIUS - 6 }}
             >
-              <img
-                src={svc.image}
-                alt={svc.title}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                onError={(e) => (e.currentTarget.src = "/images/no-image.webp")}
-              />
-              {/* Пилюля-иконка */}
-              <div className="absolute top-2 left-2">
-                <span className="px-2.5 py-1 rounded-full text-[12px] font-bold text-white border border-white/15 bg-white/10 backdrop-blur-sm">
-                  {svc.icon}
-                </span>
+              <div className="w-full aspect-square bg-[#0f141c]">
+                <img
+                  src={svc.image}
+                  alt={svc.title}
+                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-[1.03]"
+                  onError={(e) => (e.currentTarget.src = "/images/no-image.webp")}
+                />
               </div>
-              {/* Градиент снизу */}
-              <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+              {/* хладный градиент снизу */}
+              <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/70 via-black/25 to-transparent pointer-events-none" />
+              {/* Акцентная тонкая кайма */}
+              <div
+                className="pointer-events-none absolute inset-0 rounded-[16px]"
+                style={{
+                  boxShadow:
+                    "inset 0 0 0 1px rgba(255,255,255,.08), 0 24px 60px -26px rgba(14,129,255,.38)"
+                }}
+              />
             </div>
 
             {/* Текст */}

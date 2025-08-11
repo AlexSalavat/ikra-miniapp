@@ -1,7 +1,6 @@
 // src/components/LogisticsShowcase.js
 import React, { useMemo, useState } from "react";
 import logistics from "../data/logistics";
-import s from "../styles/LogisticsShowcase.module.css";
 
 const FILTERS = [
   { label: "Камчатка", keys: ["Камчатка", "Камчатский"] },
@@ -13,53 +12,58 @@ const FILTERS = [
 
 function isMatchByKeys(item, keys) {
   if (!keys || keys.length === 0) return true;
-  const hay = `${item.region || ""} ${item.name || ""} ${item.address || ""}`.toLowerCase();
+  const hay = `${item?.address || ""} ${item?.name || ""} ${item?.region || ""}`.toLowerCase();
   return keys.some(k => hay.includes(String(k).toLowerCase()));
 }
 
 export default function LogisticsShowcase() {
   const [filter, setFilter] = useState(FILTERS[0].label);
   const activeKeys = useMemo(
-    () => (FILTERS.find(f => f.label === filter)?.keys || []),
+    () => FILTERS.find(f => f.label === filter)?.keys || [],
     [filter]
   );
 
-  const filtered = useMemo(
-    () => logistics.filter(item => isMatchByKeys(item, activeKeys)),
-    [activeKeys]
-  );
-
-  // добиваем до ровной сетки (опционально)
-  const MIN_CARDS = 10;
-  const cards = filtered.concat(
-    Array(Math.max(0, MIN_CARDS - filtered.length)).fill({ isEmpty: true })
-  );
+  const filtered = logistics.filter((x) => isMatchByKeys(x, activeKeys));
 
   return (
-    <div className={s.page} style={{ ["--accent"]: "80,160,255" }}>
-      {/* Шапка + назад */}
-      <div className={s.header}>
-        <button className={s.backBtn} onClick={() => window.history.back()}>
-          <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
-            <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <div className="bg-black min-h-screen pb-24 pt-4 flex flex-col items-center">
+      {/* Назад */}
+      <div className="w-full max-w-[440px] px-3 mb-2">
+        <button
+          onClick={() => window.history.back()}
+          className="text-[#23df81] hover:text-white transition font-semibold inline-flex items-center gap-1"
+        >
+          <svg width="18" height="18" fill="none">
+            <path d="M12 4l-6 5 6 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           Назад
         </button>
-        <h1 className={s.title}>Логистика ДВ</h1>
-        <span className={s.headerSpacer} />
       </div>
 
-      {/* Фильтры */}
-      <div className={s.regionFilter} role="tablist" aria-label="Фильтр по регионам">
-        {FILTERS.map(f => {
+      {/* Заголовок */}
+      <div className="w-full max-w-[440px] px-3">
+        <h1 className="text-white font-extrabold text-[20px] mb-2">
+          Логистика ДВ
+        </h1>
+        <div className="text-white/70 text-[13px]">
+          Транспорт, экспедирование, хранение, мультимодальные маршруты.
+        </div>
+      </div>
+
+      {/* Фильтр регионов */}
+      <div className="w-full max-w-[440px] px-3 mt-3 flex gap-2 overflow-x-auto no-scrollbar">
+        {FILTERS.map((f) => {
           const active = f.label === filter;
           return (
             <button
               key={f.label}
               onClick={() => setFilter(f.label)}
-              className={active ? s.regionActive : s.regionBtn}
-              role="tab"
-              aria-selected={active}
+              className={[
+                "px-3 py-1.5 rounded-lg text-[12.5px] font-bold whitespace-nowrap transition",
+                active
+                  ? "bg-white/10 border border-white/10 text-[#23df81]"
+                  : "bg-white/5 border border-white/5 text-white/80 hover:bg-white/10"
+              ].join(" ")}
             >
               {f.label}
             </button>
@@ -67,31 +71,75 @@ export default function LogisticsShowcase() {
         })}
       </div>
 
-      {/* Сетка карточек — стекло + холодная подсветка */}
-      <div className={s.grid}>
-        {cards.map((item, idx) => (
-          <div key={idx} className={`${s.card} ${item.isEmpty ? s.empty : ""}`}>
-            <div className={s.imgBox}>
-              {!item.isEmpty && item.logo ? (
-                <img
-                  className={s.logo}
-                  src={item.logo}
-                  alt={item.name}
-                  onError={e => { e.currentTarget.src = "/images/no-image.webp"; }}
+      {/* Сетка карточек — стекло + холодная подсветка + КРУПНОЕ ФОТО */}
+      <div
+        className="w-full max-w-[440px] px-3 mt-4 grid gap-3 justify-center"
+        style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
+      >
+        {filtered.map((item, idx) => {
+          const isEmpty = !item || item.isEmpty;
+          return (
+            <div
+              key={idx}
+              className={[
+                "relative overflow-hidden rounded-2xl",
+                "bg-white/10 border border-white/10 backdrop-blur-md",
+                "shadow-[0_12px_34px_rgba(14,129,255,0.20)]",
+                "hover:shadow-[0_18px_46px_rgba(14,129,255,0.30)]",
+                "transition-transform duration-200 ease-out hover:scale-[1.02] active:scale-[.99]",
+                "flex flex-col"
+              ].join(" ")}
+            >
+              {/* МЕДИА БЛОК (крупно) */}
+              <div className="relative w-full" style={{ aspectRatio: "1 / 1" }}>
+                {(!isEmpty && item.logo) ? (
+                  <img
+                    src={item.logo}
+                    alt={item.name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => { e.currentTarget.src = "/images/no-image.webp"; }}
+                  />
+                ) : (
+                  <div className="w-full h-full grid place-items-center bg-[#0f141c]">
+                    <span className="text-white/50 text-[12.5px] font-semibold text-center px-2">
+                      {isEmpty ? "Место свободно" : "Лого в разработке"}
+                    </span>
+                  </div>
+                )}
+
+                {/* Внутренняя тонкая кайма и мягкий блик */}
+                <div
+                  className="pointer-events-none absolute inset-0 rounded-[18px]"
+                  style={{
+                    boxShadow:
+                      "inset 0 0 0 1px rgba(255,255,255,.08), 0 24px 60px -26px rgba(14,129,255,.35)"
+                  }}
                 />
-              ) : (
-                <span className={s.placeholderText}>
-                  {item.isEmpty ? "Место свободно" : "Лого в разработке"}
-                </span>
+              </div>
+
+              {/* ТЕКСТ ПОД ФОТО (без адреса — по просьбе клиента) */}
+              {!isEmpty && (
+                <div className="px-2.5 py-2">
+                  <div
+                    className="text-white font-bold text-[13.5px] leading-tight line-clamp-2 min-h-[32px]"
+                    title={item.name}
+                  >
+                    {item.name}
+                  </div>
+                  {/* при желании: чип региона */}
+                  {item.region && (
+                    <div className="mt-1.5 inline-flex items-center gap-1.5 text-[11px] text-white/80">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                        <path d="M12 2C8 2 4 6 4 11c0 5.5 7 11 8 11s8-5.5 8-11c0-5-4-9-8-9z"/><circle cx="12" cy="11" r="3"/>
+                      </svg>
+                      <span className="truncate">{item.region}</span>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
-
-            {/* ТОЛЬКО название — адрес мы убрали */}
-            {!item.isEmpty && (
-              <div className={s.name} title={item.name}>{item.name}</div>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

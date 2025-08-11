@@ -9,8 +9,7 @@ import SupplierDetail from "./components/SupplierDetail";
 import LogisticsShowcase from "./components/LogisticsShowcase";
 import ProductionShowcase from "./components/ProductionShowcase";
 
-// Важно: имя файла — NeirobizScreen.js
-import NeirobizShowcase from "./components/NeirobizScreen";
+import NeirobizScreen from "./components/NeirobizScreen";
 import NeirobizServiceDetail from "./components/NeirobizServiceDetail";
 
 import News from "./components/News";
@@ -44,7 +43,7 @@ function App() {
             <Route path="/producer/:id" element={<ProducerDetail />} />
 
             {/* NeiroBiz */}
-            <Route path="/neirobiz" element={<NeirobizShowcase />} />
+            <Route path="/neirobiz" element={<NeirobizScreen />} />
             <Route path="/neirobiz/service/:id" element={<NeirobizServiceDetail />} />
 
             {/* News */}

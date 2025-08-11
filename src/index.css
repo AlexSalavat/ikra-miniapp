@@ -141,3 +141,7 @@ a:hover {
     padding: 1px 5px;
   }
 }
+/* ===== Safe-area for iOS bottom nav ===== */
+.bottom-nav-safe {
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+}

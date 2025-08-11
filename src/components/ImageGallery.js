@@ -11,7 +11,7 @@ const galleryBoxStyle = {
   position: 'relative',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center'
+  justifyContent: 'center',
 };
 
 const arrowStyle = {
@@ -32,10 +32,10 @@ const arrowStyle = {
   justifyContent: 'center',
   zIndex: 2,
   opacity: 0.78,
-  transition: 'background .16s'
+  transition: 'background .16s',
 };
 
-const dotStyle = isActive => ({
+const dotStyle = (isActive) => ({
   display: 'inline-block',
   width: 8,
   height: 8,
@@ -43,7 +43,7 @@ const dotStyle = isActive => ({
   margin: '0 4px',
   background: isActive ? '#d8b572' : '#dadada',
   opacity: isActive ? 1 : 0.6,
-  transition: 'background .18s'
+  transition: 'background .18s',
 });
 
 export default function ImageGallery({ images }) {
@@ -61,15 +61,15 @@ export default function ImageGallery({ images }) {
             objectFit: 'cover',
             borderRadius: 18,
             background: '#f2ede4',
-            opacity: 0.7
+            opacity: 0.7,
           }}
         />
       </div>
     );
   }
 
-  const prev = () => setIdx(i => (i - 1 + images.length) % images.length);
-  const next = () => setIdx(i => (i + 1) % images.length);
+  const prev = () => setIdx((i) => (i - 1 + images.length) % images.length);
+  const next = () => setIdx((i) => (i + 1) % images.length);
 
   return (
     <div style={galleryBoxStyle}>
@@ -93,16 +93,23 @@ export default function ImageGallery({ images }) {
           borderRadius: 18,
           background: '#f2ede4',
           transition: 'opacity .28s, transform .21s cubic-bezier(.4,2,.2,1)',
-          boxShadow: '0 2px 7px 0 rgba(180,120,20,0.10)'
+          boxShadow: '0 2px 7px 0 rgba(180,120,20,0.10)',
         }}
-        onError={e => { e.target.src = '/images/no-image.webp'; }}
+        onError={(e) => {
+          e.target.src = '/images/no-image.webp';
+        }}
       />
       {images.length > 1 && (
-        <div style={{
-          position: 'absolute',
-          left: 0, right: 0, bottom: 12,
-          display: 'flex', justifyContent: 'center'
-        }}>
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 12,
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
           {images.map((_, i) => (
             <span key={i} style={dotStyle(i === idx)} />
           ))}

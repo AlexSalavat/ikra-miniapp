@@ -1,8 +1,8 @@
 // src/components/NeirobizServiceDetail.js
-import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import servicesRaw from "../data/neirobiz";
-import cardsRaw from "../data/neirobizServices";
+import React from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import servicesRaw from '../data/neirobiz';
+import cardsRaw from '../data/neirobizServices';
 
 const services = Array.isArray(servicesRaw) ? servicesRaw : [];
 const cards = Array.isArray(cardsRaw) ? cardsRaw : [];
@@ -33,9 +33,7 @@ export default function NeirobizServiceDetail() {
         <button onClick={() => navigate(-1)} className="text-[#23df81] font-semibold">
           ← Назад
         </button>
-        <h1 className="text-white font-bold truncate">
-          {svc.title || visual?.title}
-        </h1>
+        <h1 className="text-white font-bold truncate">{svc.title || visual?.title}</h1>
       </div>
 
       <div className="max-w-[420px] mx-auto p-4 space-y-4">
@@ -46,16 +44,14 @@ export default function NeirobizServiceDetail() {
               src={visual.image}
               alt={svc.title || visual?.title}
               className="w-full h-auto object-cover"
-              onError={(e) => (e.currentTarget.src = "/images/no-image.webp")}
+              onError={(e) => (e.currentTarget.src = '/images/no-image.webp')}
             />
           </div>
         )}
 
         {/* Текст */}
         <div className="bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-md">
-          <div className="text-white text-lg font-bold mb-1">
-            {svc.title || visual?.title}
-          </div>
+          <div className="text-white text-lg font-bold mb-1">{svc.title || visual?.title}</div>
           <div className="text-white/80 text-[14.5px] leading-relaxed">
             {svc.full || svc.short || visual?.description}
           </div>

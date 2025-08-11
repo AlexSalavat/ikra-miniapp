@@ -1,15 +1,15 @@
 // src/firebase.js
-import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "ТВОЙ_API_KEY",
-  authDomain: "ТВОЙ_AUTH_DOMAIN",
-  projectId: "ТВОЙ_PROJECT_ID",
-  storageBucket: "ТВОЙ_STORAGE_BUCKET",
-  messagingSenderId: "ТВОЙ_MSG_ID",
-  appId: "ТВОЙ_APP_ID"
+  apiKey: 'ТВОЙ_API_KEY',
+  authDomain: 'ТВОЙ_AUTH_DOMAIN',
+  projectId: 'ТВОЙ_PROJECT_ID',
+  storageBucket: 'ТВОЙ_STORAGE_BUCKET',
+  messagingSenderId: 'ТВОЙ_MSG_ID',
+  appId: 'ТВОЙ_APP_ID',
 };
 
 const app = initializeApp(firebaseConfig);

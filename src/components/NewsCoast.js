@@ -9,7 +9,7 @@ const RSS_URLS = [
 ];
 
 // Официальный rss2json бесплатный (ограничение по частоте запросов, для MVP хватает)
-const makeFeedApi = url =>
+const makeFeedApi = (url) =>
   `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
 
 const NewsCoast = () => {
@@ -23,15 +23,15 @@ const NewsCoast = () => {
     try {
       // Запросим все RSS параллельно
       const results = await Promise.all(
-        RSS_URLS.map(url =>
+        RSS_URLS.map((url) =>
           fetch(makeFeedApi(url))
-            .then(res => res.json())
-            .catch(() => null)
-        )
+            .then((res) => res.json())
+            .catch(() => null),
+        ),
       );
       // Собираем все новости, фильтруем ошибки
       let allNews = [];
-      results.forEach(feed => {
+      results.forEach((feed) => {
         if (feed && feed.status === 'ok' && Array.isArray(feed.items)) {
           allNews = allNews.concat(feed.items);
         }
@@ -52,11 +52,13 @@ const NewsCoast = () => {
 
   return (
     <div style={{ background: '#000', minHeight: '100vh', padding: '16px 0 64px 0' }}>
-      <div style={{
-        maxWidth: 440,
-        margin: '0 auto',
-        padding: '0 8px'
-      }}>
+      <div
+        style={{
+          maxWidth: 440,
+          margin: '0 auto',
+          padding: '0 8px',
+        }}
+      >
         <button
           onClick={() => window.history.back()}
           style={{
@@ -68,12 +70,20 @@ const NewsCoast = () => {
             border: 'none',
             fontWeight: 500,
             fontSize: 14,
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
-        >← Назад</button>
-        <h2 style={{
-          color: '#fff', fontWeight: 700, fontSize: 22, marginBottom: 18, letterSpacing: 0.08
-        }}>
+        >
+          ← Назад
+        </button>
+        <h2
+          style={{
+            color: '#fff',
+            fontWeight: 700,
+            fontSize: 22,
+            marginBottom: 18,
+            letterSpacing: 0.08,
+          }}
+        >
           Новости побережья
         </h2>
         <button
@@ -87,107 +97,131 @@ const NewsCoast = () => {
             fontSize: 14,
             padding: '7px 19px',
             cursor: 'pointer',
-            marginBottom: 15
+            marginBottom: 15,
           }}
         >
           Обновить
         </button>
-        {loading && <div style={{ color: '#bdbdbd', fontSize: 15, marginTop: 30 }}>Загрузка...</div>}
+        {loading && (
+          <div style={{ color: '#bdbdbd', fontSize: 15, marginTop: 30 }}>Загрузка...</div>
+        )}
         {error && <div style={{ color: 'red', marginTop: 18 }}>{error}</div>}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-          {!loading && !error && news.map((item, idx) => (
-            <a
-              key={idx}
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                background: '#18181d',
-                borderRadius: 17,
-                boxShadow: '0 2px 10px #13121c44',
-                padding: 0,
-                display: 'flex',
-                textDecoration: 'none',
-                color: '#fff',
-                minHeight: 100,
-                overflow: 'hidden',
-                transition: 'box-shadow .12s',
-                border: '1.2px solid #23232a',
-                alignItems: 'stretch'
-              }}
-            >
-              {item.thumbnail ? (
-                <img
-                  src={item.thumbnail}
-                  alt=""
-                  style={{
-                    width: 95,
-                    height: '100%',
-                    objectFit: 'cover',
-                    background: '#222',
-                    flexShrink: 0,
-                  }}
-                  onError={e => { e.target.src = '/images/no-image.webp'; }}
-                />
-              ) : (
-                <div style={{
-                  width: 95,
-                  background: '#24242a',
+          {!loading &&
+            !error &&
+            news.map((item, idx) => (
+              <a
+                key={idx}
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  background: '#18181d',
+                  borderRadius: 17,
+                  boxShadow: '0 2px 10px #13121c44',
+                  padding: 0,
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <span style={{ color: '#888', fontSize: 12 }}>No&nbsp;Image</span>
-                </div>
-              )}
-              <div style={{
-                flex: 1,
-                padding: '13px 13px 13px 15px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center'
-              }}>
-                <div style={{
-                  fontWeight: 700,
-                  fontSize: 14.4,
-                  marginBottom: 4,
+                  textDecoration: 'none',
                   color: '#fff',
-                  textOverflow: 'ellipsis',
+                  minHeight: 100,
                   overflow: 'hidden',
-                  whiteSpace: 'nowrap'
-                }}>{item.title}</div>
-                <div style={{
-                  color: '#bdbdbd',
-                  fontSize: 12,
-                  marginBottom: 4,
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap'
-                }}>{item.author || item.source || ''}</div>
-                <div style={{
-                  color: '#c3e4c7',
-                  fontSize: 11.5,
-                  marginBottom: 3,
-                }}>{item.pubDate ? (new Date(item.pubDate)).toLocaleDateString() : ''}</div>
-                <div style={{
-                  color: '#bbb',
-                  fontSize: 12,
-                  lineHeight: 1.26,
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
-                  maxHeight: 36,
-                  whiteSpace: 'normal'
-                }}>
-                  {item.description ? item.description.replace(/<[^>]*>?/gm, '').slice(0, 96) + '...' : ''}
+                  transition: 'box-shadow .12s',
+                  border: '1.2px solid #23232a',
+                  alignItems: 'stretch',
+                }}
+              >
+                {item.thumbnail ? (
+                  <img
+                    src={item.thumbnail}
+                    alt=""
+                    style={{
+                      width: 95,
+                      height: '100%',
+                      objectFit: 'cover',
+                      background: '#222',
+                      flexShrink: 0,
+                    }}
+                    onError={(e) => {
+                      e.target.src = '/images/no-image.webp';
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: 95,
+                      background: '#24242a',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <span style={{ color: '#888', fontSize: 12 }}>No&nbsp;Image</span>
+                  </div>
+                )}
+                <div
+                  style={{
+                    flex: 1,
+                    padding: '13px 13px 13px 15px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <div
+                    style={{
+                      fontWeight: 700,
+                      fontSize: 14.4,
+                      marginBottom: 4,
+                      color: '#fff',
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {item.title}
+                  </div>
+                  <div
+                    style={{
+                      color: '#bdbdbd',
+                      fontSize: 12,
+                      marginBottom: 4,
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {item.author || item.source || ''}
+                  </div>
+                  <div
+                    style={{
+                      color: '#c3e4c7',
+                      fontSize: 11.5,
+                      marginBottom: 3,
+                    }}
+                  >
+                    {item.pubDate ? new Date(item.pubDate).toLocaleDateString() : ''}
+                  </div>
+                  <div
+                    style={{
+                      color: '#bbb',
+                      fontSize: 12,
+                      lineHeight: 1.26,
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      maxHeight: 36,
+                      whiteSpace: 'normal',
+                    }}
+                  >
+                    {item.description
+                      ? item.description.replace(/<[^>]*>?/gm, '').slice(0, 96) + '...'
+                      : ''}
+                  </div>
                 </div>
-              </div>
-            </a>
-          ))}
+              </a>
+            ))}
         </div>
         {!loading && !error && news.length === 0 && (
-          <div style={{ color: '#aaa', fontSize: 15, marginTop: 22 }}>
-            Пока новостей нет.
-          </div>
+          <div style={{ color: '#aaa', fontSize: 15, marginTop: 22 }}>Пока новостей нет.</div>
         )}
       </div>
     </div>

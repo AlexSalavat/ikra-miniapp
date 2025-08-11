@@ -4,7 +4,7 @@ import PartnersList from './PartnersList';
 
 const CERT_COLORS = {
   'Честный знак': 'bg-blue-600 text-white',
-  'Меркурий': 'bg-blue-500 text-white',
+  Меркурий: 'bg-blue-500 text-white',
 };
 const BADGE_STYLE = 'px-2 py-0.5 rounded text-[11px] font-semibold select-none whitespace-nowrap';
 const PRICE_MINT = '#34e0a1';
@@ -22,7 +22,7 @@ const BUTTON_BADGE_STYLE = {
   borderWidth: '1.2px',
   boxShadow: 'none',
   transition: 'background .18s',
-  lineHeight: 1.1
+  lineHeight: 1.1,
 };
 
 const CompanyProfile = ({ company }) => {
@@ -30,7 +30,7 @@ const CompanyProfile = ({ company }) => {
   const [showFullDesc, setShowFullDesc] = useState(false);
   const navigate = useNavigate();
 
-  const certBadges = ['Честный знак', 'Меркурий'].filter(cert => company.certs?.includes(cert));
+  const certBadges = ['Честный знак', 'Меркурий'].filter((cert) => company.certs?.includes(cert));
   const shortDesc =
     company.fullDescription && company.fullDescription.length > 180 && !showFullDesc
       ? company.fullDescription.slice(0, 180) + '...'
@@ -51,18 +51,20 @@ const CompanyProfile = ({ company }) => {
       {/* Шапка: Логотип + Название и бэйджи */}
       <div className="flex flex-row items-center mb-6 gap-6">
         <div className="flex-shrink-0 flex items-center justify-center">
-          <div style={{
-            width: 112,
-            height: 112,
-            background: '#fff',
-            borderRadius: 19,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'hidden',
-            boxShadow: '0 1.5px 7px #2226',
-            border: '1.5px solid #eee',
-          }}>
+          <div
+            style={{
+              width: 112,
+              height: 112,
+              background: '#fff',
+              borderRadius: 19,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              overflow: 'hidden',
+              boxShadow: '0 1.5px 7px #2226',
+              border: '1.5px solid #eee',
+            }}
+          >
             <img
               src={company.logo || '/images/no-logo.webp'}
               alt={company.name}
@@ -71,29 +73,29 @@ const CompanyProfile = ({ company }) => {
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
-                background: '#eee'
+                background: '#eee',
               }}
-              onError={e => { e.target.src = '/images/no-logo.webp'; }}
+              onError={(e) => {
+                e.target.src = '/images/no-logo.webp';
+              }}
             />
           </div>
         </div>
         <div className="flex-1 min-w-0 flex flex-col justify-center items-start gap-2">
           <div className="flex items-center gap-2 flex-wrap w-full">
-            <span className="font-bold" style={{ fontSize: "1.15rem", lineHeight: '1.13', maxWidth: '220px', color: '#fff' }}>
+            <span
+              className="font-bold"
+              style={{ fontSize: '1.15rem', lineHeight: '1.13', maxWidth: '220px', color: '#fff' }}
+            >
               {company.name}
             </span>
             {company.verified && (
-              <span className={"bg-green-600 text-white " + BADGE_STYLE}>
-                Проверенный
-              </span>
+              <span className={'bg-green-600 text-white ' + BADGE_STYLE}>Проверенный</span>
             )}
             {certBadges.length > 0 && (
               <span className="flex gap-1 items-center">
-                {certBadges.map(cert => (
-                  <span
-                    key={cert}
-                    className={CERT_COLORS[cert] + " " + BADGE_STYLE}
-                  >
+                {certBadges.map((cert) => (
+                  <span key={cert} className={CERT_COLORS[cert] + ' ' + BADGE_STYLE}>
                     {cert}
                   </span>
                 ))}
@@ -105,7 +107,7 @@ const CompanyProfile = ({ company }) => {
             {company.city && company.city !== company.region && <> · {company.city}</>}
           </div>
           <div className="flex flex-wrap gap-2">
-            {(company.products || []).map(prod => (
+            {(company.products || []).map((prod) => (
               <span
                 key={prod}
                 className="bg-zinc-800 text-white rounded-md font-medium"
@@ -126,7 +128,7 @@ const CompanyProfile = ({ company }) => {
             {shortDesc}
             {company.fullDescription.length > 180 && (
               <button
-                onClick={() => setShowFullDesc(v => !v)}
+                onClick={() => setShowFullDesc((v) => !v)}
                 className="text-blue-400 underline ml-2"
                 style={{ fontSize: '14px' }}
               >
@@ -153,7 +155,9 @@ const CompanyProfile = ({ company }) => {
       {company.delivery && (
         <div className="mb-3">
           <div className="text-white text-lg font-semibold mb-1">Доставка</div>
-          <div className="text-zinc-300" style={{ fontSize: '15px' }}>{company.delivery}</div>
+          <div className="text-zinc-300" style={{ fontSize: '15px' }}>
+            {company.delivery}
+          </div>
         </div>
       )}
 
@@ -169,7 +173,15 @@ const CompanyProfile = ({ company }) => {
         <div className="mb-4">
           <div className="flex gap-2">
             {company.gallery.map((img, idx) => (
-              <img key={idx} src={img} alt="" className="w-24 h-24 rounded-lg object-cover bg-zinc-700" onError={e => { e.target.src = '/images/no-image.webp'; }} />
+              <img
+                key={idx}
+                src={img}
+                alt=""
+                className="w-24 h-24 rounded-lg object-cover bg-zinc-700"
+                onError={(e) => {
+                  e.target.src = '/images/no-image.webp';
+                }}
+              />
             ))}
           </div>
         </div>
@@ -177,18 +189,27 @@ const CompanyProfile = ({ company }) => {
 
       {/* Партнеры */}
       {company.partners && company.partners.length > 0 && (
-        <PartnersList partners={company.partners} showAll={showAllPartners} onToggleAll={() => setShowAllPartners(!showAllPartners)} />
+        <PartnersList
+          partners={company.partners}
+          showAll={showAllPartners}
+          onToggleAll={() => setShowAllPartners(!showAllPartners)}
+        />
       )}
 
       {/* Адрес и кнопки */}
       <div className="mb-2 text-base text-zinc-300 mt-5">
-        <div style={{ fontWeight: 600, color: '#fff', fontSize: 13, marginBottom: 3 }}>📍 Адрес склада</div>
+        <div style={{ fontWeight: 600, color: '#fff', fontSize: 13, marginBottom: 3 }}>
+          📍 Адрес склада
+        </div>
         {company.address && (
           <div style={{ marginBottom: 10, color: '#e4e4e4', fontSize: 13 }}>{company.address}</div>
         )}
         <div className="flex gap-2 mb-4 mt-2">
           {company.priceList && (
-            <a href={company.priceList} target="_blank" rel="noopener noreferrer"
+            <a
+              href={company.priceList}
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
                 ...BUTTON_BADGE_STYLE,
                 background: 'transparent',
@@ -203,14 +224,17 @@ const CompanyProfile = ({ company }) => {
             </a>
           )}
           {company.mapUrl && (
-            <a href={company.mapUrl} target="_blank" rel="noopener noreferrer"
+            <a
+              href={company.mapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
                 ...BUTTON_BADGE_STYLE,
                 background: 'transparent',
                 color: '#357cff',
                 border: '1.2px solid #357cff',
                 fontSize: 15,
-                fontWeight: 700
+                fontWeight: 700,
               }}
             >
               Карта
@@ -223,17 +247,29 @@ const CompanyProfile = ({ company }) => {
       <div className="mb-4 text-base text-zinc-300">
         {company.contacts?.telegram && (
           <div style={{ fontSize: 14 }}>
-            Telegram: <a href={`https://t.me/${company.contacts.telegram.replace('@', '')}`} className="text-sky-400 hover:underline" target="_blank" rel="noreferrer">{company.contacts.telegram}</a>
+            Telegram:{' '}
+            <a
+              href={`https://t.me/${company.contacts.telegram.replace('@', '')}`}
+              className="text-sky-400 hover:underline"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {company.contacts.telegram}
+            </a>
           </div>
         )}
         {company.contacts?.phone && (
           <div style={{ fontSize: 14 }}>
-            Телефон: <a href={`tel:${company.contacts.phone.replace(/\s+/g, '')}`} className="text-sky-400 hover:underline">{company.contacts.phone}</a>
+            Телефон:{' '}
+            <a
+              href={`tel:${company.contacts.phone.replace(/\s+/g, '')}`}
+              className="text-sky-400 hover:underline"
+            >
+              {company.contacts.phone}
+            </a>
           </div>
         )}
-        {company.contacts?.email && (
-          <div style={{ fontSize: 14 }}>{company.contacts.email}</div>
-        )}
+        {company.contacts?.email && <div style={{ fontSize: 14 }}>{company.contacts.email}</div>}
       </div>
 
       {/* Стать партнёром */}
@@ -243,10 +279,13 @@ const CompanyProfile = ({ company }) => {
           style={{
             fontSize: 14,
             marginTop: 8,
-            marginBottom: 30
+            marginBottom: 30,
           }}
         >
-          <span role="img" aria-label="handshake">🤝</span> Стать партнёром
+          <span role="img" aria-label="handshake">
+            🤝
+          </span>{' '}
+          Стать партнёром
         </button>
       </div>
     </div>

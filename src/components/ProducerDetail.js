@@ -1,30 +1,30 @@
 // src/components/ProducerDetail.js
-import React, { useMemo, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import producers from "../data/producers";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
+import React, { useMemo, useRef, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import producers from '../data/producers';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
 
 /* === helpers === */
-const getInitials = (name = "") =>
+const getInitials = (name = '') =>
   name
-    .replace(/["«»]/g, "")
+    .replace(/["«»]/g, '')
     .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)
     .map((w) => w[0]?.toUpperCase())
-    .join("") || "??";
+    .join('') || '??';
 
-const stringHue = (s = "") => {
+const stringHue = (s = '') => {
   let h = 0;
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360;
   return h;
 };
 
 const BADGE_INFO = {
-  "Честный знак": "Федеральная система маркировки и прослеживаемости товаров.",
-  Меркурий: "Гос. система электронных ветсертификатов от Россельхознадзора.",
-  Проверенный: "Проверка документов/контактов администрацией сервиса.",
+  'Честный знак': 'Федеральная система маркировки и прослеживаемости товаров.',
+  Меркурий: 'Гос. система электронных ветсертификатов от Россельхознадзора.',
+  Проверенный: 'Проверка документов/контактов администрацией сервиса.',
 };
 
 export default function ProducerDetail() {
@@ -34,9 +34,9 @@ export default function ProducerDetail() {
   const producer = producers.find((p) => String(p.id) === String(id)) || {};
 
   const {
-    name = "",
+    name = '',
     logo,
-    region = "",
+    region = '',
     fullDescription,
     description,
     address,
@@ -50,28 +50,24 @@ export default function ProducerDetail() {
     exportMarkets = [],
   } = producer;
 
-  const verified = badges?.includes("Проверенный");
-  const premium = badges?.includes("Честный знак") && badges?.includes("Меркурий");
+  const verified = badges?.includes('Проверенный');
+  const premium = badges?.includes('Честный знак') && badges?.includes('Меркурий');
 
   const phones = Object.values(contacts).filter(
-    (v) => typeof v === "string" && /^[-+()\d\s]{7,}$/.test(v)
+    (v) => typeof v === 'string' && /^[-+()\d\s]{7,}$/.test(v),
   );
-  const emails = Object.values(contacts).filter(
-    (v) => typeof v === "string" && /@/.test(v)
-  );
-  const safeSite = site ? (site.startsWith("http") ? site : `https://${site}`) : null;
+  const emails = Object.values(contacts).filter((v) => typeof v === 'string' && /@/.test(v));
+  const safeSite = site ? (site.startsWith('http') ? site : `https://${site}`) : null;
 
   const initialsBG = useMemo(() => {
-    const h = stringHue(name || region || "x");
-    return `linear-gradient(135deg,hsl(${h} 80% 20% / .95),hsl(${
-      (h + 40) % 360
-    } 80% 30% / .95))`;
+    const h = stringHue(name || region || 'x');
+    return `linear-gradient(135deg,hsl(${h} 80% 20% / .95),hsl(${(h + 40) % 360} 80% 30% / .95))`;
   }, [name, region]);
 
   // Галерея: основной слайдер + миниатюры-кнопки
   const swiperRef = useRef(null);
   const [activeIdx, setActiveIdx] = useState(0);
-  const images = (gallery.length ? gallery : (logo ? [logo] : [])).slice(0, 12); // ограничим до 12
+  const images = (gallery.length ? gallery : logo ? [logo] : []).slice(0, 12); // ограничим до 12
 
   return (
     <div className="bg-black min-h-screen pb-24">
@@ -113,33 +109,28 @@ export default function ProducerDetail() {
                     alt={`${name} баннер`}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.currentTarget.src = "/images/no-image.webp";
+                      e.currentTarget.src = '/images/no-image.webp';
                     }}
                   />
                 ) : (
-                  <div
-                    className="w-full h-full"
-                    style={{ background: initialsBG }}
-                  />
+                  <div className="w-full h-full" style={{ background: initialsBG }} />
                 )}
               </div>
 
               {/* Заголовок поверх баннера */}
               <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/60 via-black/10 to-transparent">
-                <div className="text-white font-extrabold text-[18px] leading-tight">
-                  {name}
-                </div>
+                <div className="text-white font-extrabold text-[18px] leading-tight">{name}</div>
                 {/* Бейджи с подсказками */}
                 <div className="mt-1 flex items-center gap-1.5 flex-wrap">
                   {verified && (
-                    <BadgeHint color="green" label="Проверенный" hint={BADGE_INFO["Проверенный"]} />
+                    <BadgeHint color="green" label="Проверенный" hint={BADGE_INFO['Проверенный']} />
                   )}
                   {badges
-                    .filter((b) => b !== "Проверенный")
+                    .filter((b) => b !== 'Проверенный')
                     .map((b, i) => (
                       <BadgeHint
                         key={i}
-                        color={b === "Честный знак" || b === "Меркурий" ? "blue" : "gray"}
+                        color={b === 'Честный знак' || b === 'Меркурий' ? 'blue' : 'gray'}
                         label={b}
                         hint={BADGE_INFO[b]}
                       />
@@ -149,12 +140,7 @@ export default function ProducerDetail() {
                       className="ml-auto w-6 h-6 rounded-full border border-[rgba(59,175,218,.7)] bg-white/10 grid place-items-center backdrop-blur-sm"
                       title="Premium"
                     >
-                      <svg
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="rgb(59,175,218)"
-                      >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="rgb(59,175,218)">
                         <path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7l3-7z" />
                       </svg>
                     </span>
@@ -165,7 +151,7 @@ export default function ProducerDetail() {
           </div>
 
           {/* LOGO + RIGHT TEXT (логотип НЕ на фото) */}
-          <div className={`glass-card p-3 ${premium ? "premium" : ""}`}>
+          <div className={`glass-card p-3 ${premium ? 'premium' : ''}`}>
             <div className="grid grid-cols-[92px,1fr] gap-3 items-start">
               {/* Логотип — стекло, не режется */}
               <div className="relative w-[92px] h-[92px] rounded-2xl overflow-hidden border border-white/10 bg-black/40 grid place-items-center">
@@ -224,7 +210,7 @@ export default function ProducerDetail() {
 
                 {/* Краткие факты */}
                 <div className="mt-2 grid grid-cols-2 gap-1.5">
-                  {typeof founded !== "undefined" && (
+                  {typeof founded !== 'undefined' && (
                     <Fact icon="📅" title="Основано" value={String(founded)} />
                   )}
                   {productionCapacity && (
@@ -234,7 +220,9 @@ export default function ProducerDetail() {
                     <Fact
                       icon="🌍"
                       title="Экспорт"
-                      value={exportMarkets.slice(0, 3).join(", ") + (exportMarkets.length > 3 ? "…" : "")}
+                      value={
+                        exportMarkets.slice(0, 3).join(', ') + (exportMarkets.length > 3 ? '…' : '')
+                      }
                     />
                   )}
                 </div>
@@ -245,9 +233,7 @@ export default function ProducerDetail() {
           {/* О компании */}
           {(fullDescription || description) && (
             <div className="glass-card p-3">
-              <div className="text-white font-semibold text-[15px] mb-1">
-                О компании
-              </div>
+              <div className="text-white font-semibold text-[15px] mb-1">О компании</div>
               <div className="text-white/90 text-[14px] leading-relaxed">
                 {fullDescription || description}
               </div>
@@ -261,7 +247,7 @@ export default function ProducerDetail() {
               <div className="grid grid-cols-2 gap-2">
                 {phones[0] && (
                   <a
-                    href={`tel:${phones[0].replace(/[^+\d]/g, "")}`}
+                    href={`tel:${phones[0].replace(/[^+\d]/g, '')}`}
                     className="flex items-center justify-center gap-2 rounded-lg py-2 bg-white/10 text-white font-semibold border border-white/10 hover:bg-white/15 transition"
                   >
                     <svg
@@ -320,7 +306,7 @@ export default function ProducerDetail() {
                   <path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3z" />
                   <path d="M5 5h7v2H7v10h10v-5h2v7H5z" />
                 </svg>
-                {safeSite.replace(/^https?:\/\//, "")}
+                {safeSite.replace(/^https?:\/\//, '')}
               </a>
             </div>
           )}
@@ -333,7 +319,13 @@ export default function ProducerDetail() {
                 {badges.map((b, i) => (
                   <BadgeHint
                     key={i}
-                    color={b === "Проверенный" ? "green" : b === "Меркурий" || b === "Честный знак" ? "blue" : "gray"}
+                    color={
+                      b === 'Проверенный'
+                        ? 'green'
+                        : b === 'Меркурий' || b === 'Честный знак'
+                          ? 'blue'
+                          : 'gray'
+                    }
                     label={b}
                     hint={BADGE_INFO[b]}
                     large
@@ -346,9 +338,7 @@ export default function ProducerDetail() {
           {/* ГАЛЕРЕЯ С МИНИАТЮРАМИ */}
           {images.length > 0 && (
             <div className="glass-card p-2">
-              <div className="text-white font-semibold text-[15px] mb-2 px-1">
-                Галерея
-              </div>
+              <div className="text-white font-semibold text-[15px] mb-2 px-1">Галерея</div>
 
               {/* Основной слайдер */}
               <div className="relative w-full rounded-xl overflow-hidden border border-white/10">
@@ -368,7 +358,7 @@ export default function ProducerDetail() {
                           alt={`${name} фото ${i + 1}`}
                           className="w-full h-full object-cover"
                           onError={(e) => {
-                            e.currentTarget.src = "/images/no-image.webp";
+                            e.currentTarget.src = '/images/no-image.webp';
                           }}
                         />
                       </SwiperSlide>
@@ -385,11 +375,9 @@ export default function ProducerDetail() {
                       key={i}
                       onClick={() => swiperRef.current?.slideTo(i)}
                       className={[
-                        "shrink-0 w-16 h-12 rounded-lg overflow-hidden border",
-                        i === activeIdx
-                          ? "border-[rgba(59,175,218,0.9)]"
-                          : "border-white/15",
-                      ].join(" ")}
+                        'shrink-0 w-16 h-12 rounded-lg overflow-hidden border',
+                        i === activeIdx ? 'border-[rgba(59,175,218,0.9)]' : 'border-white/15',
+                      ].join(' ')}
                       title={`фото ${i + 1}`}
                     >
                       <img
@@ -397,7 +385,7 @@ export default function ProducerDetail() {
                         alt=""
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          e.currentTarget.src = "/images/no-image.webp";
+                          e.currentTarget.src = '/images/no-image.webp';
                         }}
                       />
                     </button>
@@ -414,22 +402,21 @@ export default function ProducerDetail() {
 
 /* === small UI bits === */
 
-function BadgeHint({ label, hint, color = "gray", large = false }) {
+function BadgeHint({ label, hint, color = 'gray', large = false }) {
   const [open, setOpen] = useState(false);
-  const base =
-    "px-2 py-0.5 rounded-full text-[10px] font-semibold backdrop-blur-sm border";
+  const base = 'px-2 py-0.5 rounded-full text-[10px] font-semibold backdrop-blur-sm border';
   const palette =
-    color === "green"
-      ? "text-white bg-green-600/60 border-white/20"
-      : color === "blue"
-      ? "text-white bg-[rgba(59,175,218,0.6)] border-[rgba(255,255,255,0.25)]"
-      : "text-white/90 bg-white/10 border-white/20";
+    color === 'green'
+      ? 'text-white bg-green-600/60 border-white/20'
+      : color === 'blue'
+        ? 'text-white bg-[rgba(59,175,218,0.6)] border-[rgba(255,255,255,0.25)]'
+        : 'text-white/90 bg-white/10 border-white/20';
 
   return (
     <span className="relative">
       <button
         onClick={() => hint && setOpen((v) => !v)}
-        className={`${base} ${palette} ${large ? "text-[11px] px-2.5" : ""}`}
+        className={`${base} ${palette} ${large ? 'text-[11px] px-2.5' : ''}`}
         title={hint || label}
       >
         {label}
@@ -453,9 +440,7 @@ function Fact({ icon, title, value }) {
         <span className="text-[12px]">{icon}</span>
         <span>{title}</span>
       </div>
-      <div className="text-white font-semibold text-[12.5px] mt-0.5 leading-tight">
-        {value}
-      </div>
+      <div className="text-white font-semibold text-[12.5px] mt-0.5 leading-tight">{value}</div>
     </div>
   );
 }

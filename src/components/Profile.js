@@ -1,19 +1,19 @@
 // Profile.js
-import React, { useEffect, useState } from "react";
-import { auth, googleProvider } from "../firebase";
+import React, { useEffect, useState } from 'react';
+import { auth, googleProvider } from '../firebase';
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   onAuthStateChanged,
-} from "firebase/auth";
+} from 'firebase/auth';
 
 function Profile() {
   const [user, setUser] = useState(null);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => setUser(user));
@@ -23,22 +23,22 @@ function Profile() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setError('');
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (err) {
-      setError("Ошибка входа. Проверьте данные.");
+      setError('Ошибка входа. Проверьте данные.');
     }
     setLoading(false);
   };
 
   const handleGoogleLogin = async () => {
     setLoading(true);
-    setError("");
+    setError('');
     try {
       await signInWithPopup(auth, googleProvider);
     } catch (err) {
-      setError("Ошибка входа через Google.");
+      setError('Ошибка входа через Google.');
     }
     setLoading(false);
   };
@@ -56,7 +56,7 @@ function Profile() {
             placeholder="Email"
             className="w-full p-3 rounded-lg bg-neutral-800 border border-yellow-500 focus:outline-none"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             required
             autoFocus
           />
@@ -65,7 +65,7 @@ function Profile() {
             placeholder="Пароль"
             className="w-full p-3 rounded-lg bg-neutral-800 border border-yellow-500 focus:outline-none"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
           {error && <div className="text-red-400">{error}</div>}
@@ -95,16 +95,18 @@ function Profile() {
     <div className="max-w-md mx-auto p-6 bg-neutral-900 rounded-2xl shadow-lg mt-8">
       <div className="flex items-center gap-3 mb-4">
         <img
-          src={user.photoURL || "/images/no-image.webp"}
+          src={user.photoURL || '/images/no-image.webp'}
           alt="avatar"
           className="w-12 h-12 rounded-full border-2 border-yellow-400"
         />
         <div>
-          <div className="text-lg font-bold">{user.displayName || "Пользователь"}</div>
+          <div className="text-lg font-bold">{user.displayName || 'Пользователь'}</div>
           <div className="text-sm text-gray-300">{user.email}</div>
         </div>
       </div>
-      <div className="mt-2 mb-4 text-yellow-400 font-semibold">Доступ: <span className="text-white">DEMO</span></div>
+      <div className="mt-2 mb-4 text-yellow-400 font-semibold">
+        Доступ: <span className="text-white">DEMO</span>
+      </div>
       {/* TODO: здесь добавим кнопки/формы управления карточкой и объявлениями */}
       <div className="space-y-2">
         <button

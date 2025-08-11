@@ -1,12 +1,12 @@
-import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { LayoutList, Newspaper, Store, User } from "lucide-react";
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { LayoutList, Newspaper, Store, User } from 'lucide-react';
 
 const tabs = [
-  { label: "Каталог", icon: LayoutList, path: "/catalog" },
-  { label: "Новости", icon: Newspaper, path: "/news" },
-  { label: "Маркет", icon: Store, path: "/market" },
-  { label: "Профиль", icon: User, path: "/profile" }
+  { label: 'Каталог', icon: LayoutList, path: '/catalog' },
+  { label: 'Новости', icon: Newspaper, path: '/news' },
+  { label: 'Маркет', icon: Store, path: '/market' },
+  { label: 'Профиль', icon: User, path: '/profile' },
 ];
 
 function BottomNav() {
@@ -26,12 +26,14 @@ function BottomNav() {
               flex flex-col items-center justify-center flex-1 gap-0.5
               transition-all duration-150
               py-1.5
-              ${active
-                ? "text-sky-400 font-bold bg-gradient-to-t from-sky-900/50 via-sky-900/10 rounded-xl shadow-[0_2px_17px_#38bdf84f]"
-                : "text-zinc-400"}
+              ${
+                active
+                  ? 'text-sky-400 font-bold bg-gradient-to-t from-sky-900/50 via-sky-900/10 rounded-xl shadow-[0_2px_17px_#38bdf84f]'
+                  : 'text-zinc-400'
+              }
             `}
             style={{
-              fontSize: 13.5
+              fontSize: 13.5,
             }}
           >
             <Icon size={26} strokeWidth={2.2} />

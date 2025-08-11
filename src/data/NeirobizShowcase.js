@@ -2,17 +2,22 @@
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import services from "../data/neirobiz";
-import neirobizServices from "../data/neirobizServices";
+import cards from "../data/neirobizServices";
+import s from "../styles/NeirobizCategory.module.css";
 
-const CARD = 172;
-const RADIUS = 20;
+// убираем эмодзи из заголовка
+const stripEmoji = (t = "") => t.replace(/\p{Extended_Pictographic}/gu, "").trim();
 
 function mergeServices() {
-  const map = Object.fromEntries(services.map(s => [s.id, s]));
-  return neirobizServices.map(card => ({
-    ...card,
-    short: map[card.id]?.short || card.description || "",
-  }));
+  const map = Object.fromEntries(services.map(svc => [svc.id, svc]));
+  return cards.map(card => {
+    const base = map[card.id] || {};
+    return {
+      ...card,
+      title: stripEmoji(base.title || card.title || ""),
+      short: base.short || card.description || "",
+    };
+  });
 }
 
 export default function NeirobizShowcase() {
@@ -20,73 +25,39 @@ export default function NeirobizShowcase() {
   const items = useMemo(mergeServices, []);
 
   return (
-    <div className="bg-black min-h-screen pb-20 pt-6 flex flex-col items-center">
-      {/* Заголовок */}
-      <div className="w-full max-w-[420px] px-4">
-        <h1 className="text-white font-extrabold text-[22px] tracking-[.02em]">NeiroBiz</h1>
-        <div className="text-[#b5e0fe] text-[14.5px] mt-1 font-semibold">
-          AI-сервисы и генерация упаковки
-        </div>
-        <div className="text-white/70 text-[13px] mt-1">
-          Автоматизируйте бизнес через ботов, мини-приложения, дизайн и аналитику.{" "}
-          <span className="text-[#23df81] font-semibold">Оформите заявку — результат быстрее.</span>
+    <div style={{ background: "#000", minHeight: "100vh", padding: "20px 0 80px 0", display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div style={{ width: "100%", maxWidth: 440, padding: "0 14px" }}>
+        <h1 style={{ color: "#fff", fontWeight: 800, fontSize: 22, letterSpacing: ".02em" }}>NeiroBiz</h1>
+        <div style={{ color: "#b5e0fe", fontWeight: 700, fontSize: 14.5, marginTop: 4 }}>AI‑сервисы и генерация упаковки</div>
+        <div style={{ color: "rgba(255,255,255,.7)", fontSize: 13, marginTop: 4 }}>
+          Автоматизируйте бизнес через ботов, мини‑приложения, дизайн и аналитику.{" "}
+          <span style={{ color: "#23df81", fontWeight: 700 }}>Оформите заявку — результат быстрее.</span>
         </div>
       </div>
 
-      {/* Сетка карточек */}
-      <div
-        className="mt-4 grid justify-center gap-4"
-        style={{ gridTemplateColumns: `repeat(2, min(${CARD}px, 44vw))` }}
-      >
-        {items.map((svc) => (
-          <button
-            key={svc.id}
-            onClick={() => navigate(`/neirobiz/service/${svc.id}`)}
-            className="group relative text-left"
-            style={{
-              width: CARD,
-              maxWidth: "44vw",
-              borderRadius: RADIUS,
-              padding: 8,
-              background: "rgba(255,255,255,0.05)",
-              backdropFilter: "blur(8px)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              boxShadow: "0 0 12px rgba(97, 180, 255, 0.35)", // Синее свечение
-              transition: "box-shadow .3s ease, transform .2s ease",
-            }}
-          >
-            {/* Картинка */}
-            <div
-              className="relative w-full aspect-square overflow-hidden"
-              style={{
-                borderRadius: RADIUS - 6,
-                background: "#11141a",
-                border: "1px solid rgba(255,255,255,0.08)",
-              }}
+      <div className={s.wrap} style={{ width: "100%", marginTop: 14 }}>
+        <div className={s.grid}>
+          {items.map(item => (
+            <button
+              key={item.id}
+              className={s.card}
+              onClick={() => navigate(`/neirobiz/service/${item.id}`)}
             >
-              <img
-                src={svc.image}
-                alt={svc.title}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                onError={(e) => (e.currentTarget.src = "/images/no-image.webp")}
-              />
-              <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-            </div>
-
-            {/* Текст */}
-            <div className="mt-2 px-0.5">
-              <div
-                className="text-white font-bold text-[14px] leading-tight truncate"
-                title={svc.title}
-              >
-                {svc.title}
+              <div className={s.thumb}>
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className={s.img}
+                  onError={(e) => (e.currentTarget.src = "/images/no-image.webp")}
+                />
+                {/* мини-пилюля (можно иконку/метку заменить/убрать) */}
+                <span className={s.pill}>AI</span>
               </div>
-              <div className="text-white/70 text-[11.5px] leading-snug mt-1 line-clamp-2">
-                {svc.short}
-              </div>
-            </div>
-          </button>
-        ))}
+              <div className={s.title} title={item.title}>{item.title}</div>
+              <div className={s.desc}>{item.short}</div>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

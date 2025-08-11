@@ -1,0 +1,44 @@
+/* src/styles/glass.css */
+
+/* Холодный акцент по умолчанию можно не ставить; 
+   но оставлю: его можно переопределять inline стилем */
+:root {
+  --rk-accent: 0,255,200; /* общий акцент (бирюза). Для Neirobiz мы переопределяем в компоненте на синий */
+}
+
+/* Мягкое проявление картинок (лого/фото) */
+.img-fade-in {
+  animation: imgFade .25s ease-out both;
+}
+@keyframes imgFade {
+  from { opacity: 0; transform: translateY(2px) scale(.98); filter: saturate(.9); }
+  to   { opacity: 1; transform: translateY(0) scale(1);     filter: saturate(1); }
+}
+
+/* Универсальный стеклянный контейнер */
+.glass-card {
+  background: rgba(255,255,255,.06);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.08),
+    0 24px 60px -24px rgba(var(--rk-accent), .35);
+  backdrop-filter: blur(12px);
+  border-radius: 20px; /* можно переопределить в инлайн стилях */
+}
+
+/* Неоновый «блик» под карточкой */
+.card-glow { position: relative; }
+.card-glow::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: -6px;
+  height: 14px;
+  filter: blur(10px);
+  background: radial-gradient(60% 100% at 50% 0%, rgba(var(--rk-accent), .45), rgba(0,0,0,0));
+  pointer-events: none;
+}
+
+/* Тихие скролл‑полосы, если нужно */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

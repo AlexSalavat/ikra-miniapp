@@ -4,16 +4,14 @@ import { useNavigate } from "react-router-dom";
 import services from "../data/neirobiz";
 import neirobizServices from "../data/neirobizServices";
 
-// компактный квадрат карточки
 const CARD = 172;
 const RADIUS = 20;
 
-// склеиваем текстовые описания/иконки (neirobiz.js) с визуалами (neirobizServices.js)
 function mergeServices() {
   const map = Object.fromEntries(services.map((s) => [s.id, s]));
   return neirobizServices.map((card) => ({
     ...card,
-    icon: map[card.id]?.icon || "✨",
+    // оставляем только текст; иконки/эмодзи не используем
     short: map[card.id]?.short || card.description || "",
   }));
 }
@@ -24,19 +22,21 @@ export default function NeirobizShowcase() {
 
   return (
     <div className="bg-black min-h-screen pb-20 pt-6 flex flex-col items-center">
-      {/* Заголовок экрана */}
       <div className="w-full max-w-[420px] px-4">
-        <h1 className="text-white font-extrabold text-[22px] tracking-[.02em]">NeiroBiz</h1>
+        <h1 className="text-white font-extrabold text-[22px] tracking-[.02em]">
+          NeiroBiz
+        </h1>
         <div className="text-[#b5e0fe] text-[14.5px] mt-1 font-semibold">
           AI‑сервисы и генерация упаковки
         </div>
         <div className="text-white/70 text-[13px] mt-1">
           Автоматизируйте бизнес через ботов, мини‑приложения, дизайн и аналитику.{" "}
-          <span className="text-[#23df81] font-semibold">Оформите заявку — результат быстрее.</span>
+          <span className="text-[#23df81] font-semibold">
+            Оформите заявку — результат быстрее.
+          </span>
         </div>
       </div>
 
-      {/* Сетка карточек */}
       <div
         className="mt-4 grid justify-center gap-4"
         style={{ gridTemplateColumns: `repeat(2, min(${CARD}px, 44vw))` }}
@@ -59,13 +59,8 @@ export default function NeirobizShowcase() {
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                 onError={(e) => (e.currentTarget.src = "/images/no-image.webp")}
               />
-              {/* затемнение снизу + «пилюля» с иконкой */}
+              {/* затемнение снизу */}
               <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-              <div className="absolute top-2 left-2">
-                <span className="px-2.5 py-1 rounded-full text-[12px] font-bold text-white border border-white/15 bg-white/10 backdrop-blur-sm">
-                  {svc.icon}
-                </span>
-              </div>
             </div>
 
             {/* Текст под фото */}
@@ -80,6 +75,12 @@ export default function NeirobizShowcase() {
                 {svc.short}
               </div>
             </div>
+
+            {/* лёгкий ховер-контур */}
+            <div
+              className="pointer-events-none absolute inset-0 rounded-[20px] transition-opacity duration-200 opacity-0 group-hover:opacity-100"
+              style={{ boxShadow: "0 0 0 1px rgba(255,255,255,.08) inset" }}
+            />
           </button>
         ))}
       </div>

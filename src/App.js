@@ -9,8 +9,8 @@ import SupplierDetail from "./components/SupplierDetail";
 import LogisticsShowcase from "./components/LogisticsShowcase";
 import ProductionShowcase from "./components/ProductionShowcase";
 
-// ВАЖНО: путь и регистр файла должны совпадать с именем файла на диске
-import NeirobizShowcase from "./components/NeirobizShowcase";
+// Важно: имя файла — NeirobizScreen.js
+import NeirobizShowcase from "./components/NeirobizScreen";
 import NeirobizServiceDetail from "./components/NeirobizServiceDetail";
 
 import News from "./components/News";
@@ -34,12 +34,12 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/catalog" element={<Showcase />} />
-
-            {/* Каталоги */}
             <Route path="/catalog/suppliers" element={<Catalog />} />
             <Route path="/supplier/:id" element={<SupplierDetail />} />
+
             <Route path="/logistics" element={<LogisticsShowcase />} />
             <Route path="/production" element={<ProductionShowcase />} />
+
             <Route path="/producers" element={<TopProducers />} />
             <Route path="/producer/:id" element={<ProducerDetail />} />
 
@@ -47,21 +47,20 @@ function App() {
             <Route path="/neirobiz" element={<NeirobizShowcase />} />
             <Route path="/neirobiz/service/:id" element={<NeirobizServiceDetail />} />
 
-            {/* Новости */}
+            {/* News */}
             <Route path="/news" element={<News />} />
             <Route path="/news/ikra-wars" element={<CaviarWarBoard />} />
             <Route path="/news/top-producers" element={<TopProducers />} />
 
-            {/* Маркет */}
+            {/* Market */}
             <Route path="/market" element={<Market />} />
             <Route path="/market/sell" element={<MarketSell />} />
             <Route path="/market/buy" element={<MarketBuy />} />
             <Route path="/market/sell/:category" element={<MarketSellCategory />} />
             <Route path="/market/sell/detail/:id" element={<MarketSellDetail />} />
-            <Route path="/market/add" element={<AddAdForm />} />
 
-            {/* Профиль */}
             <Route path="/profile" element={<Profile />} />
+            <Route path="/market/add" element={<AddAdForm />} />
           </Routes>
         </div>
         <BottomNav />

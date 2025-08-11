@@ -1,10 +1,10 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function BackButton({
-  text = "Назад",
-  color = "#2678f3",
-  bg = "#23232a",
+  text = 'Назад',
+  color = '#2678f3',
+  bg = '#23232a',
   style = {},
   ...props
 }) {
@@ -13,20 +13,20 @@ export default function BackButton({
     <button
       onClick={props.onClick || (() => navigate(-1))}
       style={{
-        display: "flex",
-        alignItems: "center",
+        display: 'flex',
+        alignItems: 'center',
         gap: 7,
         background: bg,
-        border: "none",
+        border: 'none',
         color,
         fontWeight: 600,
         fontSize: 15.5,
-        cursor: "pointer",
+        cursor: 'pointer',
         borderRadius: 11,
-        padding: "7px 17px 7px 13px",
+        padding: '7px 17px 7px 13px',
         marginBottom: 9,
-        boxShadow: "none",
-        ...style
+        boxShadow: 'none',
+        ...style,
       }}
       type="button"
     >

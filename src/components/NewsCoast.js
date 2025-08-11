@@ -1,197 +1,149 @@
-import React, { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { ChevronDown, ExternalLink, MapPin, Calendar, Sparkles } from 'lucide-react';
+import itemsRaw from '../data/newsCoast';
 
-// Список RSS Google Alerts (можно расширять)
-const RSS_URLS = [
-  'https://www.google.com/alerts/feeds/01774507790294298106/845110848427929712',
-  'https://www.google.com/alerts/feeds/01774507790294298106/6882105407994878657',
-  'https://www.google.com/alerts/feeds/01774507790294298106/17971983383204798536',
-  'https://www.google.com/alerts/feeds/01774507790294298106/17971983383204800557',
-];
+function formatDate(d) {
+  try {
+    const dt = new Date(d);
+    return dt.toLocaleDateString();
+  } catch {
+    return '';
+  }
+}
 
-// Официальный rss2json бесплатный (ограничение по частоте запросов, для MVP хватает)
-const makeFeedApi = url =>
-  `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
-
-const NewsCoast = () => {
-  const [news, setNews] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  const fetchNews = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      // Запросим все RSS параллельно
-      const results = await Promise.all(
-        RSS_URLS.map(url =>
-          fetch(makeFeedApi(url))
-            .then(res => res.json())
-            .catch(() => null)
-        )
-      );
-      // Собираем все новости, фильтруем ошибки
-      let allNews = [];
-      results.forEach(feed => {
-        if (feed && feed.status === 'ok' && Array.isArray(feed.items)) {
-          allNews = allNews.concat(feed.items);
-        }
-      });
-      // Сортировка по дате (свежие в начале)
-      allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-      setNews(allNews);
-    } catch (err) {
-      setError('Ошибка загрузки');
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchNews();
-    // eslint-disable-next-line
-  }, []);
-
+function Tag({ children }) {
   return (
-    <div style={{ background: '#000', minHeight: '100vh', padding: '16px 0 64px 0' }}>
-      <div style={{
-        maxWidth: 440,
-        margin: '0 auto',
-        padding: '0 8px'
-      }}>
-        <button
-          onClick={() => window.history.back()}
-          style={{
-            marginBottom: 18,
-            padding: '7px 18px',
-            borderRadius: 10,
-            background: '#23232a',
-            color: '#fff',
-            border: 'none',
-            fontWeight: 500,
-            fontSize: 14,
-            cursor: 'pointer'
-          }}
-        >← Назад</button>
-        <h2 style={{
-          color: '#fff', fontWeight: 700, fontSize: 22, marginBottom: 18, letterSpacing: 0.08
-        }}>
-          Новости побережья
-        </h2>
-        <button
-          onClick={fetchNews}
-          style={{
-            background: '#37e08a',
-            color: '#18181d',
-            border: 'none',
-            borderRadius: 9,
-            fontWeight: 700,
-            fontSize: 14,
-            padding: '7px 19px',
-            cursor: 'pointer',
-            marginBottom: 15
-          }}
-        >
-          Обновить
-        </button>
-        {loading && <div style={{ color: '#bdbdbd', fontSize: 15, marginTop: 30 }}>Загрузка...</div>}
-        {error && <div style={{ color: 'red', marginTop: 18 }}>{error}</div>}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-          {!loading && !error && news.map((item, idx) => (
-            <a
-              key={idx}
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                background: '#18181d',
-                borderRadius: 17,
-                boxShadow: '0 2px 10px #13121c44',
-                padding: 0,
-                display: 'flex',
-                textDecoration: 'none',
-                color: '#fff',
-                minHeight: 100,
-                overflow: 'hidden',
-                transition: 'box-shadow .12s',
-                border: '1.2px solid #23232a',
-                alignItems: 'stretch'
-              }}
-            >
-              {item.thumbnail ? (
-                <img
-                  src={item.thumbnail}
-                  alt=""
-                  style={{
-                    width: 95,
-                    height: '100%',
-                    objectFit: 'cover',
-                    background: '#222',
-                    flexShrink: 0,
-                  }}
-                  onError={e => { e.target.src = '/images/no-image.webp'; }}
-                />
-              ) : (
-                <div style={{
-                  width: 95,
-                  background: '#24242a',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <span style={{ color: '#888', fontSize: 12 }}>No&nbsp;Image</span>
-                </div>
-              )}
-              <div style={{
-                flex: 1,
-                padding: '13px 13px 13px 15px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center'
-              }}>
-                <div style={{
-                  fontWeight: 700,
-                  fontSize: 14.4,
-                  marginBottom: 4,
-                  color: '#fff',
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap'
-                }}>{item.title}</div>
-                <div style={{
-                  color: '#bdbdbd',
-                  fontSize: 12,
-                  marginBottom: 4,
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap'
-                }}>{item.author || item.source || ''}</div>
-                <div style={{
-                  color: '#c3e4c7',
-                  fontSize: 11.5,
-                  marginBottom: 3,
-                }}>{item.pubDate ? (new Date(item.pubDate)).toLocaleDateString() : ''}</div>
-                <div style={{
-                  color: '#bbb',
-                  fontSize: 12,
-                  lineHeight: 1.26,
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
-                  maxHeight: 36,
-                  whiteSpace: 'normal'
-                }}>
-                  {item.description ? item.description.replace(/<[^>]*>?/gm, '').slice(0, 96) + '...' : ''}
-                </div>
-              </div>
-            </a>
-          ))}
-        </div>
-        {!loading && !error && news.length === 0 && (
-          <div style={{ color: '#aaa', fontSize: 15, marginTop: 22 }}>
-            Пока новостей нет.
+    <span className="px-2 py-0.5 text-xs rounded-full bg-cyan-500/10 border border-cyan-400/20 text-cyan-300">
+      {children}
+    </span>
+  );
+}
+
+function ItemCard({ item, defaultOpen = false }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="group relative rounded-2xl border border-white/10 bg-white/5 overflow-hidden">
+      {/* левая подсветка */}
+      <div
+        className={`absolute left-0 top-0 h-full w-1 transition-opacity ${open ? 'opacity-100' : 'opacity-60'}`}
+        style={{ background: 'linear-gradient(180deg,#22d3ee 0%,#60a5fa 100%)' }}
+      />
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full text-left px-4 py-3 flex items-center justify-between gap-3 hover:bg-white/5"
+        aria-expanded={open}
+      >
+        <div className="min-w-0">
+          {item.pinned ? (
+            <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wide text-cyan-300">
+              <Sparkles className="w-3 h-3" /> важное
+            </span>
+          ) : null}
+          <div className="text-cyan-300 font-extrabold uppercase tracking-wide text-sm">
+            {item.title}
           </div>
-        )}
+          <div className="mt-1 flex items-center gap-3 text-xs text-white/60">
+            <span className="inline-flex items-center gap-1">
+              <MapPin className="w-3 h-3" />
+              {item.region}
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Calendar className="w-3 h-3" />
+              {formatDate(item.date)}
+            </span>
+          </div>
+        </div>
+        <ChevronDown
+          className={`w-5 h-5 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+
+      <div
+        className={`grid transition-all duration-200 ${open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'} px-4`}
+      >
+        <div className="overflow-hidden">
+          <div className="pb-3 text-sm leading-relaxed text-white/85 whitespace-pre-line">
+            {item.body}
+          </div>
+          <div className="pb-3 flex flex-wrap items-center gap-2">
+            {Array.isArray(item.tags) && item.tags.map((t) => <Tag key={t}>{t}</Tag>)}
+            {item.sourceUrl ? (
+              <a
+                href={item.sourceUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 text-xs underline underline-offset-2 text-cyan-300 hover:text-cyan-200"
+              >
+                Источник <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            ) : null}
+          </div>
+        </div>
       </div>
     </div>
   );
-};
+}
 
-export default NewsCoast;
+export default function NewsCoast() {
+  const [q, setQ] = useState('');
+  const [expanded, setExpanded] = useState(false);
+
+  const items = useMemo(() => {
+    const list = Array.isArray(itemsRaw) ? itemsRaw.slice() : [];
+    // важные вверх
+    list.sort((a, b) => Number(b.pinned || 0) - Number(a.pinned || 0));
+    return list;
+  }, []);
+
+  const filtered = useMemo(() => {
+    const s = q.trim().toLowerCase();
+    if (!s) return items;
+    return items.filter((x) =>
+      [x.title, x.body, x.region, (x.tags || []).join(' ')].join(' ').toLowerCase().includes(s),
+    );
+  }, [items, q]);
+
+  return (
+    <main className="p-4 space-y-4">
+      {/* шапка */}
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <div className="text-xs text-white/60">Новости</div>
+          <div className="text-xl font-bold">Побережье</div>
+          <div className="text-xs text-white/60">{filtered.length} записей</div>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setExpanded((v) => !v)}
+            className="px-3 py-2 rounded-lg bg-white/10 border border-white/15 hover:brightness-110 text-sm"
+          >
+            {expanded ? 'Свернуть все' : 'Раскрыть все'}
+          </button>
+        </div>
+      </div>
+
+      {/* поиск */}
+      <div className="flex items-center gap-2">
+        <input
+          className="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/15 outline-none"
+          placeholder="Поиск по заголовкам, тегам и тексту"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+        />
+      </div>
+
+      {/* список */}
+      <div className="space-y-3">
+        {filtered.length ? (
+          filtered.map((n, i) => (
+            <ItemCard key={n.id} item={n} defaultOpen={expanded || (i === 0 && n.pinned)} />
+          ))
+        ) : (
+          <div className="text-white/60">Ничего не найдено.</div>
+        )}
+      </div>
+
+      <div className="h-4" />
+    </main>
+  );
+}

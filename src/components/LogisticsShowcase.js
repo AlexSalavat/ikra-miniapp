@@ -1,25 +1,25 @@
 // src/components/LogisticsShowcase.js
-import React, { useMemo, useState } from "react";
-import styles from "../styles/LogisticsShowcase.module.css";
-import logistics from "../data/logistics";
+import React, { useMemo, useState } from 'react';
+import styles from '../styles/LogisticsShowcase.module.css';
+import logistics from '../data/logistics';
 
 /* ===== helpers ===== */
-const getInitials = (name = "") =>
+const getInitials = (name = '') =>
   name
-    .replace(/["«»]/g, "")
+    .replace(/["«»]/g, '')
     .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)
     .map((w) => w[0]?.toUpperCase())
-    .join("") || "??";
+    .join('') || '??';
 
-const stringHue = (s = "") => {
+const stringHue = (s = '') => {
   let h = 0;
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360;
   return h;
 };
 
-function initialsBG(seed = "x") {
+function initialsBG(seed = 'x') {
   const h = stringHue(seed);
   return `linear-gradient(135deg,
       hsl(${h} 80% 20% / .95),
@@ -32,13 +32,13 @@ export default function LogisticsShowcase() {
   // Список регионов строим из данных, чтобы ничего не потерять
   const regions = useMemo(() => {
     const set = new Set(logistics.map((i) => i.region).filter(Boolean));
-    return ["Все", ...Array.from(set)];
+    return ['Все', ...Array.from(set)];
   }, []);
 
-  const [filter, setFilter] = useState(regions[0] || "Все");
+  const [filter, setFilter] = useState(regions[0] || 'Все');
 
   const filtered = useMemo(() => {
-    if (filter === "Все") return logistics;
+    if (filter === 'Все') return logistics;
     return logistics.filter((i) => i.region === filter);
   }, [filter]);
 
@@ -63,7 +63,13 @@ export default function LogisticsShowcase() {
             aria-label="Назад"
           >
             <svg width="20" height="20" fill="none">
-              <path d="M13 5l-5 5 5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path
+                d="M13 5l-5 5 5 5"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
             <span className="font-semibold">Назад</span>
           </button>
@@ -100,8 +106,8 @@ export default function LogisticsShowcase() {
             }
 
             const showLogo = Boolean(item.logo);
-            const city = item.city || ""; // адрес/город мы в карточке НЕ показываем по ТЗ
-            const bg = initialsBG(item.name || item.region || "x");
+            const city = item.city || ''; // адрес/город мы в карточке НЕ показываем по ТЗ
+            const bg = initialsBG(item.name || item.region || 'x');
 
             return (
               <div key={item.id || idx} className={styles.card}>
@@ -112,17 +118,17 @@ export default function LogisticsShowcase() {
                       src={item.logo}
                       alt={item.name}
                       className={styles.logo}
-                      onError={(e) => (e.currentTarget.src = "/images/no-image.webp")}
+                      onError={(e) => (e.currentTarget.src = '/images/no-image.webp')}
                     />
                   ) : (
                     // fallback — стеклянная плитка с инициалами
                     <div
                       style={{
-                        width: "100%",
-                        height: "100%",
-                        display: "grid",
-                        placeItems: "center",
-                        color: "#fff",
+                        width: '100%',
+                        height: '100%',
+                        display: 'grid',
+                        placeItems: 'center',
+                        color: '#fff',
                         fontWeight: 900,
                         fontSize: 24,
                         background: bg,
@@ -139,9 +145,7 @@ export default function LogisticsShowcase() {
                     {item.name}
                   </div>
                   {/* Город/регион — аккуратно и компактно */}
-                  <div className={styles.city}>
-                    {city || item.region || "—"}
-                  </div>
+                  <div className={styles.city}>{city || item.region || '—'}</div>
                 </div>
               </div>
             );

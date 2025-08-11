@@ -1,19 +1,19 @@
-import React, { useMemo, useState } from "react";
-import suppliers from "../data/suppliers";
-import SupplierCard from "./SupplierCard";
+import React, { useMemo, useState } from 'react';
+import suppliers from '../data/suppliers';
+import SupplierCard from './SupplierCard';
 
 export default function Catalog() {
-  const [q, setQ] = useState("");
+  const [q, setQ] = useState('');
 
   const data = useMemo(() => {
     const s = q.trim().toLowerCase();
     if (!s) return suppliers;
-    return suppliers.filter(x =>
+    return suppliers.filter((x) =>
       [x.name, x.region, x.city, ...(x.products || [])]
         .filter(Boolean)
-        .join(" ")
+        .join(' ')
         .toLowerCase()
-        .includes(s)
+        .includes(s),
     );
   }, [q]);
 
@@ -24,7 +24,7 @@ export default function Catalog() {
         <div className="max-w-md mx-auto">
           <div className="flex items-center gap-2 rounded-2xl px-3 py-2 bg-white/8 border border-white/10 backdrop-blur-xl shadow-[0_20px_40px_-20px_rgba(0,0,0,.5)]">
             <svg width="18" height="18" viewBox="0 0 24 24" className="text-white/60">
-              <circle cx="11" cy="11" r="7" stroke="currentColor" fill="none" strokeWidth="2"/>
+              <circle cx="11" cy="11" r="7" stroke="currentColor" fill="none" strokeWidth="2" />
               <path d="M20 20l-3.2-3.2" stroke="currentColor" strokeWidth="2" />
             </svg>
             <input

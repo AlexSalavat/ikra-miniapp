@@ -1,8 +1,8 @@
 // src/components/NeirobizScreen.js
-import React, { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import services from "../data/neirobiz";
-import neirobizServices from "../data/neirobizServices";
+import React, { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import services from '../data/neirobiz';
+import neirobizServices from '../data/neirobizServices';
 
 // размер карточки (мобайл-первый)
 const CARD = 172;
@@ -10,11 +10,11 @@ const RADIUS = 20;
 
 function mergeServices() {
   // склеиваем: визуальные карточки + описания из services
-  const byId = Object.fromEntries(services.map(s => [s.id, s]));
-  return neirobizServices.map(card => ({
+  const byId = Object.fromEntries(services.map((s) => [s.id, s]));
+  return neirobizServices.map((card) => ({
     ...card,
     // эмодзи НЕ выводим — по просьбе клиента
-    short: byId[card.id]?.short || card.description || "",
+    short: byId[card.id]?.short || card.description || '',
   }));
 }
 
@@ -26,17 +26,13 @@ export default function NeirobizScreen() {
     <div className="bg-black min-h-screen pb-24 pt-6 flex flex-col items-center">
       {/* Заголовок */}
       <div className="w-full max-w-[420px] px-4">
-        <h1 className="text-white font-extrabold text-[22px] tracking-[.02em]">
-          NeiroBiz
-        </h1>
+        <h1 className="text-white font-extrabold text-[22px] tracking-[.02em]">NeiroBiz</h1>
         <div className="text-[#b5e0fe] text-[14.5px] mt-1 font-semibold">
           AI‑сервисы и генерация упаковки
         </div>
         <div className="text-white/70 text-[13px] mt-1">
-          Автоматизируйте бизнес через ботов, мини‑приложения, дизайн и аналитику.{" "}
-          <span className="text-[#23df81] font-semibold">
-            Оформите заявку — результат быстрее.
-          </span>
+          Автоматизируйте бизнес через ботов, мини‑приложения, дизайн и аналитику.{' '}
+          <span className="text-[#23df81] font-semibold">Оформите заявку — результат быстрее.</span>
         </div>
       </div>
 
@@ -51,15 +47,15 @@ export default function NeirobizScreen() {
             onClick={() => navigate(`/neirobiz/service/${svc.id}`)}
             className={[
               // стекло
-              "relative text-left bg-white/10 border border-white/10 backdrop-blur-md",
+              'relative text-left bg-white/10 border border-white/10 backdrop-blur-md',
               // форма
-              "rounded-2xl p-2",
+              'rounded-2xl p-2',
               // эффект/свечение
-              "shadow-[0_10px_30px_rgba(14,129,255,0.18)]",
-              "hover:shadow-[0_14px_40px_rgba(14,129,255,0.26)]",
-              "transition-transform duration-200 ease-out hover:scale-[1.02] active:scale-[.99]"
-            ].join(" ")}
-            style={{ width: CARD, maxWidth: "44vw" }}
+              'shadow-[0_10px_30px_rgba(14,129,255,0.18)]',
+              'hover:shadow-[0_14px_40px_rgba(14,129,255,0.26)]',
+              'transition-transform duration-200 ease-out hover:scale-[1.02] active:scale-[.99]',
+            ].join(' ')}
+            style={{ width: CARD, maxWidth: '44vw' }}
           >
             {/* Медиа */}
             <div
@@ -71,7 +67,7 @@ export default function NeirobizScreen() {
                   src={svc.image}
                   alt={svc.title}
                   className="w-full h-full object-cover transition-transform duration-300 hover:scale-[1.03]"
-                  onError={(e) => (e.currentTarget.src = "/images/no-image.webp")}
+                  onError={(e) => (e.currentTarget.src = '/images/no-image.webp')}
                 />
               </div>
 
@@ -82,7 +78,7 @@ export default function NeirobizScreen() {
                 className="pointer-events-none absolute inset-0 rounded-[16px]"
                 style={{
                   boxShadow:
-                    "inset 0 0 0 1px rgba(255,255,255,.08), 0 24px 60px -26px rgba(14,129,255,.38)"
+                    'inset 0 0 0 1px rgba(255,255,255,.08), 0 24px 60px -26px rgba(14,129,255,.38)',
                 }}
               />
             </div>

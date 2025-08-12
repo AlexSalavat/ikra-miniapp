@@ -111,6 +111,7 @@ function ProducerCard({ p, onClick }) {
       <div className="relative aspect-square rounded-lg overflow-hidden border border-white/10">
         {img ? (
           <img
+            loading="lazy"
             src={img}
             alt={p.name}
             className="w-full h-full object-contain bg-black/40 img-fade-in"

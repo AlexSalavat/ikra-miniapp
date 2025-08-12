@@ -115,6 +115,7 @@ export default function LogisticsShowcase() {
                 <div className={styles.imgBox}>
                   {showLogo ? (
                     <img
+                      loading="lazy"
                       src={item.logo}
                       alt={item.name}
                       className={styles.logo}

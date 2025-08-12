@@ -57,6 +57,7 @@ export default function Market() {
           >
             <div className="relative aspect-square rounded-lg overflow-hidden border border-white/10">
               <img
+                loading="lazy"
                 src={card.image}
                 alt={card.title}
                 className="w-full h-full object-cover"

@@ -127,6 +127,7 @@ function AdCard({ ad }) {
         <div className="relative aspect-square rounded-lg overflow-hidden border border-white/10">
           {img ? (
             <img
+              loading="lazy"
               src={img}
               alt={ad.title}
               className="w-full h-full object-cover"

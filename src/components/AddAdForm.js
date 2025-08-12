@@ -179,6 +179,7 @@ export default function AddAdForm({ onSubmit }) {
             {preview && (
               <div style={{ marginTop: 7 }}>
                 <img
+                  loading="lazy"
                   src={preview}
                   alt="preview"
                   style={{ width: 108, borderRadius: 14, boxShadow: '0 2px 12px #181a1a44' }}

@@ -116,6 +116,7 @@ export default function SupplierDetail() {
               <div className="w-full aspect-[16/10] bg-black/35">
                 {images.length ? (
                   <img
+                    loading="lazy"
                     src={images[0]}
                     alt={`${name} баннер`}
                     className="w-full h-full object-cover"
@@ -155,6 +156,7 @@ export default function SupplierDetail() {
               <div className="relative w-[92px] h-[92px] rounded-2xl overflow-hidden border border-white/10 bg-black/40 grid place-items-center">
                 {logo ? (
                   <img
+                    loading="lazy"
                     src={logo}
                     alt={name}
                     className="w-[86%] h-[86%] object-contain img-fade-in"
@@ -366,6 +368,7 @@ export default function SupplierDetail() {
                     {images.map((src, i) => (
                       <SwiperSlide key={i}>
                         <img
+                          loading="lazy"
                           src={src}
                           alt={`${name} фото ${i + 1}`}
                           className="w-full h-full object-cover"
@@ -391,6 +394,7 @@ export default function SupplierDetail() {
                       title={`фото ${i + 1}`}
                     >
                       <img
+                        loading="lazy"
                         src={src}
                         alt=""
                         className="w-full h-full object-cover"

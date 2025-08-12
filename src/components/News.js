@@ -74,6 +74,7 @@ export default function News() {
           >
             <div className="relative aspect-square rounded-lg overflow-hidden border border-white/10">
               <img
+                loading="lazy"
                 src={it.image}
                 alt={it.title}
                 onError={(e) => {

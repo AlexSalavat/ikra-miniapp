@@ -41,6 +41,7 @@ export default function NeirobizServiceDetail() {
         {visual?.image && (
           <div className="rounded-xl overflow-hidden border border-white/10">
             <img
+              loading="lazy"
               src={visual.image}
               alt={svc.title || visual?.title}
               className="w-full h-auto object-cover"

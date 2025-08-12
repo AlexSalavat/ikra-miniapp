@@ -64,6 +64,7 @@ export default function NeirobizScreen() {
             >
               <div className="w-full aspect-square bg-[#0f141c]">
                 <img
+                  loading="lazy"
                   src={svc.image}
                   alt={svc.title}
                   className="w-full h-full object-cover transition-transform duration-300 hover:scale-[1.03]"

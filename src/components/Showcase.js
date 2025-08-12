@@ -46,6 +46,7 @@ export default function Showcase() {
           >
             <div className="relative aspect-square rounded-lg overflow-hidden">
               <img
+                loading="lazy"
                 src={item.image}
                 alt={item.title}
                 className="w-full h-full object-cover"

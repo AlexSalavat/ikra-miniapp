@@ -402,6 +402,7 @@ export default function MarketSellCreate() {
                     }}
                   >
                     <img
+                      loading="lazy"
                       src={URL.createObjectURL(img)}
                       alt="preview"
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}

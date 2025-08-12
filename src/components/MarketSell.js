@@ -46,6 +46,7 @@ export default function MarketSell() {
           >
             <div className="relative aspect-square rounded-lg overflow-hidden border border-white/10">
               <img
+                loading="lazy"
                 src={cat.image}
                 alt={cat.title}
                 className="w-full h-full object-cover"

@@ -65,6 +65,7 @@ export default function MarketSellDetail() {
               {(ad.images?.length ? ad.images : ['/images/no-image.webp']).map((src, i) => (
                 <SwiperSlide key={i}>
                   <img
+                    loading="lazy"
                     src={src}
                     alt={`${ad.title} ${i + 1}`}
                     className="w-full h-full object-cover"

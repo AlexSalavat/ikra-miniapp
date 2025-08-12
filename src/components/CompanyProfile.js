@@ -174,6 +174,7 @@ const CompanyProfile = ({ company }) => {
           <div className="flex gap-2">
             {company.gallery.map((img, idx) => (
               <img
+                loading="lazy"
                 key={idx}
                 src={img}
                 alt=""

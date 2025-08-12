@@ -1,26 +1,5 @@
 import * as React from 'react';
 
-const SupplierDetail = React.lazy(() => import('./components/SupplierDetail'));
-const ProducerDetail = React.lazy(() => import('./components/ProducerDetail'));
-const TopProducers = React.lazy(() => import('./components/TopProducers'));
-const LogisticsShowcase = React.lazy(() => import('./components/LogisticsShowcase'));
-const ProductionShowcase = React.lazy(() => import('./components/ProductionShowcase'));
-const Market = React.lazy(() => import('./components/Market'));
-const MarketSell = React.lazy(() => import('./components/MarketSell'));
-const MarketBuy = React.lazy(() => import('./components/MarketBuy'));
-const MarketSellCategory = React.lazy(() => import('./components/MarketSellCategory'));
-const MarketSellDetail = React.lazy(() => import('./components/MarketSellDetail'));
-const NeirobizScreen = React.lazy(() => import('./components/NeirobizScreen'));
-const NeirobizServiceDetail = React.lazy(() => import('./components/NeirobizServiceDetail'));
-const News = React.lazy(() => import('./components/News'));
-const CaviarWarBoard = React.lazy(() => import('./components/CaviarWarBoard'));
-const AdminLayout = React.lazy(() => import('./admin/AdminLayout'));
-const AdminHome = React.lazy(() => import('./admin/AdminHome'));
-const Suppliers = React.lazy(() => import('./admin/suppliers/Suppliers'));
-const SuppliersListPage = React.lazy(() => import('./admin/suppliers/SuppliersListPage'));
-const SupplierCreatePage = React.lazy(() => import('./admin/suppliers/SupplierCreatePage'));
-const LeadFormPage = React.lazy(() => import('./components/LeadFormPage'));
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 
@@ -29,30 +8,36 @@ import BottomNav from './components/BottomNav';
 import Home from './components/Home';
 import Showcase from './components/Showcase';
 
-const Catalog = lazy(() => import('./components/Catalog'));
+const SupplierDetail = lazy(() => import('./components/SupplierDetail'));
+const ProducerDetail = lazy(() => import('./components/ProducerDetail'));
+const TopProducers = lazy(() => import('./components/TopProducers'));
 const LogisticsShowcase = lazy(() => import('./components/LogisticsShowcase'));
 const ProductionShowcase = lazy(() => import('./components/ProductionShowcase'));
-const TopProducers = lazy(() => import('./components/TopProducers'));
-const ProducerDetail = lazy(() => import('./components/ProducerDetail'));
-const NeirobizScreen = lazy(() => import('./components/NeirobizScreen'));
-const NeirobizServiceDetail = lazy(() => import('./components/NeirobizServiceDetail'));
-const News = lazy(() => import('./components/News'));
-const NewsCoast = lazy(() => import('./components/NewsCoast'));
-const CaviarWarBoard = lazy(() => import('./components/CaviarWarBoard'));
 const Market = lazy(() => import('./components/Market'));
 const MarketSell = lazy(() => import('./components/MarketSell'));
 const MarketBuy = lazy(() => import('./components/MarketBuy'));
 const MarketSellCategory = lazy(() => import('./components/MarketSellCategory'));
 const MarketSellDetail = lazy(() => import('./components/MarketSellDetail'));
+const NeirobizScreen = lazy(() => import('./components/NeirobizScreen'));
+const NeirobizServiceDetail = lazy(() => import('./components/NeirobizServiceDetail'));
+const News = lazy(() => import('./components/News'));
+const CaviarWarBoard = lazy(() => import('./components/CaviarWarBoard'));
+const AdminLayout = lazy(() => import('./admin/AdminLayout'));
+const AdminHome = lazy(() => import('./admin/AdminHome'));
+const Suppliers = lazy(() => import('./admin/suppliers/Suppliers'));
+const SuppliersListPage = lazy(() => import('./admin/suppliers/SuppliersListPage'));
+const SupplierCreatePage = lazy(() => import('./admin/suppliers/SupplierCreatePage'));
+const LeadFormPage = lazy(() => import('./components/LeadFormPage'));
+const Catalog = lazy(() => import('./components/Catalog'));
+
+const NewsCoast = lazy(() => import('./components/NewsCoast'));
+
 const AddAdForm = lazy(() => import('./components/AddAdForm'));
 const Profile = lazy(() => import('./components/Profile'));
 
 // Admin
-const AdminLayout = lazy(() => import('./admin/AdminLayout'));
-const AdminHome = lazy(() => import('./admin/AdminHome'));
+
 const AdminSuppliers = lazy(() => import('./admin/suppliers/Suppliers'));
-const SuppliersListPage = lazy(() => import('./admin/suppliers/SuppliersListPage'));
-const SupplierCreatePage = lazy(() => import('./admin/suppliers/SupplierCreatePage'));
 
 function Loading() {
   return <div className="p-4">Loading...</div>;

@@ -1,4 +1,4 @@
-﻿/** @type {import('eslint').Linter.Config} */
+/** @type {import('eslint').Linter.Config} */
 module.exports = {
   extends: ['react-app', 'react-app/jest', 'plugin:prettier/recommended'],
   rules: {

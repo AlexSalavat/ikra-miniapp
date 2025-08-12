@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@supabase/supabase-js": "^2.54.0",
     "@telegram-apps/sdk": "^3.11.4",
     "@telegram-apps/sdk-react": "^3.3.6",
     "@testing-library/dom": "^10.4.0",

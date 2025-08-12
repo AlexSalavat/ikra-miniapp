@@ -1,3 +1,4 @@
+import { Navigation, Pagination, Thumbs } from 'swiper/modules';
 // src/components/ProducerDetail.js
 import React, { useMemo, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';

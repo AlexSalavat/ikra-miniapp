@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-
+import { Navigation, Pagination, Thumbs } from 'swiper/modules';
 const exampleAds = [
   {
     id: 1,

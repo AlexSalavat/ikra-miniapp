@@ -30,13 +30,16 @@
                     "prepare":  "husky"
                 },
     "lint-staged":  {
+                        "src/**/*.{css,md}":  [
+                                                  "prettier -w"
+                                              ],
                         "src/**/*.{js,jsx}":  [
                                                   "eslint --fix",
                                                   "prettier -w"
                                               ],
-                        "src/**/*.{css,md}":  [
-                                                  "prettier -w"
-                                              ]
+                        "*.{css,md}":  [
+                                           "prettier -w"
+                                       ]
                     },
     "browserslist":  {
                          "production":  [

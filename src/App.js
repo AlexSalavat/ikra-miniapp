@@ -1,3 +1,4 @@
+import LeadFormPage from './components/LeadFormPage';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 

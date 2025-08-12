@@ -1,9 +1,14 @@
+// src/lib/useSuppliers.js
 import { useEffect, useState } from 'react';
 import { supabase } from './supabase';
-import localFallback from '../data/suppliers.local.json';
+import fallback from '../data/suppliers.local.json';
 
+/**
+ * Хук списка поставщиков
+ * Возвращает: { suppliers, loading, error }
+ */
 export function useSuppliers() {
-  const [suppliers, setSuppliers] = useState([]);
+  const [suppliers, setSuppliers] = useState(Array.isArray(fallback) ? fallback : []);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -12,20 +17,25 @@ export function useSuppliers() {
 
     async function load() {
       try {
-        const { data, error: e } = await supabase
-          .from('suppliers')
-          .select('*')
-          .order('premium', { ascending: false })
-          .order('verified', { ascending: false })
-          .order('name');
+        setLoading(true);
+        setError(null);
 
-        if (e) throw e;
-        if (!cancelled) setSuppliers(Array.isArray(data) ? data : []);
-      } catch (err) {
-        if (!cancelled) {
-          setSuppliers(localFallback);
-          setError(err);
-        }
+        const { data, error: err } = await supabase.from('suppliers').select('*');
+        if (err) throw err;
+
+        const rows = Array.isArray(data) ? data : [];
+        // Сортируем: premium → verified → name
+        rows.sort((a, b) => {
+          const p = (b?.premium ? 1 : 0) - (a?.premium ? 1 : 0);
+          if (p) return p;
+          const v = (b?.verified ? 1 : 0) - (a?.verified ? 1 : 0);
+          if (v) return v;
+          return String(a?.name || '').localeCompare(String(b?.name || ''), 'ru');
+        });
+
+        if (!cancelled) setSuppliers(rows);
+      } catch (e) {
+        if (!cancelled) setError(e);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -40,11 +50,50 @@ export function useSuppliers() {
   return { suppliers, loading, error };
 }
 
-export async function getSupplierById(id) {
-  const { data, error } = await supabase.from('suppliers').select('*').eq('id', id).maybeSingle();
+/**
+ * Хук одного поставщика по slug/id
+ * Возвращает: { supplier, loading, error }
+ */
+export function useSupplier(id) {
+  const [supplier, setSupplier] = useState(null);
+  const [loading, setLoading] = useState(Boolean(id));
+  const [error, setError] = useState(null);
 
-  if (error) {
-    return localFallback.find((s) => s.id === id) || null;
-  }
-  return data;
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadOne() {
+      if (!id) {
+        setSupplier(null);
+        setLoading(false);
+        return;
+      }
+      try {
+        setLoading(true);
+        setError(null);
+
+        // одна строка — чтобы не ругался prettier
+        const { data, error: err } = await supabase
+          .from('suppliers')
+          .select('*')
+          .eq('id', id)
+          .limit(1)
+          .maybeSingle();
+        if (err) throw err;
+
+        if (!cancelled) setSupplier(data || null);
+      } catch (e) {
+        if (!cancelled) setError(e);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    loadOne();
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  return { supplier, loading, error };
 }

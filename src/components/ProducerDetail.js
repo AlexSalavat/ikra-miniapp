@@ -348,6 +348,7 @@ export default function ProducerDetail() {
                 {/* если Tailwind < v3 — замени aspect-[4/3] на h-56 */}
                 <div className="w-full aspect-[4/3]">
                   <Swiper
+                    modules={[Navigation, Pagination, Thumbs]}
                     spaceBetween={10}
                     slidesPerView={1}
                     onSwiper={(s) => (swiperRef.current = s)}

@@ -61,7 +61,12 @@ export default function MarketSellDetail() {
         <div className={`glass-card p-3 ${ad.premium ? 'premium' : ''}`}>
           {/* Gallery */}
           <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-white/10 mb-3">
-            <Swiper spaceBetween={12} slidesPerView={1} style={{ borderRadius: 12 }}>
+            <Swiper
+              modules={[Navigation, Pagination, Thumbs]}
+              spaceBetween={12}
+              slidesPerView={1}
+              style={{ borderRadius: 12 }}
+            >
               {(ad.images?.length ? ad.images : ['/images/no-image.webp']).map((src, i) => (
                 <SwiperSlide key={i}>
                   <img

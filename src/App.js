@@ -24,7 +24,7 @@ const News = lazy(() => import('./components/News'));
 const CaviarWarBoard = lazy(() => import('./components/CaviarWarBoard'));
 const AdminLayout = lazy(() => import('./admin/AdminLayout'));
 const AdminHome = lazy(() => import('./admin/AdminHome'));
-const Suppliers = lazy(() => import('./admin/suppliers/Suppliers'));
+
 const SuppliersListPage = lazy(() => import('./admin/suppliers/SuppliersListPage'));
 const SupplierCreatePage = lazy(() => import('./admin/suppliers/SupplierCreatePage'));
 const LeadFormPage = lazy(() => import('./components/LeadFormPage'));

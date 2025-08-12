@@ -74,6 +74,7 @@ export default function App() {
               <Route path="suppliers/list" element={<SuppliersListPage />} />
               <Route path="suppliers/create" element={<SupplierCreatePage />} />
             </Route>
+            <Route path="/lead" element={<LeadFormPage />} />
           </Routes>
         </Suspense>
 

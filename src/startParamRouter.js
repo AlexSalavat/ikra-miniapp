@@ -1,7 +1,3 @@
-/**
- * Telegram WebApp start_param -> SPA path
- * Поддержка: home, catalog, market:sell|buy, news:coast, supplier:<id>, lead[:supplier:<id>]
- */
 (function routeStartParam() {
   try {
     if (window.__ikraStartParamDone) return;
@@ -20,12 +16,12 @@
           return '/news';
         case 'supplier':
           return rest ? `/supplier/${encodeURIComponent(rest)}` : null;
-        case 'lead':
-          if (rest && rest.startsWith('supplier')) {
-            const [, sid] = raw.split(':'); // raw: "lead:supplier:<id>"
-            return sid ? `/lead?supplier=${encodeURIComponent(sid)}` : '/lead';
-          }
-          return '/lead';
+        case 'lead': {
+          // lead  OR  lead:supplier:<id>
+          const parts = raw.split(':');
+          const sid = parts.length >= 3 ? parts[2] : null;
+          return sid ? `/lead?supplier=${encodeURIComponent(sid)}` : '/lead';
+        }
         default:
           return null;
       }

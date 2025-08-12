@@ -1,35 +1,50 @@
 import { useEffect, useState } from 'react';
 import { supabase } from './supabase';
-import localSuppliers from '../data/suppliers';
+import localFallback from '../data/suppliers.local.json';
 
 export function useSuppliers() {
-  const [data, setData] = useState(localSuppliers);
-  const [loading, setLoading] = useState(!!supabase);
+  const [suppliers, setSuppliers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!supabase) return; // остаёмся на локальных данных
-    let canceled = false;
+    let cancelled = false;
 
-    (async () => {
+    async function load() {
       try {
-        const { data: rows, error: e } = await supabase
+        const { data, error: e } = await supabase
           .from('suppliers')
           .select('*')
-          .eq('published', true);
-        if (e) throw e;
-        if (!canceled && rows) setData(rows);
-      } catch (err) {
-        setError(err?.message || String(err));
-      } finally {
-        setLoading(false);
-      }
-    })();
+          .order('premium', { ascending: false })
+          .order('verified', { ascending: false })
+          .order('name');
 
+        if (e) throw e;
+        if (!cancelled) setSuppliers(Array.isArray(data) ? data : []);
+      } catch (err) {
+        if (!cancelled) {
+          setSuppliers(localFallback);
+          setError(err);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    load();
     return () => {
-      canceled = true;
+      cancelled = true;
     };
   }, []);
 
-  return { data, loading, error };
+  return { suppliers, loading, error };
+}
+
+export async function getSupplierById(id) {
+  const { data, error } = await supabase.from('suppliers').select('*').eq('id', id).maybeSingle();
+
+  if (error) {
+    return localFallback.find((s) => s.id === id) || null;
+  }
+  return data;
 }

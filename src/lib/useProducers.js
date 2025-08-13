@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { supabase } from './supabase';
-import localProducers from '../data/producers';
-
 export function normalizeProducer(row = {}) {
   const p = row || {};
   return {
@@ -23,9 +21,9 @@ export function normalizeProducer(row = {}) {
   };
 }
 
-/** Список производителей */
+/** РЎРїРёСЃРѕРє РїСЂРѕРёР·РІРѕРґРёС‚РµР»РµР№ */
 export function useProducers() {
-  const [producers, setProducers] = useState(localProducers.map(normalizeProducer));
+  const [producers, setProducers] = useState([].map(normalizeProducer));
   const [loading, setLoading] = useState(Boolean(supabase));
   const [error, setError] = useState(null);
 
@@ -61,7 +59,7 @@ export function useProducers() {
   return { producers, loading, error };
 }
 
-/** Один производитель по id */
+/** РћРґРёРЅ РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊ РїРѕ id */
 export function useProducer(id) {
   const [producer, setProducer] = useState(null);
   const [loading, setLoading] = useState(Boolean(id) && Boolean(supabase));
@@ -77,7 +75,7 @@ export function useProducer(id) {
     }
 
     const fromLocal = () => {
-      const found = localProducers.find((p) => String(p.id) === String(id));
+      const found = [].find((p) => String(p.id) === String(id));
       setProducer(found ? normalizeProducer(found) : null);
     };
 

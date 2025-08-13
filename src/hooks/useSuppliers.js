@@ -1,12 +1,24 @@
 import { useEffect, useState } from 'react';
-import { supabase } from './supabase';
+import { createClient } from '@supabase/supabase-js';
 import localSuppliers from './suppliers.local.json';
 
-// Подгоним схему под БД
+/**
+ * Читает ENV и создаёт Supabase-клиент.
+ * Работает и с CRA (REACT_APP_*) и с Next.js (NEXT_PUBLIC_*).
+ */
+const SUPABASE_URL =
+  process.env.REACT_APP_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const SUPABASE_ANON_KEY =
+  process.env.REACT_APP_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+
+const supabase =
+  SUPABASE_URL && SUPABASE_ANON_KEY ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+// Приведи поля под свою схему при необходимости
 function normalizeSupplier(row) {
   if (!row || typeof row !== 'object') return row;
   return {
-    id: String(row.id ?? row.uuid ?? row.slug ?? ''),
+    id: row.id ?? row.uuid ?? row.slug ?? null,
     name: row.name ?? row.title ?? '',
     brand: row.brand ?? row.producer ?? '',
     country: row.country ?? row.location ?? '',
@@ -16,7 +28,7 @@ function normalizeSupplier(row) {
 
 /**
  * В DEV  можно читать локальный JSON.
- * В PROD  если нет ENV/клиента, кидаем ошибку (чтобы не было "старых" данных из бандла).
+ * В PROD  без ENV кидаем ошибку (чтобы не было "старых данных").
  */
 export function useSuppliers() {
   const [suppliers, setSuppliers] = useState([]);
@@ -33,7 +45,7 @@ export function useSuppliers() {
             return;
           }
           throw new Error(
-            'Supabase не инициализирован. Проверь REACT_APP_/NEXT_PUBLIC_SUPABASE_*.'
+            'Supabase не сконфигурирован: отсутствуют REACT_APP_/NEXT_PUBLIC_SUPABASE_* переменные.'
           );
         }
 
@@ -50,6 +62,7 @@ export function useSuppliers() {
         if (!cancelled) setLoading(false);
       }
     })();
+
     return () => {
       cancelled = true;
     };

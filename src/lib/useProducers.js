@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from './supabase';
+
 export function normalizeProducer(row = {}) {
   const p = row || {};
   return {
@@ -21,22 +22,31 @@ export function normalizeProducer(row = {}) {
   };
 }
 
-/** Р В Р Р‹Р В РЎвЂ”Р В РЎвЂР РЋР С“Р В РЎвЂўР В РЎвЂќ Р В РЎвЂ”Р РЋР вЂљР В РЎвЂўР В РЎвЂР В Р’В·Р В Р вЂ Р В РЎвЂўР В РўвЂР В РЎвЂР РЋРІР‚С™Р В Р’ВµР В Р’В»Р В Р’ВµР В РІвЂћвЂ“ */
+/**
+ * В DEV можно жить без Supabase (например, подмонтировать локальные данные).
+ * В PROD  отсутствие клиента/ENV считаем ошибкой.
+ */
 export function useProducers() {
-  const [producers, setProducers] = useState([].map(normalizeProducer));
-  const [loading, setLoading] = useState(Boolean(supabase));
+  const [producers, setProducers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
 
-    if (!supabase) {
-      setLoading(false);
-      return;
-    }
-
     (async () => {
       try {
+        if (!supabase) {
+          if (process.env.NODE_ENV !== 'production') {
+            // Нет локального JSON  просто пустой список в деве.
+            setProducers([]);
+            return;
+          }
+          throw new Error(
+            'Supabase не инициализирован. Проверь REACT_APP_/NEXT_PUBLIC_SUPABASE_*.'
+          );
+        }
+
         const { data, error } = await supabase
           .from('producers')
           .select('*')
@@ -59,14 +69,18 @@ export function useProducers() {
   return { producers, loading, error };
 }
 
-/** Р В РЎвЂєР В РўвЂР В РЎвЂР В Р вЂ¦ Р В РЎвЂ”Р РЋР вЂљР В РЎвЂўР В РЎвЂР В Р’В·Р В Р вЂ Р В РЎвЂўР В РўвЂР В РЎвЂР РЋРІР‚С™Р В Р’ВµР В Р’В»Р РЋР Р‰ Р В РЎвЂ”Р В РЎвЂў id */
+/** Получение одного производителя по id */
 export function useProducer(id) {
   const [producer, setProducer] = useState(null);
-  const [loading, setLoading] = useState(Boolean(id) && Boolean(supabase));
+  const [loading, setLoading] = useState(Boolean(id));
   const [error, setError] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
+
+    const fromEmptyLocal = () => {
+      setProducer(null); // локального JSON нет — возвращаем null
+    };
 
     if (!id) {
       setProducer(null);
@@ -74,19 +88,18 @@ export function useProducer(id) {
       return;
     }
 
-    const fromLocal = () => {
-      const found = [].find((p) => String(p.id) === String(id));
-      setProducer(found ? normalizeProducer(found) : null);
-    };
-
-    if (!supabase) {
-      fromLocal();
-      setLoading(false);
-      return;
-    }
-
     (async () => {
       try {
+        if (!supabase) {
+          if (process.env.NODE_ENV !== 'production') {
+            fromEmptyLocal();
+            return;
+          }
+          throw new Error(
+            'Supabase не инициализирован. Проверь REACT_APP_/NEXT_PUBLIC_SUPABASE_*.'
+          );
+        }
+
         setLoading(true);
         const { data, error } = await supabase
           .from('producers')
@@ -97,13 +110,12 @@ export function useProducer(id) {
 
         if (error) throw error;
         if (!cancelled) {
-          if (data) setProducer(normalizeProducer(data));
-          else fromLocal();
+          setProducer(data ? normalizeProducer(data) : null);
         }
       } catch (e) {
         if (!cancelled) {
           setError(e);
-          fromLocal();
+          fromEmptyLocal();
         }
       } finally {
         if (!cancelled) setLoading(false);

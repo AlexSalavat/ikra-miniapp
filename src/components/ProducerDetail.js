@@ -55,7 +55,7 @@ export default function ProducerDetail() {
   const premium = badges?.includes('Честный знак') && badges?.includes('Меркурий');
 
   const phones = Object.values(contacts).filter(
-    (v) => typeof v === 'string' && /^[-+()\d\s]{7,}$/.test(v),
+    (v) => typeof v === 'string' && /^[-+()\d\s]{7,}$/.test(v)
   );
   const emails = Object.values(contacts).filter((v) => typeof v === 'string' && /@/.test(v));
   const safeSite = site ? (site.startsWith('http') ? site : `https://${site}`) : null;

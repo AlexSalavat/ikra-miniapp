@@ -26,3 +26,7 @@ yarn-error.log*
 
 # local build log
 build.log
+# local artifacts
+*.bak
+PROJECT_SNAPSHOT.md
+local-changes.patch

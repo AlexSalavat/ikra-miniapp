@@ -99,7 +99,7 @@ export default function NewsCoast() {
     const s = q.trim().toLowerCase();
     if (!s) return items;
     return items.filter((x) =>
-      [x.title, x.body, x.region, (x.tags || []).join(' ')].join(' ').toLowerCase().includes(s),
+      [x.title, x.body, x.region, (x.tags || []).join(' ')].join(' ').toLowerCase().includes(s)
     );
   }, [items, q]);
 

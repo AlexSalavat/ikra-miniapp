@@ -16,7 +16,7 @@ export default function Catalog() {
         .filter(Boolean)
         .join(' ')
         .toLowerCase()
-        .includes(s),
+        .includes(s)
     );
   }, [q, suppliers]);
 

@@ -62,7 +62,7 @@ export default function MarketSellCategory() {
         a.category === category &&
         (a.title.toLowerCase().includes(query.toLowerCase()) ||
           a.company.toLowerCase().includes(query.toLowerCase()) ||
-          (a.region || '').toLowerCase().includes(query.toLowerCase())),
+          (a.region || '').toLowerCase().includes(query.toLowerCase()))
     );
   }, [category, query]);
 

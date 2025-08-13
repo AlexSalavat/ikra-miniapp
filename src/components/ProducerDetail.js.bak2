@@ -1,14 +1,15 @@
+import { Navigation, Pagination, Thumbs } from 'swiper/modules';
+// src/components/ProducerDetail.js
 import React, { useMemo, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Thumbs } from 'swiper/modules';
-import 'swiper/css';
 import { useProducer } from '../lib/useProducers';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
 
 /* === helpers === */
 const getInitials = (name = '') =>
   name
-    .replace(/["«»]/g, '')
+    .replace(/["В«В»]/g, '')
     .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)
@@ -22,19 +23,17 @@ const stringHue = (s = '') => {
 };
 
 const BADGE_INFO = {
-  'Честный знак': 'Федеральная система маркировки и прослеживаемости товаров.',
-  Меркурий: 'Гос. система электронных ветсертификатов от Россельхознадзора.',
-  Проверенный: 'Проверка документов/контактов администрацией сервиса.',
+  'Р§РµСЃС‚РЅС‹Р№ Р·РЅР°Рє': 'Р¤РµРґРµСЂР°Р»СЊРЅР°СЏ СЃРёСЃС‚РµРјР° РјР°СЂРєРёСЂРѕРІРєРё Рё РїСЂРѕСЃР»РµР¶РёРІР°РµРјРѕСЃС‚Рё С‚РѕРІР°СЂРѕРІ.',
+  РњРµСЂРєСѓСЂРёР№: 'Р“РѕСЃ. СЃРёСЃС‚РµРјР° СЌР»РµРєС‚СЂРѕРЅРЅС‹С… РІРµС‚СЃРµСЂС‚РёС„РёРєР°С‚РѕРІ РѕС‚ Р РѕСЃСЃРµР»СЊС…РѕР·РЅР°РґР·РѕСЂР°.',
+  РџСЂРѕРІРµСЂРµРЅРЅС‹Р№: 'РџСЂРѕРІРµСЂРєР° РґРѕРєСѓРјРµРЅС‚РѕРІ/РєРѕРЅС‚Р°РєС‚РѕРІ Р°РґРјРёРЅРёСЃС‚СЂР°С†РёРµР№ СЃРµСЂРІРёСЃР°.',
 };
 
 export default function ProducerDetail() {
-  const { id } = useParams();
+const { id } = useParams();
   const navigate = useNavigate();
-
-  const { producer, loading, error } = useProducer(id);
-
-  // Деструктурим сразу, чтобы хуки были выше любых return
-  const {
+const { producer, loading, error } = useProducer(id);
+  if (loading) return <div className="max-w-md mx-auto px-3 pt-6 text-white/80">Загрузка</div>;
+  if (error)   return <div className="max-w-md mx-auto px-3 pt-6 text-red-400">Ошибка загрузки производителя</div>;const {
     name = '',
     logo,
     region = '',
@@ -49,26 +48,24 @@ export default function ProducerDetail() {
     founded,
     productionCapacity,
     exportMarkets = [],
-  } = producer || {};
+  } = (producer || {});const verified = badges?.includes('РџСЂРѕРІРµСЂРµРЅРЅС‹Р№');
+  const premium = badges?.includes('Р§РµСЃС‚РЅС‹Р№ Р·РЅР°Рє') && badges?.includes('РњРµСЂРєСѓСЂРёР№');
+
+  const phones = Object.values(contacts).filter(
+    (v) => typeof v === 'string' && /^[-+()\d\s]{7,}$/.test(v)
+  );
+  const emails = Object.values(contacts).filter((v) => typeof v === 'string' && /@/.test(v));
+  const safeSite = site ? (site.startsWith('http') ? site : `https://${site}`) : null;
 
   const initialsBG = useMemo(() => {
     const h = stringHue(name || region || 'x');
     return `linear-gradient(135deg,hsl(${h} 80% 20% / .95),hsl(${(h + 40) % 360} 80% 30% / .95))`;
   }, [name, region]);
 
-  // Галерея: основной слайдер + миниатюры-кнопки
+  // Р“Р°Р»РµСЂРµСЏ: РѕСЃРЅРѕРІРЅРѕР№ СЃР»Р°Р№РґРµСЂ + РјРёРЅРёР°С‚СЋСЂС‹-РєРЅРѕРїРєРё
   const swiperRef = useRef(null);
   const [activeIdx, setActiveIdx] = useState(0);
-  const images = (gallery.length ? gallery : logo ? [logo] : []).slice(0, 12);
-
-  if (loading) {
-    return <div className="max-w-md mx-auto px-3 pt-6 text-white/80">Загрузка...</div>;
-  }
-  if (error) {
-    return (
-      <div className="max-w-md mx-auto px-3 pt-6 text-red-400">Ошибка загрузки производителя</div>
-    );
-  }
+  const images = (gallery.length ? gallery : logo ? [logo] : []).slice(0, 12); // РѕРіСЂР°РЅРёС‡РёРј РґРѕ 12
 
   return (
     <div className="bg-black min-h-screen pb-24">
@@ -88,26 +85,27 @@ export default function ProducerDetail() {
                 strokeLinejoin="round"
               />
             </svg>
-            <span className="font-semibold">Назад</span>
+            <span className="font-semibold">РќР°Р·Р°Рґ</span>
           </button>
-          <h2 className="ml-auto mr-auto text-white font-bold text-lg">Производитель</h2>
+          <h2 className="ml-auto mr-auto text-white font-bold text-lg">РџСЂРѕРёР·РІРѕРґРёС‚РµР»СЊ</h2>
           <span className="w-16" />
         </div>
       </div>
 
       {!name ? (
-        <div className="max-w-md mx-auto px-3 pt-6 text-white">Завод не найден</div>
+        <div className="max-w-md mx-auto px-3 pt-6 text-white">Р—Р°РІРѕРґ РЅРµ РЅР°Р№РґРµРЅ</div>
       ) : (
         <div className="max-w-md mx-auto px-3 pt-3 space-y-3">
-          {/* BANNER (большое фото) */}
+          {/* BANNER (Р±РѕР»СЊС€РѕРµ С„РѕС‚Рѕ) */}
           <div className="glass-card p-2">
             <div className="relative w-full rounded-xl overflow-hidden border border-white/10">
+              {/* РµСЃР»Рё Tailwind < v3, Р·Р°РјРµРЅРё aspect-[16/10] РЅР° h-56 */}
               <div className="w-full aspect-[16/10] bg-black/40">
                 {images.length ? (
                   <img
                     loading="lazy"
                     src={images[0]}
-                    alt={`${name} баннер`}
+                    alt={`${name} Р±Р°РЅРЅРµСЂ`}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       e.currentTarget.src = '/images/no-image.webp';
@@ -118,25 +116,25 @@ export default function ProducerDetail() {
                 )}
               </div>
 
-              {/* Заголовок поверх баннера */}
+              {/* Р—Р°РіРѕР»РѕРІРѕРє РїРѕРІРµСЂС… Р±Р°РЅРЅРµСЂР° */}
               <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/60 via-black/10 to-transparent">
                 <div className="text-white font-extrabold text-[18px] leading-tight">{name}</div>
-                {/* Бейджи с подсказками */}
+                {/* Р‘РµР№РґР¶Рё СЃ РїРѕРґСЃРєР°Р·РєР°РјРё */}
                 <div className="mt-1 flex items-center gap-1.5 flex-wrap">
-                  {badges?.includes('Проверенный') && (
-                    <BadgeHint color="green" label="Проверенный" hint={BADGE_INFO['Проверенный']} />
+                  {verified && (
+                    <BadgeHint color="green" label="РџСЂРѕРІРµСЂРµРЅРЅС‹Р№" hint={BADGE_INFO['РџСЂРѕРІРµСЂРµРЅРЅС‹Р№']} />
                   )}
                   {badges
-                    .filter((b) => b !== 'Проверенный')
+                    .filter((b) => b !== 'РџСЂРѕРІРµСЂРµРЅРЅС‹Р№')
                     .map((b, i) => (
                       <BadgeHint
                         key={i}
-                        color={b === 'Честный знак' || b === 'Меркурий' ? 'blue' : 'gray'}
+                        color={b === 'Р§РµСЃС‚РЅС‹Р№ Р·РЅР°Рє' || b === 'РњРµСЂРєСѓСЂРёР№' ? 'blue' : 'gray'}
                         label={b}
                         hint={BADGE_INFO[b]}
                       />
                     ))}
-                  {badges?.includes('Честный знак') && badges?.includes('Меркурий') && (
+                  {premium && (
                     <span
                       className="ml-auto w-6 h-6 rounded-full border border-[rgba(59,175,218,.7)] bg-white/10 grid place-items-center backdrop-blur-sm"
                       title="Premium"
@@ -151,12 +149,10 @@ export default function ProducerDetail() {
             </div>
           </div>
 
-          {/* LOGO + RIGHT TEXT */}
-          <div
-            className={`glass-card p-3 ${badges?.includes('Честный знак') && badges?.includes('Меркурий') ? 'premium' : ''}`}
-          >
+          {/* LOGO + RIGHT TEXT (Р»РѕРіРѕС‚РёРї РќР• РЅР° С„РѕС‚Рѕ) */}
+          <div className={`glass-card p-3 ${premium ? 'premium' : ''}`}>
             <div className="grid grid-cols-[92px,1fr] gap-3 items-start">
-              {/* Логотип */}
+              {/* Р›РѕРіРѕС‚РёРї вЂ” СЃС‚РµРєР»Рѕ, РЅРµ СЂРµР¶РµС‚СЃСЏ */}
               <div className="relative w-[92px] h-[92px] rounded-2xl overflow-hidden border border-white/10 bg-black/40 grid place-items-center">
                 {logo ? (
                   <img
@@ -178,8 +174,9 @@ export default function ProducerDetail() {
                 )}
               </div>
 
-              {/* Правый столбец */}
+              {/* РџСЂР°РІС‹Р№ СЃС‚РѕР»Р±РµС†: СЂРµРіРёРѕРЅ, РєР°С‚РµРіРѕСЂРёРё, РјРёРЅРё-С„Р°РєС‚С‹ */}
               <div className="min-w-0">
+                {/* Р РµРіРёРѕРЅ */}
                 {region && (
                   <div className="flex items-center gap-1 text-white/80 text-sm">
                     <svg
@@ -197,6 +194,7 @@ export default function ProducerDetail() {
                   </div>
                 )}
 
+                {/* РљР°С‚РµРіРѕСЂРёРё */}
                 {!!categories.length && (
                   <div className="mt-1.5 flex flex-wrap gap-1">
                     {categories.slice(0, 4).map((c, i) => (
@@ -210,19 +208,20 @@ export default function ProducerDetail() {
                   </div>
                 )}
 
+                {/* РљСЂР°С‚РєРёРµ С„Р°РєС‚С‹ */}
                 <div className="mt-2 grid grid-cols-2 gap-1.5">
                   {typeof founded !== 'undefined' && (
-                    <Fact icon="" title="Основано" value={String(founded)} />
+                    <Fact icon="рџ“…" title="РћСЃРЅРѕРІР°РЅРѕ" value={String(founded)} />
                   )}
                   {productionCapacity && (
-                    <Fact icon="" title="Мощность" value={productionCapacity} />
+                    <Fact icon="вљ™пёЏ" title="РњРѕС‰РЅРѕСЃС‚СЊ" value={productionCapacity} />
                   )}
                   {exportMarkets && exportMarkets.length > 0 && (
                     <Fact
-                      icon=""
-                      title="Экспорт"
+                      icon="рџЊЌ"
+                      title="Р­РєСЃРїРѕСЂС‚"
                       value={
-                        exportMarkets.slice(0, 3).join(', ') + (exportMarkets.length > 3 ? '' : '')
+                        exportMarkets.slice(0, 3).join(', ') + (exportMarkets.length > 3 ? 'вЂ¦' : '')
                       }
                     />
                   )}
@@ -231,30 +230,24 @@ export default function ProducerDetail() {
             </div>
           </div>
 
+          {/* Рћ РєРѕРјРїР°РЅРёРё */}
           {(fullDescription || description) && (
             <div className="glass-card p-3">
-              <div className="text-white font-semibold text-[15px] mb-1">О компании</div>
+              <div className="text-white font-semibold text-[15px] mb-1">Рћ РєРѕРјРїР°РЅРёРё</div>
               <div className="text-white/90 text-[14px] leading-relaxed">
                 {fullDescription || description}
               </div>
             </div>
           )}
 
-          {(Object.values(contacts).filter(
-            (v) => typeof v === 'string' && /^[-+()\d\s]{7,}$/.test(v)
-          ).length ||
-            Object.values(contacts).filter((v) => typeof v === 'string' && /@/.test(v)).length) >
-            0 && (
+          {/* РљРѕРЅС‚Р°РєС‚С‹ / РђРґСЂРµСЃ / РЎР°Р№С‚ вЂ” СЂР°Р·РґРµР»СЊРЅС‹Рµ СЃС‚РµРєР»СЏРЅРЅС‹Рµ СЃРµРєС†РёРё */}
+          {(phones.length || emails.length) > 0 && (
             <div className="glass-card p-3">
-              <div className="text-white/80 text-sm mb-2">Контакты</div>
+              <div className="text-white/80 text-sm mb-2">РљРѕРЅС‚Р°РєС‚С‹</div>
               <div className="grid grid-cols-2 gap-2">
-                {Object.values(contacts).filter(
-                  (v) => typeof v === 'string' && /^[-+()\d\s]{7,}$/.test(v)
-                )[0] && (
+                {phones[0] && (
                   <a
-                    href={`tel:${Object.values(contacts)
-                      .filter((v) => typeof v === 'string' && /^[-+()\d\s]{7,}$/.test(v))[0]
-                      .replace(/[^+\d]/g, '')}`}
+                    href={`tel:${phones[0].replace(/[^+\d]/g, '')}`}
                     className="flex items-center justify-center gap-2 rounded-lg py-2 bg-white/10 text-white font-semibold border border-white/10 hover:bg-white/15 transition"
                   >
                     <svg
@@ -267,12 +260,12 @@ export default function ProducerDetail() {
                     >
                       <path d="M22 16.92v3a2 2 0 01-2.18 2 19.72 19.72 0 01-8.63-3.12A19.72 19.72 0 013.2 6.18 2 2 0 015.09 4h3a2 2 0 012 1.72c.07.64.2 1.28.39 1.9a2 2 0 01-.45 2.11L9.09 10.9a16 16 0 006 6l1.18-1.18a2 2 0 012.11-.45c.62.19 1.26.32 1.9.39A2 2 0 0122 16.92z" />
                     </svg>
-                    Позвонить
+                    РџРѕР·РІРѕРЅРёС‚СЊ
                   </a>
                 )}
-                {Object.values(contacts).filter((v) => typeof v === 'string' && /@/.test(v))[0] && (
+                {emails[0] && (
                   <a
-                    href={`mailto:${Object.values(contacts).filter((v) => typeof v === 'string' && /@/.test(v))[0]}`}
+                    href={`mailto:${emails[0]}`}
                     className="flex items-center justify-center gap-2 rounded-lg py-2 bg-white/10 text-white font-semibold border border-white/10 hover:bg-white/15 transition"
                   >
                     <svg
@@ -286,7 +279,7 @@ export default function ProducerDetail() {
                       <rect x="3" y="5" width="18" height="14" rx="2" />
                       <path d="M3 7l9 6 9-6" />
                     </svg>
-                    Написать
+                    РќР°РїРёСЃР°С‚СЊ
                   </a>
                 )}
               </div>
@@ -295,16 +288,16 @@ export default function ProducerDetail() {
 
           {address && (
             <div className="glass-card p-3">
-              <div className="text-white/80 text-sm mb-1">Адрес</div>
+              <div className="text-white/80 text-sm mb-1">РђРґСЂРµСЃ</div>
               <div className="text-white font-medium text-[14px]">{address}</div>
             </div>
           )}
 
-          {site && (
+          {safeSite && (
             <div className="glass-card p-3">
-              <div className="text-white/80 text-sm mb-1">Сайт</div>
+              <div className="text-white/80 text-sm mb-1">РЎР°Р№С‚</div>
               <a
-                href={site.startsWith('http') ? site : `https://${site}`}
+                href={safeSite}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 text-[rgba(59,175,218,0.95)] font-bold"
@@ -313,16 +306,43 @@ export default function ProducerDetail() {
                   <path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3z" />
                   <path d="M5 5h7v2H7v10h10v-5h2v7H5z" />
                 </svg>
-                {(site.startsWith('http') ? site : `https://${site}`).replace(/^https?:\/\//, '')}
+                {safeSite.replace(/^https?:\/\//, '')}
               </a>
             </div>
           )}
 
+          {/* РЎРµСЂС‚РёС„РёРєР°С‚С‹ / СЃС‚Р°С‚СѓСЃС‹ (СЂР°СЃС€РёСЂРµРЅРЅРѕ) */}
+          {badges && badges.length > 0 && (
+            <div className="glass-card p-3">
+              <div className="text-white/80 text-sm mb-2">РЎРµСЂС‚РёС„РёРєР°С‚С‹ Рё СЃС‚Р°С‚СѓСЃС‹</div>
+              <div className="flex flex-wrap gap-1.5">
+                {badges.map((b, i) => (
+                  <BadgeHint
+                    key={i}
+                    color={
+                      b === 'РџСЂРѕРІРµСЂРµРЅРЅС‹Р№'
+                        ? 'green'
+                        : b === 'РњРµСЂРєСѓСЂРёР№' || b === 'Р§РµСЃС‚РЅС‹Р№ Р·РЅР°Рє'
+                          ? 'blue'
+                          : 'gray'
+                    }
+                    label={b}
+                    hint={BADGE_INFO[b]}
+                    large
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Р“РђР›Р•Р Р•РЇ РЎ РњРРќРРђРўР®Р РђРњР */}
           {images.length > 0 && (
             <div className="glass-card p-2">
-              <div className="text-white font-semibold text-[15px] mb-2 px-1">Галерея</div>
+              <div className="text-white font-semibold text-[15px] mb-2 px-1">Р“Р°Р»РµСЂРµСЏ</div>
 
+              {/* РћСЃРЅРѕРІРЅРѕР№ СЃР»Р°Р№РґРµСЂ */}
               <div className="relative w-full rounded-xl overflow-hidden border border-white/10">
+                {/* РµСЃР»Рё Tailwind < v3 вЂ” Р·Р°РјРµРЅРё aspect-[4/3] РЅР° h-56 */}
                 <div className="w-full aspect-[4/3]">
                   <Swiper
                     modules={[Navigation, Pagination, Thumbs]}
@@ -337,7 +357,7 @@ export default function ProducerDetail() {
                         <img
                           loading="lazy"
                           src={src}
-                          alt={`${name} фото ${i + 1}`}
+                          alt={`${name} С„РѕС‚Рѕ ${i + 1}`}
                           className="w-full h-full object-cover"
                           onError={(e) => {
                             e.currentTarget.src = '/images/no-image.webp';
@@ -349,6 +369,7 @@ export default function ProducerDetail() {
                 </div>
               </div>
 
+              {/* РњРёРЅРёР°С‚СЋСЂС‹ */}
               {images.length > 1 && (
                 <div className="mt-2 flex gap-2 overflow-x-auto no-scrollbar px-1">
                   {images.map((src, i) => (
@@ -359,7 +380,7 @@ export default function ProducerDetail() {
                         'shrink-0 w-16 h-12 rounded-lg overflow-hidden border',
                         i === activeIdx ? 'border-[rgba(59,175,218,0.9)]' : 'border-white/15',
                       ].join(' ')}
-                      title={`фото ${i + 1}`}
+                      title={`С„РѕС‚Рѕ ${i + 1}`}
                     >
                       <img
                         loading="lazy"

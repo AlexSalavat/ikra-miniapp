@@ -1,12 +1,12 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import producers from '../data/producers';
+import { useProducers } from '../lib/useProducers';
 
 const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
 
 const getInitials = (name = '') =>
-  name
-    .replace(/["«»]/g, '')
+  (name || '')
+    .replace(/["]/g, '')
     .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)
@@ -20,14 +20,27 @@ const stringHue = (s = '') => {
 };
 
 export default function TopProducers() {
-  const [filter, setFilter] = useState(REGIONS[0]);
   const navigate = useNavigate();
+  const { producers, loading, error } = useProducers();
+
+  const [filter, setFilter] = useState(REGIONS[0]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [filter]);
 
-  const filtered = useMemo(() => producers.filter((p) => p.region === filter), [filter]);
+  const filtered = useMemo(
+    () => (producers || []).filter((p) => (p?.region || '') === filter),
+    [producers, filter]
+  );
+
+  if (error) {
+    return (
+      <div className="bg-black min-h-screen text-red-400 p-4">
+        Ошибка загрузки производителей: {String(error.message || error)}
+      </div>
+    );
+  }
 
   return (
     <div className="bg-black min-h-screen pb-24">
@@ -79,33 +92,42 @@ export default function TopProducers() {
 
       {/* Сетка карточек */}
       <div className="max-w-md mx-auto px-3 pt-3 grid grid-cols-2 gap-3">
-        {filtered.map((p) => (
-          <ProducerCard key={p.id} p={p} onClick={() => navigate(`/producer/${p.id}`)} />
-        ))}
-        {filtered.length === 0 &&
-          Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="glass-card aspect-square animate-pulse" />
-          ))}
+        {(loading ? Array.from({ length: 8 }) : filtered).map((item, i) =>
+          loading ? (
+            <div key={`s-${i}`} className="glass-card aspect-square animate-pulse" />
+          ) : (
+            <ProducerCard
+              key={item.id || i}
+              p={item}
+              onClick={() => navigate(`/producer/${item.id}`)}
+            />
+          )
+        )}
+        {!loading && filtered.length === 0 && (
+          <div className="col-span-2 text-center text-white/70 py-6">Ничего не найдено</div>
+        )}
       </div>
     </div>
   );
 }
 
 function ProducerCard({ p, onClick }) {
-  const verified = p.badges?.includes('Проверенный');
-  const premium = p.badges?.includes('Честный знак') && p.badges?.includes('Меркурий');
-  const img = p.logo?.trim() ? p.logo : null;
+  const verified = p?.badges?.includes('Проверенный');
+  const premium = p?.badges?.includes('Честный знак') && p?.badges?.includes('Меркурий');
+  const img = p?.logo?.trim() ? p.logo : null;
 
   const fallbackBG = useMemo(() => {
-    const h = stringHue(p.name || p.region || 'x');
+    const h = stringHue(p?.name || p?.region || 'x');
     return `linear-gradient(135deg,hsl(${h} 80% 20% / .85),hsl(${(h + 40) % 360} 80% 30% / .85))`;
-  }, [p.name, p.region]);
+  }, [p?.name, p?.region]);
 
   return (
     <div
-      className={`glass-card p-2 cursor-pointer transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98] ${premium ? 'premium' : ''}`}
+      className={`glass-card p-2 cursor-pointer transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98] ${
+        premium ? 'premium' : ''
+      }`}
       onClick={onClick}
-      title={p.name}
+      title={p?.name}
     >
       {/* Квадратное фото/лого */}
       <div className="relative aspect-square rounded-lg overflow-hidden border border-white/10">
@@ -113,7 +135,7 @@ function ProducerCard({ p, onClick }) {
           <img
             loading="lazy"
             src={img}
-            alt={p.name}
+            alt={p?.name}
             className="w-full h-full object-contain bg-black/40 img-fade-in"
             onError={(e) => {
               e.currentTarget.remove();
@@ -124,7 +146,7 @@ function ProducerCard({ p, onClick }) {
             className="w-full h-full grid place-items-center text-white/95 font-extrabold text-xl"
             style={{ background: fallbackBG }}
           >
-            {getInitials(p.name)}
+            {getInitials(p?.name)}
           </div>
         )}
 
@@ -143,18 +165,16 @@ function ProducerCard({ p, onClick }) {
 
       {/* Текстовая часть */}
       <div className="mt-2 text-center">
-        <div className="text-white font-semibold text-sm truncate" title={p.name}>
-          {p.name}
+        <div className="text-white font-semibold text-sm truncate" title={p?.name}>
+          {p?.name}
         </div>
 
-        {/* Строчка ниже — регион по центру */}
+        {/* строка ниже  регион по центру */}
         <div className="mt-0.5 flex items-center justify-center gap-1.5 text-xs">
           {verified && (
-            <span className="px-1.5 py-0.5 rounded-full text-[10px] font-semibold text-white border border-white/20 bg-green-600/60 backdrop-blur-sm">
-              ✅
-            </span>
+            <span className="px-1.5 py-0.5 rounded-full text-[10px] font-semibold text-white border border-white/20 bg-green-600/60 backdrop-blur-sm"></span>
           )}
-          <span className="text-white/75 truncate">{p.region}</span>
+          <span className="text-white/75 truncate">{p?.region}</span>
         </div>
       </div>
     </div>

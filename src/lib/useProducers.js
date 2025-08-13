@@ -21,7 +21,7 @@ export function normalizeProducer(row = {}) {
   };
 }
 
-/** РЎРїРёСЃРѕРє РїСЂРѕРёР·РІРѕРґРёС‚РµР»РµР№ */
+/** Р РЋР С—Р С‘РЎРѓР С•Р С” Р С—РЎР‚Р С•Р С‘Р В·Р Р†Р С•Р Т‘Р С‘РЎвЂљР ВµР В»Р ВµР в„– */
 export function useProducers() {
   const [producers, setProducers] = useState([].map(normalizeProducer));
   const [loading, setLoading] = useState(Boolean(supabase));
@@ -59,7 +59,7 @@ export function useProducers() {
   return { producers, loading, error };
 }
 
-/** РћРґРёРЅ РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊ РїРѕ id */
+/** Р С›Р Т‘Р С‘Р Р… Р С—РЎР‚Р С•Р С‘Р В·Р Р†Р С•Р Т‘Р С‘РЎвЂљР ВµР В»РЎРЉ Р С—Р С• id */
 export function useProducer(id) {
   const [producer, setProducer] = useState(null);
   const [loading, setLoading] = useState(Boolean(id) && Boolean(supabase));

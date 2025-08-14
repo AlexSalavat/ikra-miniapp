@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useProducer } from '../lib/useProducers';
 
@@ -60,8 +60,6 @@ export default function ProducerDetail() {
     0,
     12
   );
-  const [activeIdx, setActiveIdx] = useState(0);
-  const swiperRef = useRef(null); // на будущее, если подключишь Swiper
 
   if (loading) return <div className="max-w-md mx-auto px-3 pt-6 text-white/80">Загрузка</div>;
   if (error)
@@ -261,7 +259,7 @@ export default function ProducerDetail() {
           </div>
         )}
 
-        {/* Галерея (простая сетка без Swiper, чтобы не подтягивать модули лишний раз) */}
+        {/* Галерея (простая сетка) */}
         {!!images.length && (
           <div className="glass-card p-3">
             <div className="text-white font-semibold text-[15px] mb-2">Галерея</div>
@@ -286,7 +284,7 @@ export default function ProducerDetail() {
 }
 
 function BadgeHint({ label, hint, color = 'gray' }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
   const base = 'px-2 py-0.5 rounded-full text-[10px] font-semibold backdrop-blur-sm border';
   const palette =
     color === 'green'

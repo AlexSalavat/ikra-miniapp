@@ -1,1 +1,11 @@
-{"headers":[{"headers":[{"key":"Cache-Control","value":"no-store"}],"source":"/"},{"headers":[{"key":"Cache-Control","value":"no-store"}],"source":"/index.html"},{"headers":[{"key":"Cache-Control","value":"no-store"}],"source":"/(sw|service-worker|workbox-.*)\\\\.js"},{"headers":[{"key":"Cache-Control","value":"no-store"}],"source":"/images/(.*)"}]}
+{
+  "headers": [
+    { "headers": [{ "key": "Cache-Control", "value": "no-store" }], "source": "/" },
+    { "headers": [{ "key": "Cache-Control", "value": "no-store" }], "source": "/index.html" },
+    {
+      "headers": [{ "key": "Cache-Control", "value": "no-store" }],
+      "source": "/(sw|service-worker|workbox-.*)\\\\.js"
+    },
+    { "headers": [{ "key": "Cache-Control", "value": "no-store" }], "source": "/images/(.*)" }
+  ]
+}

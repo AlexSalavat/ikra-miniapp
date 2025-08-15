@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import BottomNav from './components/BottomNav';
 import TopProducers from './components/TopProducers';
 
+// Экраны (ленивая загрузка)
 const Home = lazy(() => import('./components/Home'));
 const Catalog = lazy(() => import('./components/Catalog'));
 const Market = lazy(() => import('./components/Market'));
@@ -21,7 +22,7 @@ function AppShell() {
   return (
     <div className="min-h-screen pb-20 bg-white">
       <main className="max-w-screen-md mx-auto px-3 py-2">
-        <Suspense fallback={<div className="p-6 text-lg">Загрузка…</div>}>
+        <Suspense fallback={<div className="p-6 text-lg">Загрузка</div>}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/catalog" element={<Catalog />} />
@@ -34,13 +35,11 @@ function AppShell() {
 
             <Route path="/news" element={<News />} />
             <Route path="/profile" element={<Profile />} />
-
-            {/* новое: список производителей */}
-            <Route path="/producers" element={<TopProducers />} />
-            {/* карточка производителя */}
             <Route path="/producer/:id" element={<ProducerDetail />} />
             <Route path="/supplier/:id" element={<SupplierDetail />} />
             <Route path="/lead" element={<LeadFormPage />} />
+
+            <Route path="/producers" element={<TopProducers />} />
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
@@ -65,7 +64,7 @@ export default function App() {
         tg.expand();
         tg.setHeaderColor('secondary_bg_color');
       }
-    } catch (_e) {}
+    } catch {}
   }, []);
 
   return (

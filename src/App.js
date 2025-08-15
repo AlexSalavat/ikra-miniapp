@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import BottomNav from './components/BottomNav';
 import TopProducers from './components/TopProducers';
 
-// Экраны (ленивая загрузка)
 const Home = lazy(() => import('./components/Home'));
 const Catalog = lazy(() => import('./components/Catalog'));
 const Market = lazy(() => import('./components/Market'));
@@ -14,7 +13,7 @@ const MarketSellCategory = lazy(() => import('./components/MarketSellCategory'))
 const MarketSellDetail = lazy(() => import('./components/MarketSellDetail'));
 const News = lazy(() => import('./components/News'));
 const Profile = lazy(() => import('./components/Profile'));
-import ProducerDetail from './components/ProducerDetail';
+const ProducerDetail = lazy(() => import('./components/ProducerDetail'));
 const SupplierDetail = lazy(() => import('./components/SupplierDetail'));
 const LeadFormPage = lazy(() => import('./components/LeadFormPage'));
 
@@ -22,7 +21,7 @@ function AppShell() {
   return (
     <div className="min-h-screen pb-20 bg-white">
       <main className="max-w-screen-md mx-auto px-3 py-2">
-        <Suspense fallback={<div className="p-6 text-lg">Загрузка</div>}>
+        <Suspense fallback={<div className="p-6 text-lg">Загрузка…</div>}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/catalog" element={<Catalog />} />
@@ -35,11 +34,14 @@ function AppShell() {
 
             <Route path="/news" element={<News />} />
             <Route path="/profile" element={<Profile />} />
+
+            {/* новое: список производителей */}
+            <Route path="/producers" element={<TopProducers />} />
+            {/* карточка производителя */}
             <Route path="/producer/:id" element={<ProducerDetail />} />
             <Route path="/supplier/:id" element={<SupplierDetail />} />
             <Route path="/lead" element={<LeadFormPage />} />
 
-            <Route path="/producers" element={<TopProducers />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
@@ -60,11 +62,10 @@ export default function App() {
       const tg = window?.Telegram?.WebApp;
       if (tg) {
         tg.ready();
-        tg.expand(); // разворачиваем на максимум
-        // второй цвет для шапки/хедера (под тему Telegram)
+        tg.expand();
         tg.setHeaderColor('secondary_bg_color');
       }
-    } catch (_) {}
+    } catch (_e) {}
   }, []);
 
   return (
@@ -73,7 +74,3 @@ export default function App() {
     </BrowserRouter>
   );
 }
-
-
-
-

@@ -24,8 +24,8 @@ export function normalizeProducer(row = {}) {
 }
 
 /**
- * В DEV используем мок-данные, если Supabase не настроен или вернул пусто.
- * В PROD  только Supabase.
+ * Р’ DEV РёСЃРїРѕР»СЊР·СѓРµРј РјРѕРє-РґР°РЅРЅС‹Рµ, РµСЃР»Рё Supabase РЅРµ РЅР°СЃС‚СЂРѕРµРЅ РёР»Рё РІРµСЂРЅСѓР» РїСѓСЃС‚Рѕ.
+ * Р’ PROD  С‚РѕР»СЊРєРѕ Supabase.
  */
 export function useProducers() {
   const [producers, setProducers] = useState([]);
@@ -36,13 +36,15 @@ export function useProducers() {
     let cancelled = false;
     (async () => {
       try {
-        // Нет клиента  фоллбэк в DEV
+        // РќРµС‚ РєР»РёРµРЅС‚Р°  С„РѕР»Р»Р±СЌРє РІ DEV
         if (!supabase) {
           if (process.env.NODE_ENV !== 'production') {
             if (!cancelled) setProducers(MOCK_PRODUCERS.map(normalizeProducer));
             return;
           }
-          throw new Error('Supabase не инициализирован. Проверь переменные окружения.');
+          throw new Error(
+            'Supabase РЅРµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ. РџСЂРѕРІРµСЂСЊ РїРµСЂРµРјРµРЅРЅС‹Рµ РѕРєСЂСѓР¶РµРЅРёСЏ.'
+          );
         }
 
         const { data, error } = await supabase
@@ -64,13 +66,15 @@ export function useProducers() {
         if (!cancelled) setLoading(false);
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return { producers, loading, error };
 }
 
-/** Получение одного производителя по id (с фоллбэком в DEV) */
+/** РџРѕР»СѓС‡РµРЅРёРµ РѕРґРЅРѕРіРѕ РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЏ РїРѕ id (СЃ С„РѕР»Р»Р±СЌРєРѕРј РІ DEV) */
 export function useProducer(id) {
   const [producer, setProducer] = useState(null);
   const [loading, setLoading] = useState(Boolean(id));
@@ -87,14 +91,17 @@ export function useProducer(id) {
 
     (async () => {
       try {
-        // DEV фоллбэк, если нет клиента
+        // DEV С„РѕР»Р»Р±СЌРє, РµСЃР»Рё РЅРµС‚ РєР»РёРµРЅС‚Р°
         if (!supabase && process.env.NODE_ENV !== 'production') {
           const found = MOCK_PRODUCERS.find((p) => String(p.id) === String(id)) || null;
           if (!cancelled) setProducer(found ? normalizeProducer(found) : null);
           return;
         }
 
-        if (!supabase) throw new Error('Supabase не инициализирован. Проверь переменные окружения.');
+        if (!supabase)
+          throw new Error(
+            'Supabase РЅРµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ. РџСЂРѕРІРµСЂСЊ РїРµСЂРµРјРµРЅРЅС‹Рµ РѕРєСЂСѓР¶РµРЅРёСЏ.'
+          );
 
         setLoading(true);
         const { data, error } = await supabase
@@ -131,7 +138,9 @@ export function useProducer(id) {
       }
     })();
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
   return { producer, loading, error };

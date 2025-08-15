@@ -1,6 +1,6 @@
 export const MOCK_PRODUCERS = [
   {
-    id: "1",
+    id: '1',
     name: 'ООО "Корякморепродукт"',
     region: 'Камчатка',
     logo: '/images/koryak.webp',
@@ -9,10 +9,10 @@ export const MOCK_PRODUCERS = [
     contacts: { phone: '+7 (4152) 20-10-02', email: 'kmp-office@bk.ru' },
     categories: ['Икра', 'Рыба', 'Морепродукты'],
     badges: ['Проверенный', 'Честный знак', 'Меркурий'],
-    gallery: ['/images/koryak-1.webp', '/images/koryak-2.webp']
+    gallery: ['/images/koryak-1.webp', '/images/koryak-2.webp'],
   },
   {
-    id: "2",
+    id: '2',
     name: 'ООО "Витязь Авто"',
     region: 'Камчатка',
     logo: '/images/VA.webp',
@@ -20,10 +20,10 @@ export const MOCK_PRODUCERS = [
     site: 'https://va-salmon.ru',
     categories: ['Рыба'],
     badges: [],
-    gallery: []
+    gallery: [],
   },
   {
-    id: "6",
+    id: '6',
     name: 'ООО "Фирма Жупанова"',
     region: 'Камчатка',
     logo: '/images/zhupanova.webp',
@@ -31,6 +31,6 @@ export const MOCK_PRODUCERS = [
     contacts: { phone: '8-961-965-35-95' },
     categories: ['Икра лососевая', 'Мороженая рыба'],
     badges: [],
-    gallery: ['/images/zhupanova.webp']
-  }
+    gallery: ['/images/zhupanova.webp'],
+  },
 ];

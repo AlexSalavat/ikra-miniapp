@@ -19,7 +19,14 @@ const Home = () => {
         overflow: 'hidden',
       }}
     >
-      {/* Убрали тёмный оверлей */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          zIndex: 1,
+        }}
+      />
       <div
         style={{
           zIndex: 2,
@@ -32,7 +39,7 @@ const Home = () => {
           style={{
             fontSize: '2rem',
             marginBottom: '16px',
-            textShadow: '0 1px 3px rgba(0,0,0,0.35)', // мягче
+            textShadow: '0 2px 8px rgba(0,0,0,0.8)',
           }}
         >
           PORT MARKET
@@ -41,7 +48,7 @@ const Home = () => {
           style={{
             fontSize: '1rem',
             lineHeight: '1.4',
-            textShadow: '0 1px 2px rgba(0,0,0,0.25)', // мягче
+            textShadow: '0 1px 4px rgba(0,0,0,0.6)',
           }}
         >
           Цифровой морской рынок: от вылова до продажи,

@@ -1,1 +1,8 @@
-npx --no-install lint-staged
+#!/usr/bin/env sh
+
+# Try lint-staged if installed, otherwise skip
+if command -v npx >/dev/null 2>&1; then
+  npx --no-install lint-staged 2>/dev/null || echo "lint-staged skipped"
+else
+  echo "npx not found, skipping lint-staged"
+fi

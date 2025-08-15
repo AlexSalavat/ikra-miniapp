@@ -31,10 +31,12 @@ module.exports = {
     configure: (config) => {
       // Оставим и штатный ignoreWarnings  как запасной парашют
       const re = /Critical dependency: the request of a dependency is an expression/;
-      const asFn = (w) => re.test((w && (w.message || w.toString())) || '');
+      const asFn = (w) => re.test(((w && (w.message || w.toString())) || ''));
       config.ignoreWarnings = [...(config.ignoreWarnings || []), asFn];
       return config;
     },
-    plugins: [new SilenceCriticalDependencyPlugin()],
+    plugins: [
+      new SilenceCriticalDependencyPlugin(),
+    ],
   },
 };

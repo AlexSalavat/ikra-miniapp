@@ -1,73 +1,92 @@
-import React, { Suspense, lazy, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import * as React from 'react';
 
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
+
+import DevAdminButton from './admin/DevAdminButton';
 import BottomNav from './components/BottomNav';
+import Home from './components/Home';
+import Showcase from './components/Showcase';
 
-// Экраны (ленивая загрузка)
-const Home = lazy(() => import('./components/Home'));
-const Catalog = lazy(() => import('./components/Catalog'));
+const SupplierDetail = lazy(() => import('./components/SupplierDetail'));
+const ProducerDetail = lazy(() => import('./components/ProducerDetail'));
+const TopProducers = lazy(() => import('./components/TopProducers'));
+const LogisticsShowcase = lazy(() => import('./components/LogisticsShowcase'));
+const ProductionShowcase = lazy(() => import('./components/ProductionShowcase'));
 const Market = lazy(() => import('./components/Market'));
-const MarketBuy = lazy(() => import('./components/MarketBuy'));
 const MarketSell = lazy(() => import('./components/MarketSell'));
+const MarketBuy = lazy(() => import('./components/MarketBuy'));
 const MarketSellCategory = lazy(() => import('./components/MarketSellCategory'));
 const MarketSellDetail = lazy(() => import('./components/MarketSellDetail'));
+const NeirobizScreen = lazy(() => import('./components/NeirobizScreen'));
+const NeirobizServiceDetail = lazy(() => import('./components/NeirobizServiceDetail'));
 const News = lazy(() => import('./components/News'));
-const Profile = lazy(() => import('./components/Profile'));
-const ProducerDetail = lazy(() => import('./components/ProducerDetail'));
-const SupplierDetail = lazy(() => import('./components/SupplierDetail'));
+const CaviarWarBoard = lazy(() => import('./components/CaviarWarBoard'));
+const AdminLayout = lazy(() => import('./admin/AdminLayout'));
+const AdminHome = lazy(() => import('./admin/AdminHome'));
+
+const SuppliersListPage = lazy(() => import('./admin/suppliers/SuppliersListPage'));
+const SupplierCreatePage = lazy(() => import('./admin/suppliers/SupplierCreatePage'));
 const LeadFormPage = lazy(() => import('./components/LeadFormPage'));
+const Catalog = lazy(() => import('./components/Catalog'));
 
-function AppShell() {
-  return (
-    <div className="min-h-screen pb-20 bg-white">
-      <main className="max-w-screen-md mx-auto px-3 py-2">
-        <Suspense fallback={<div className="p-6 text-lg">Загрузка</div>}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/catalog" element={<Catalog />} />
+const NewsCoast = lazy(() => import('./components/NewsCoast'));
 
-            <Route path="/market" element={<Market />} />
-            <Route path="/market/buy" element={<MarketBuy />} />
-            <Route path="/market/sell" element={<MarketSell />} />
-            <Route path="/market/sell/category" element={<MarketSellCategory />} />
-            <Route path="/market/sell/:id" element={<MarketSellDetail />} />
+const AddAdForm = lazy(() => import('./components/AddAdForm'));
+const Profile = lazy(() => import('./components/Profile'));
 
-            <Route path="/news" element={<News />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/producer/:id" element={<ProducerDetail />} />
-            <Route path="/supplier/:id" element={<SupplierDetail />} />
-            <Route path="/lead" element={<LeadFormPage />} />
+// Admin
 
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </Suspense>
-      </main>
+const AdminSuppliers = lazy(() => import('./admin/suppliers/Suppliers'));
 
-      <div className="fixed bottom-0 left-0 right-0 border-t bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/70">
-        <div className="max-w-screen-md mx-auto">
-          <BottomNav />
-        </div>
-      </div>
-    </div>
-  );
+function Loading() {
+  return <div className="p-4">Loading...</div>;
 }
 
 export default function App() {
-  useEffect(() => {
-    try {
-      const tg = window?.Telegram?.WebApp;
-      if (tg) {
-        tg.ready();
-        tg.expand(); // разворачиваем на максимум
-        // второй цвет для шапки/хедера (под тему Telegram)
-        tg.setHeaderColor('secondary_bg_color');
-      }
-    } catch (_) {}
-  }, []);
-
   return (
     <BrowserRouter>
-      <AppShell />
+      <div className="min-h-screen bg-black text-white pb-[72px] md:pb-0">
+        <Suspense fallback={<Loading />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/catalog" element={<Showcase />} />
+            <Route path="/catalog/suppliers" element={<Catalog />} />
+            <Route path="/supplier/:id" element={<SupplierDetail />} />
+            <Route path="/logistics" element={<LogisticsShowcase />} />
+            <Route path="/production" element={<ProductionShowcase />} />
+            <Route path="/producers" element={<TopProducers />} />
+            <Route path="/producer/:id" element={<ProducerDetail />} />
+            <Route path="/neirobiz" element={<NeirobizScreen />} />
+            <Route path="/neirobiz/service/:id" element={<NeirobizServiceDetail />} />
+
+            <Route path="/news" element={<News />} />
+            <Route path="/news/coast" element={<NewsCoast />} />
+            <Route path="/news/ikra-wars" element={<CaviarWarBoard />} />
+            <Route path="/news/top-producers" element={<TopProducers />} />
+
+            <Route path="/market" element={<Market />} />
+            <Route path="/market/sell" element={<MarketSell />} />
+            <Route path="/market/buy" element={<MarketBuy />} />
+            <Route path="/market/sell/:category" element={<MarketSellCategory />} />
+            <Route path="/market/sell/detail/:id" element={<MarketSellDetail />} />
+            <Route path="/market/add" element={<AddAdForm />} />
+            <Route path="/profile" element={<Profile />} />
+
+            {/* Admin */}
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminHome />} />
+              <Route path="suppliers" element={<AdminSuppliers />} />
+              <Route path="suppliers/list" element={<SuppliersListPage />} />
+              <Route path="suppliers/create" element={<SupplierCreatePage />} />
+            </Route>
+            <Route path="/lead" element={<LeadFormPage />} />
+          </Routes>
+        </Suspense>
+
+        <DevAdminButton />
+        <BottomNav />
+      </div>
     </BrowserRouter>
   );
 }

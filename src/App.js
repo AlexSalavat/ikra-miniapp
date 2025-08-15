@@ -48,44 +48,40 @@ export default function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-black text-white pb-[72px] md:pb-0">
         <Suspense fallback={<Loading />}>
-          <Suspense fallback={<div style={{ padding: 16, color: '#fff' }}>Загрузка</div>}>
-            \n
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/catalog" element={<Showcase />} />
-              <Route path="/catalog/suppliers" element={<Catalog />} />
-              <Route path="/supplier/:id" element={<SupplierDetail />} />
-              <Route path="/logistics" element={<LogisticsShowcase />} />
-              <Route path="/production" element={<ProductionShowcase />} />
-              <Route path="/producers" element={<TopProducers />} />
-              <Route path="/producer/:id" element={<ProducerDetail />} />
-              <Route path="/neirobiz" element={<NeirobizScreen />} />
-              <Route path="/neirobiz/service/:id" element={<NeirobizServiceDetail />} />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/catalog" element={<Showcase />} />
+            <Route path="/catalog/suppliers" element={<Catalog />} />
+            <Route path="/supplier/:id" element={<SupplierDetail />} />
+            <Route path="/logistics" element={<LogisticsShowcase />} />
+            <Route path="/production" element={<ProductionShowcase />} />
+            <Route path="/producers" element={<TopProducers />} />
+            <Route path="/producer/:id" element={<ProducerDetail />} />
+            <Route path="/neirobiz" element={<NeirobizScreen />} />
+            <Route path="/neirobiz/service/:id" element={<NeirobizServiceDetail />} />
 
-              <Route path="/news" element={<News />} />
-              <Route path="/news/coast" element={<NewsCoast />} />
-              <Route path="/news/ikra-wars" element={<CaviarWarBoard />} />
-              <Route path="/news/top-producers" element={<TopProducers />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/news/coast" element={<NewsCoast />} />
+            <Route path="/news/ikra-wars" element={<CaviarWarBoard />} />
+            <Route path="/news/top-producers" element={<TopProducers />} />
 
-              <Route path="/market" element={<Market />} />
-              <Route path="/market/sell" element={<MarketSell />} />
-              <Route path="/market/buy" element={<MarketBuy />} />
-              <Route path="/market/sell/:category" element={<MarketSellCategory />} />
-              <Route path="/market/sell/detail/:id" element={<MarketSellDetail />} />
-              <Route path="/market/add" element={<AddAdForm />} />
-              <Route path="/profile" element={<Profile />} />
+            <Route path="/market" element={<Market />} />
+            <Route path="/market/sell" element={<MarketSell />} />
+            <Route path="/market/buy" element={<MarketBuy />} />
+            <Route path="/market/sell/:category" element={<MarketSellCategory />} />
+            <Route path="/market/sell/detail/:id" element={<MarketSellDetail />} />
+            <Route path="/market/add" element={<AddAdForm />} />
+            <Route path="/profile" element={<Profile />} />
 
-              {/* Admin */}
-              <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<AdminHome />} />
-                <Route path="suppliers" element={<AdminSuppliers />} />
-                <Route path="suppliers/list" element={<SuppliersListPage />} />
-                <Route path="suppliers/create" element={<SupplierCreatePage />} />
-              </Route>
-              <Route path="/lead" element={<LeadFormPage />} />
-            </Routes>
-            \n
-          </Suspense>
+            {/* Admin */}
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminHome />} />
+              <Route path="suppliers" element={<AdminSuppliers />} />
+              <Route path="suppliers/list" element={<SuppliersListPage />} />
+              <Route path="suppliers/create" element={<SupplierCreatePage />} />
+            </Route>
+            <Route path="/lead" element={<LeadFormPage />} />
+          </Routes>
         </Suspense>
 
         <DevAdminButton />

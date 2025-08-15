@@ -1,15 +1,9 @@
-﻿* text=auto eol=lf
-*.js  text eol=lf
-*.jsx text eol=lf
-*.json text eol=lf
-*.css text eol=lf
-*.md  text eol=lf
+# .gitattributes  sane defaults
+* text=auto
 
-# binaries
-*.png binary
-*.jpg binary
-*.jpeg binary
-*.webp binary
-*.gif binary
-*.svg binary
-*.ico binary
+# ????????? ?????: ????????????? LF
+*.{js,jsx,ts,tsx,css,scss,md,html,json,yml,yaml} text eol=lf
+*.sh text eol=lf
+
+# ?????????
+*.{png,jpg,jpeg,gif,ico,svg,webp,woff,woff2,ttf,otf,zip} binary

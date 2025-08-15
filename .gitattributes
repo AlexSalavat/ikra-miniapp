@@ -1,29 +1,6 @@
-﻿# Универсально
-* text=auto eol=lf
+* text=auto
 
-# JavaScript/React
-*.js     text eol=lf
-*.jsx    text eol=lf
-*.ts     text eol=lf
-*.tsx    text eol=lf
-*.json   text eol=lf
-*.css    text eol=lf
-*.html   text eol=lf
-*.md     text eol=lf
-*.yml    text eol=lf
-*.yaml   text eol=lf
-*.env    text eol=lf
+*.{js,jsx,ts,tsx,css,scss,md,html,json,yml,yaml} text eol=lf
+*.sh text eol=lf
 
-# PowerShell/батники  разрешаем CRLF, если появятся
-*.ps1    text eol=crlf
-*.bat    text eol=crlf
-
-# Бинарники
-*.png binary
-*.jpg binary
-*.jpeg binary
-*.gif binary
-*.webp binary
-*.svg binary
-*.ico binary
-*.pdf binary
+*.{png,jpg,jpeg,gif,ico,svg,webp,woff,woff2,ttf,otf,zip} binary

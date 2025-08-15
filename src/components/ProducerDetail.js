@@ -27,6 +27,7 @@ export default function ProducerDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { producer, loading, error } = useProducer(id);
+  console.log('ProducerDetail state', { id, loading, hasProducer: !!producer, error });
 
   const {
     name = '',
@@ -369,3 +370,5 @@ function ActionBtn({ href, label, icon, disabled, gradient = false }) {
     </a>
   );
 }
+
+

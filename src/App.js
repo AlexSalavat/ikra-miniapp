@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import BottomNav from './components/BottomNav';
+import TopProducers from './components/TopProducers';
 
 // Экраны (ленивая загрузка)
 const Home = lazy(() => import('./components/Home'));
@@ -13,7 +14,7 @@ const MarketSellCategory = lazy(() => import('./components/MarketSellCategory'))
 const MarketSellDetail = lazy(() => import('./components/MarketSellDetail'));
 const News = lazy(() => import('./components/News'));
 const Profile = lazy(() => import('./components/Profile'));
-const ProducerDetail = lazy(() => import('./components/ProducerDetail'));
+import ProducerDetail from './components/ProducerDetail';
 const SupplierDetail = lazy(() => import('./components/SupplierDetail'));
 const LeadFormPage = lazy(() => import('./components/LeadFormPage'));
 
@@ -38,6 +39,7 @@ function AppShell() {
             <Route path="/supplier/:id" element={<SupplierDetail />} />
             <Route path="/lead" element={<LeadFormPage />} />
 
+            <Route path="/producers" element={<TopProducers />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
@@ -71,3 +73,7 @@ export default function App() {
     </BrowserRouter>
   );
 }
+
+
+
+

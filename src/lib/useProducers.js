@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from './supabase';
+import { MOCK_PRODUCERS } from '../mock/producers';
 
 export function normalizeProducer(row = {}) {
   const p = row || {};
@@ -23,8 +24,8 @@ export function normalizeProducer(row = {}) {
 }
 
 /**
- * В DEV можно жить без Supabase (например, подмонтировать локальные данные).
- * В PROD  отсутствие клиента/ENV считаем ошибкой.
+ * Р’ DEV РёСЃРїРѕР»СЊР·СѓРµРј РјРѕРє-РґР°РЅРЅС‹Рµ, РµСЃР»Рё Supabase РЅРµ РЅР°СЃС‚СЂРѕРµРЅ РёР»Рё РІРµСЂРЅСѓР» РїСѓСЃС‚Рѕ.
+ * Р’ PROD  С‚РѕР»СЊРєРѕ Supabase.
  */
 export function useProducers() {
   const [producers, setProducers] = useState([]);
@@ -33,17 +34,16 @@ export function useProducers() {
 
   useEffect(() => {
     let cancelled = false;
-
     (async () => {
       try {
+        // РќРµС‚ РєР»РёРµРЅС‚Р°  С„РѕР»Р»Р±СЌРє РІ DEV
         if (!supabase) {
           if (process.env.NODE_ENV !== 'production') {
-            // Нет локального JSON  просто пустой список в деве.
-            setProducers([]);
+            if (!cancelled) setProducers(MOCK_PRODUCERS.map(normalizeProducer));
             return;
           }
           throw new Error(
-            'Supabase не инициализирован. Проверь REACT_APP_/NEXT_PUBLIC_SUPABASE_*.'
+            'Supabase РЅРµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ. РџСЂРѕРІРµСЂСЊ РїРµСЂРµРјРµРЅРЅС‹Рµ РѕРєСЂСѓР¶РµРЅРёСЏ.'
           );
         }
 
@@ -53,14 +53,19 @@ export function useProducers() {
           .order('name', { ascending: true });
 
         if (error) throw error;
-        if (!cancelled) setProducers((data || []).map(normalizeProducer));
+
+        const rows = Array.isArray(data) ? data : [];
+        if (!rows.length && process.env.NODE_ENV !== 'production') {
+          if (!cancelled) setProducers(MOCK_PRODUCERS.map(normalizeProducer));
+        } else {
+          if (!cancelled) setProducers(rows.map(normalizeProducer));
+        }
       } catch (e) {
         if (!cancelled) setError(e);
       } finally {
         if (!cancelled) setLoading(false);
       }
     })();
-
     return () => {
       cancelled = true;
     };
@@ -69,7 +74,7 @@ export function useProducers() {
   return { producers, loading, error };
 }
 
-/** Получение одного производителя по id */
+/** РџРѕР»СѓС‡РµРЅРёРµ РѕРґРЅРѕРіРѕ РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЏ РїРѕ id (СЃ С„РѕР»Р»Р±СЌРєРѕРј РІ DEV) */
 export function useProducer(id) {
   const [producer, setProducer] = useState(null);
   const [loading, setLoading] = useState(Boolean(id));
@@ -77,10 +82,6 @@ export function useProducer(id) {
 
   useEffect(() => {
     let cancelled = false;
-
-    const fromEmptyLocal = () => {
-      setProducer(null); // локального JSON нет — возвращаем null
-    };
 
     if (!id) {
       setProducer(null);
@@ -90,15 +91,17 @@ export function useProducer(id) {
 
     (async () => {
       try {
-        if (!supabase) {
-          if (process.env.NODE_ENV !== 'production') {
-            fromEmptyLocal();
-            return;
-          }
-          throw new Error(
-            'Supabase не инициализирован. Проверь REACT_APP_/NEXT_PUBLIC_SUPABASE_*.'
-          );
+        // DEV С„РѕР»Р»Р±СЌРє, РµСЃР»Рё РЅРµС‚ РєР»РёРµРЅС‚Р°
+        if (!supabase && process.env.NODE_ENV !== 'production') {
+          const found = MOCK_PRODUCERS.find((p) => String(p.id) === String(id)) || null;
+          if (!cancelled) setProducer(found ? normalizeProducer(found) : null);
+          return;
         }
+
+        if (!supabase)
+          throw new Error(
+            'Supabase РЅРµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ. РџСЂРѕРІРµСЂСЊ РїРµСЂРµРјРµРЅРЅС‹Рµ РѕРєСЂСѓР¶РµРЅРёСЏ.'
+          );
 
         setLoading(true);
         const { data, error } = await supabase
@@ -109,13 +112,26 @@ export function useProducer(id) {
           .maybeSingle();
 
         if (error) throw error;
+
         if (!cancelled) {
-          setProducer(data ? normalizeProducer(data) : null);
+          if (data) {
+            setProducer(normalizeProducer(data));
+          } else if (process.env.NODE_ENV !== 'production') {
+            const found = MOCK_PRODUCERS.find((p) => String(p.id) === String(id)) || null;
+            setProducer(found ? normalizeProducer(found) : null);
+          } else {
+            setProducer(null);
+          }
         }
       } catch (e) {
         if (!cancelled) {
           setError(e);
-          fromEmptyLocal();
+          if (process.env.NODE_ENV !== 'production') {
+            const found = MOCK_PRODUCERS.find((p) => String(p.id) === String(id)) || null;
+            setProducer(found ? normalizeProducer(found) : null);
+          } else {
+            setProducer(null);
+          }
         }
       } finally {
         if (!cancelled) setLoading(false);

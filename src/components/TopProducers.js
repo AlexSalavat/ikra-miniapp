@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProducers } from '../lib/useProducers';
 
-const REGIONS = ['РљР°РјС‡Р°С‚РєР°', 'РЎР°С…Р°Р»РёРЅ', 'РҐР°Р±Р°СЂРѕРІСЃРє', 'РњР°РіР°РґР°РЅ'];
+const REGIONS = ['Камчатка', 'Сахалин', 'Хабаровск', 'Магадан'];
 
 const getInitials = (name = '') =>
   (name || '')
@@ -35,7 +35,7 @@ export default function TopProducers() {
   if (error) {
     return (
       <div className="bg-black min-h-screen text-red-400 p-4">
-        РћС€РёР±РєР° Р·Р°РіСЂСѓР·РєРё РїСЂРѕРёР·РІРѕРґРёС‚РµР»РµР№: {String(error.message || error)}
+        Ошибка загрузки производителей: {String(error.message || error)}
       </div>
     );
   }
@@ -58,15 +58,13 @@ export default function TopProducers() {
                 strokeLinejoin="round"
               />
             </svg>
-            <span className="font-semibold">РќР°Р·Р°Рґ</span>
+            <span className="font-semibold">Назад</span>
           </button>
-          <h2 className="ml-auto mr-auto text-white font-bold text-lg">
-            РџСЂРѕРёР·РІРѕРґРёС‚РµР»Рё
-          </h2>
+          <h2 className="ml-auto mr-auto text-white font-bold text-lg">Производители</h2>
           <span className="w-16" />
         </div>
 
-        {/* Р¤РёР»СЊС‚СЂС‹ СЂРµРіРёРѕРЅРѕРІ */}
+        {/* Фильтры регионов */}
         <div className="max-w-md mx-auto px-3 pb-3">
           <div className="flex gap-2 overflow-x-auto no-scrollbar">
             {REGIONS.map((r) => {
@@ -90,7 +88,7 @@ export default function TopProducers() {
         </div>
       </div>
 
-      {/* РЎРµС‚РєР° РєР°СЂС‚РѕС‡РµРє */}
+      {/* Сетка карточек */}
       <div className="max-w-md mx-auto px-3 pt-3 grid grid-cols-2 gap-3">
         {(loading ? Array.from({ length: 8 }) : filtered).map((item, i) =>
           loading ? (
@@ -113,9 +111,7 @@ export default function TopProducers() {
           )
         )}
         {!loading && filtered.length === 0 && (
-          <div className="col-span-2 text-center text-white/70 py-6">
-            РќРёС‡РµРіРѕ РЅРµ РЅР°Р№РґРµРЅРѕ
-          </div>
+          <div className="col-span-2 text-center text-white/70 py-6">Ничего не найдено</div>
         )}
       </div>
     </div>
@@ -123,9 +119,8 @@ export default function TopProducers() {
 }
 
 function ProducerCard({ p, onClick }) {
-  const verified = p?.badges?.includes('РџСЂРѕРІРµСЂРµРЅРЅС‹Р№');
-  const premium =
-    p?.badges?.includes('Р§РµСЃС‚РЅС‹Р№ Р·РЅР°Рє') && p?.badges?.includes('РњРµСЂРєСѓСЂРёР№');
+  const verified = p?.badges?.includes('Проверенный');
+  const premium = p?.badges?.includes('Честный знак') && p?.badges?.includes('Меркурий');
   const img = p?.logo?.trim() ? p.logo : null;
 
   const fallbackBG = useMemo(() => {
@@ -141,7 +136,7 @@ function ProducerCard({ p, onClick }) {
       onClick={onClick}
       title={p?.name}
     >
-      {/* РљРІР°РґСЂР°С‚РЅРѕРµ С„РѕС‚Рѕ/Р»РѕРіРѕ */}
+      {/* Квадратное фото/лого */}
       <div className="relative aspect-square rounded-lg overflow-hidden border border-white/10">
         {img ? (
           <img
@@ -162,7 +157,7 @@ function ProducerCard({ p, onClick }) {
           </div>
         )}
 
-        {/* РјР°Р»РµРЅСЊРєРёР№ РїСЂРµРјРёСѓРј Р·РЅР°С‡РѕРє РІ СѓРіР»Сѓ */}
+        {/* маленький премиум значок в углу */}
         {premium && (
           <div
             className="absolute top-1 right-1 w-5 h-5 rounded-full border border-[rgba(59,175,218,.7)] bg-white/10 grid place-items-center backdrop-blur-sm"
@@ -175,13 +170,13 @@ function ProducerCard({ p, onClick }) {
         )}
       </div>
 
-      {/* РўРµРєСЃС‚РѕРІР°СЏ С‡Р°СЃС‚СЊ */}
+      {/* Текстовая часть */}
       <div className="mt-2 text-center">
         <div className="text-white font-semibold text-sm truncate" title={p?.name}>
           {p?.name}
         </div>
 
-        {/* СЃС‚СЂРѕРєР° РЅРёР¶Рµ  СЂРµРіРёРѕРЅ РїРѕ С†РµРЅС‚СЂСѓ */}
+        {/* строка ниже  регион по центру */}
         <div className="mt-0.5 flex items-center justify-center gap-1.5 text-xs">
           {verified && (
             <span className="px-1.5 py-0.5 rounded-full text-[10px] font-semibold text-white border border-white/20 bg-green-600/60 backdrop-blur-sm"></span>

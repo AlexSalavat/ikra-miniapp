@@ -1,49 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import ads from '../data/marketAdsDemo';
 
 const CATEGORY_LABELS = { ikra: 'Икра', ryba: 'Рыба', krab: 'Краб', mor: 'Морепродукты' };
-
-const exampleAds = [
-  {
-    id: 1,
-    title: 'Икра кеты солёная, 2024',
-    images: ['/images/ikra1.webp'],
-    category: 'ikra',
-    company: 'ООО КамчатИкра',
-    region: 'Камчатка',
-    price: '3 200 ₽/кг',
-    verified: true,
-    premium: true,
-  },
-  {
-    id: 2,
-    title: 'Горбуша свежемороженая, опт',
-    images: ['/images/ryba1.webp'],
-    category: 'ryba',
-    company: 'ООО РыбСнаб',
-    region: 'Сахалин',
-    price: 'от 180 ₽/кг',
-    verified: true,
-  },
-  {
-    id: 3,
-    title: 'Краб живой, Владивосток',
-    images: ['/images/krab.webp'],
-    category: 'krab',
-    company: 'КрабСнаб',
-    region: 'Приморье',
-    price: '12 000 ₽/шт',
-  },
-  {
-    id: 4,
-    title: 'Мидии премиум',
-    images: ['/images/mor.webp'],
-    category: 'mor',
-    company: 'Море Прим',
-    region: 'Владивосток',
-    price: '850 ₽/кг',
-  },
-];
 
 const stringHue = (s = '') => {
   let h = 0;
@@ -57,12 +16,14 @@ export default function MarketSellCategory() {
   const [query, setQuery] = useState('');
 
   const filtered = useMemo(() => {
-    return exampleAds.filter(
+    return ads.filter(
       (a) =>
         a.category === category &&
-        (a.title.toLowerCase().includes(query.toLowerCase()) ||
-          a.company.toLowerCase().includes(query.toLowerCase()) ||
-          (a.region || '').toLowerCase().includes(query.toLowerCase()))
+        [a.title, a.company, a.region]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase()
+          .includes(query.toLowerCase())
     );
   }, [category, query]);
 

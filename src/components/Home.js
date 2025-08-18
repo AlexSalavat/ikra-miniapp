@@ -1,3 +1,4 @@
+// src/components/Home.js
 import React from 'react';
 
 const Home = () => {
@@ -19,12 +20,14 @@ const Home = () => {
         overflow: 'hidden',
       }}
     >
+      {/* затемнение — пропускает клики, чтобы не блокировать BottomNav */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
           backgroundColor: 'rgba(0,0,0,0.5)',
           zIndex: 1,
+          pointerEvents: 'none',
         }}
       />
       <div

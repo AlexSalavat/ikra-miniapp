@@ -30,3 +30,6 @@ build.log
 *.bak
 PROJECT_SNAPSHOT.md
 local-changes.patch
+
+# ESLint debug
+.eslint.effective.json

@@ -7,13 +7,13 @@ export default function Suppliers() {
         to="/admin/suppliers/list"
         className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center hover:brightness-110"
       >
-        РЎРїРёСЃРѕРє
+        Список
       </Link>
       <Link
         to="/admin/suppliers/create"
         className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center hover:brightness-110"
       >
-        РЎРѕР·РґР°С‚СЊ
+        Создать
       </Link>
     </div>
   );

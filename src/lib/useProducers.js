@@ -24,8 +24,8 @@ export function normalizeProducer(row = {}) {
 }
 
 /**
- * Р’ DEV РёСЃРїРѕР»СЊР·СѓРµРј РјРѕРє-РґР°РЅРЅС‹Рµ, РµСЃР»Рё Supabase РЅРµ РЅР°СЃС‚СЂРѕРµРЅ РёР»Рё РІРµСЂРЅСѓР» РїСѓСЃС‚Рѕ.
- * Р’ PROD  С‚РѕР»СЊРєРѕ Supabase.
+ * В DEV используем мок-данные, если Supabase не настроен или вернул пусто.
+ * В PROD  только Supabase.
  */
 export function useProducers() {
   const [producers, setProducers] = useState([]);
@@ -36,15 +36,13 @@ export function useProducers() {
     let cancelled = false;
     (async () => {
       try {
-        // РќРµС‚ РєР»РёРµРЅС‚Р°  С„РѕР»Р»Р±СЌРє РІ DEV
+        // Нет клиента  фоллбэк в DEV
         if (!supabase) {
           if (process.env.NODE_ENV !== 'production') {
             if (!cancelled) setProducers(MOCK_PRODUCERS.map(normalizeProducer));
             return;
           }
-          throw new Error(
-            'Supabase РЅРµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ. РџСЂРѕРІРµСЂСЊ РїРµСЂРµРјРµРЅРЅС‹Рµ РѕРєСЂСѓР¶РµРЅРёСЏ.'
-          );
+          throw new Error('Supabase не инициализирован. Проверь переменные окружения.');
         }
 
         const { data, error } = await supabase
@@ -74,7 +72,7 @@ export function useProducers() {
   return { producers, loading, error };
 }
 
-/** РџРѕР»СѓС‡РµРЅРёРµ РѕРґРЅРѕРіРѕ РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЏ РїРѕ id (СЃ С„РѕР»Р»Р±СЌРєРѕРј РІ DEV) */
+/** Получение одного производителя по id (с фоллбэком в DEV) */
 export function useProducer(id) {
   const [producer, setProducer] = useState(null);
   const [loading, setLoading] = useState(Boolean(id));
@@ -91,7 +89,7 @@ export function useProducer(id) {
 
     (async () => {
       try {
-        // DEV С„РѕР»Р»Р±СЌРє, РµСЃР»Рё РЅРµС‚ РєР»РёРµРЅС‚Р°
+        // DEV фоллбэк, если нет клиента
         if (!supabase && process.env.NODE_ENV !== 'production') {
           const found = MOCK_PRODUCERS.find((p) => String(p.id) === String(id)) || null;
           if (!cancelled) setProducer(found ? normalizeProducer(found) : null);
@@ -99,9 +97,7 @@ export function useProducer(id) {
         }
 
         if (!supabase)
-          throw new Error(
-            'Supabase РЅРµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ. РџСЂРѕРІРµСЂСЊ РїРµСЂРµРјРµРЅРЅС‹Рµ РѕРєСЂСѓР¶РµРЅРёСЏ.'
-          );
+          throw new Error('Supabase не инициализирован. Проверь переменные окружения.');
 
         setLoading(true);
         const { data, error } = await supabase

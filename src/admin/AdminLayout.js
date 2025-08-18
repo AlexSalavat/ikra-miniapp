@@ -19,7 +19,7 @@ export default function AdminLayout() {
       localStorage.setItem('admin_ok', '1');
       setOk(true);
     } else {
-      alert('РќРµРІРµСЂРЅС‹Р№ РєРѕРґ');
+      alert('Неверный код');
     }
   };
 
@@ -37,19 +37,18 @@ export default function AdminLayout() {
   if (!ok) {
     return (
       <div className="p-6 max-w-lg mx-auto">
-        <h1 className="text-2xl font-bold mb-3">Р’С…РѕРґ РІ Р°РґРјРёРЅРєСѓ</h1>
+        <h1 className="text-2xl font-bold mb-3">Вход в админку</h1>
         <form onSubmit={enter} className="space-y-3">
           <input
             className="w-full px-3 py-2 rounded bg-white/10 border border-white/20"
-            placeholder="РљРѕРґ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°"
+            placeholder="Код администратора"
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />
-          <button className="px-4 py-2 rounded bg-cyan-600 hover:brightness-110">Р’РѕР№С‚Рё</button>
+          <button className="px-4 py-2 rounded bg-cyan-600 hover:brightness-110">Войти</button>
         </form>
         <p className="mt-3 text-white/70 text-sm">
-          РџРѕРєР° РІС…РѕРґ РїРѕ РєРѕРґСѓ. РџРѕР·Р¶Рµ РІРєР»СЋС‡РёРј РЅРѕСЂРјР°Р»СЊРЅС‹Р№
-          Р»РѕРіРёРЅ.
+          Пока вход по коду. Позже включим нормальный логин.
         </p>
       </div>
     );
@@ -64,16 +63,16 @@ export default function AdminLayout() {
           {notRoot && (
             <button
               onClick={goBack}
-              aria-label="РќР°Р·Р°Рґ"
+              aria-label="Назад"
               className="px-3 py-1 rounded-lg bg-white/10 border border-white/20 hover:brightness-110"
             >
-              РќР°Р·Р°Рґ
+              Назад
             </button>
           )}
-          <h1 className="text-2xl font-bold">РђРґРјРёРЅРєР°</h1>
+          <h1 className="text-2xl font-bold">Админка</h1>
         </div>
         <button onClick={logout} className="px-3 py-1 rounded bg-white/10 border border-white/20">
-          Р’С‹Р№С‚Рё
+          Выйти
         </button>
       </div>
       <Outlet />

@@ -22,6 +22,7 @@ const stringHue = (s = '') => {
 export default function TopProducers() {
   const navigate = useNavigate();
   const { producers, loading, error } = useProducers();
+  console.log('TopProducers: count', producers?.length, producers?.map((p) => p.id).slice(0, 10));
 
   const [filter, setFilter] = useState(REGIONS[0]);
 
@@ -29,10 +30,7 @@ export default function TopProducers() {
     window.scrollTo(0, 0);
   }, [filter]);
 
-  const filtered = useMemo(
-    () => (producers || []).filter((p) => (p?.region || '') === filter),
-    [producers, filter]
-  );
+  const filtered = useMemo(() => producers || [], [producers]);
 
   if (error) {
     return (
@@ -99,7 +97,16 @@ export default function TopProducers() {
             <ProducerCard
               key={item.id || i}
               p={item}
-              onClick={() => navigate(`/producer/${item.id}`)}
+              onClick={() => {
+                const id = item?.id;
+                if (!id) {
+                  console.warn('TopProducers: missing id', item);
+                  return;
+                }
+                const url = `/producer/${encodeURIComponent(String(id))}`;
+                console.log('TopProducers: navigate', { id, url });
+                navigate(url);
+              }}
             />
           )
         )}

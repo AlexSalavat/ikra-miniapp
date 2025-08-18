@@ -26,7 +26,7 @@ export const MOCK_PRODUCERS = [
     id: '6',
     name: 'ООО "Фирма Жупанова"',
     region: 'Камчатка',
-    logo: '/images/zhupanova.webp',
+    logo: '/images/zhupanov.webp',
     description: 'Лососевая рыба и икра. Основано в 1996 г.',
     contacts: { phone: '8-961-965-35-95' },
     categories: ['Икра лососевая', 'Мороженая рыба'],

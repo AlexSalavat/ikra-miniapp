@@ -1,30 +1,45 @@
 // src/lib/useProducers.js
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from './supabase';
 import { MOCK_PRODUCERS } from '../mock/producers';
 
 export function normalizeProducer(row = {}) {
   const p = row || {};
+
+  // соберём бейджи: из массива + из флагов
+  const flags = [
+    p.verified ? 'Проверенный' : null,
+    p.premium ? 'Честный знак' : null,
+    p.premium ? 'Меркурий' : null,
+  ].filter(Boolean);
+  const baseBadges = Array.isArray(p.badges) ? p.badges : [];
+  const badges = Array.from(new Set([...baseBadges, ...flags]));
+
   return {
     id: String(p.id ?? ''),
     name: p.name ?? '',
     region: p.region ?? '',
     logo: p.logo ?? '',
     description: p.description ?? '',
-    fullDescription: p.fullDescription ?? p.fulldescription ?? '',
+    fullDescription: p.full_description ?? p.fullDescription ?? '',
     site: p.site ?? '',
     address: p.address ?? '',
     contacts: p.contacts ?? {},
     categories: p.categories ?? [],
-    badges: p.badges ?? [],
+    badges,
     gallery: p.gallery ?? [],
-    founded: p.founded ?? undefined,
-    productionCapacity: p.productionCapacity ?? p.production_capacity ?? '',
-    exportMarkets: p.exportMarkets ?? p.export_markets ?? [],
+    founded: typeof p.founded === 'number' ? p.founded : undefined,
+    productionCapacity: p.production_capacity ?? p.productionCapacity ?? '',
+    exportMarkets: p.export_markets ?? p.exportMarkets ?? [],
+    verified: Boolean(p.verified),
+    premium: Boolean(p.premium),
   };
 }
 
-// ===== Список производителей =====
+/**
+ * PROD: читаем из Supabase (view producers_app)
+ * DEV: если нет клиента или пусто — фоллбэк на моки
+ */
 export function useProducers() {
   const [producers, setProducers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,41 +47,35 @@ export function useProducers() {
 
   useEffect(() => {
     let cancelled = false;
-
-    async function load() {
+    (async () => {
       try {
-        // Если нет supabase-клиента — сразу мок
-        if (!supabase || typeof supabase.from !== 'function') {
-          if (!cancelled) setProducers(MOCK_PRODUCERS.map(normalizeProducer));
-          return;
+        if (!supabase) {
+          if (process.env.NODE_ENV !== 'production') {
+            if (!cancelled) setProducers(MOCK_PRODUCERS.map(normalizeProducer));
+            return;
+          }
+          throw new Error('Supabase не инициализирован.');
         }
 
         const { data, error } = await supabase
-          .from('producers')
+          .from('producers_app') // ← читаем из VIEW
           .select('*')
           .order('name', { ascending: true });
 
         if (error) throw error;
 
         const rows = Array.isArray(data) ? data : [];
-
-        // Если база пуста — тоже мок (и в prod, и в dev)
-        if (!rows.length) {
+        if (!rows.length && process.env.NODE_ENV !== 'production') {
           if (!cancelled) setProducers(MOCK_PRODUCERS.map(normalizeProducer));
         } else {
           if (!cancelled) setProducers(rows.map(normalizeProducer));
         }
       } catch (e) {
-        if (!cancelled) {
-          setError(e);
-          setProducers(MOCK_PRODUCERS.map(normalizeProducer)); // фоллбэк на ошибке
-        }
+        if (!cancelled) setError(e);
       } finally {
         if (!cancelled) setLoading(false);
       }
-    }
-
-    load();
+    })();
     return () => {
       cancelled = true;
     };
@@ -75,91 +84,68 @@ export function useProducers() {
   return { producers, loading, error };
 }
 
-// ===== Один производитель =====
 export function useProducer(id) {
-  const safeId = String(id ?? '');
-  const { producers, loading: listLoading, error: listError } = useProducers();
-
-  // Сначала пробуем найти в уже загруженном списке (из базы или из мока)
-  const fromList = useMemo(
-    () => producers.find((p) => String(p.id) === safeId) || null,
-    [producers, safeId]
-  );
-
-  const [producer, setProducer] = useState(fromList);
-  const [loading, setLoading] = useState(!fromList && Boolean(safeId));
+  const [producer, setProducer] = useState(null);
+  const [loading, setLoading] = useState(Boolean(id));
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    setProducer(fromList);
-  }, [fromList]);
 
   useEffect(() => {
     let cancelled = false;
 
-    if (!safeId) {
+    if (!id) {
       setProducer(null);
       setLoading(false);
       return;
     }
 
-    // Если уже нашли в списке — отдельный запрос не нужен
-    if (fromList) {
-      setLoading(false);
-      return;
-    }
-
-    async function loadOne() {
+    (async () => {
       try {
-        // Нет клиента — используем мок
-        if (!supabase || typeof supabase.from !== 'function') {
-          const found = MOCK_PRODUCERS.find((p) => String(p.id) === safeId) || null;
+        if (!supabase && process.env.NODE_ENV !== 'production') {
+          const found = MOCK_PRODUCERS.find((p) => String(p.id) === String(id)) || null;
           if (!cancelled) setProducer(found ? normalizeProducer(found) : null);
           return;
         }
+        if (!supabase) throw new Error('Supabase не инициализирован.');
 
         setLoading(true);
-
-        // Пытаемся получить по id из базы; если колонка numeric — попробуем и число, и строку
-        const tryNum = Number.isFinite(Number(safeId)) ? Number(safeId) : safeId;
-
-        let { data, error } = await supabase
-          .from('producers')
+        const { data, error } = await supabase
+          .from('producers_app') // ← читаем из VIEW
           .select('*')
-          .eq('id', tryNum)
+          .eq('id', String(id))
           .limit(1)
           .maybeSingle();
 
         if (error) throw error;
 
-        if (!data) {
-          // пусто в базе — возьмём мок
-          const found = MOCK_PRODUCERS.find((p) => String(p.id) === safeId) || null;
-          if (!cancelled) setProducer(found ? normalizeProducer(found) : null);
-        } else {
-          if (!cancelled) setProducer(normalizeProducer(data));
+        if (!cancelled) {
+          if (data) {
+            setProducer(normalizeProducer(data));
+          } else if (process.env.NODE_ENV !== 'production') {
+            const found = MOCK_PRODUCERS.find((p) => String(p.id) === String(id)) || null;
+            setProducer(found ? normalizeProducer(found) : null);
+          } else {
+            setProducer(null);
+          }
         }
       } catch (e) {
         if (!cancelled) {
           setError(e);
-          const found = MOCK_PRODUCERS.find((p) => String(p.id) === safeId) || null;
-          setProducer(found ? normalizeProducer(found) : null);
+          if (process.env.NODE_ENV !== 'production') {
+            const found = MOCK_PRODUCERS.find((p) => String(p.id) === String(id)) || null;
+            setProducer(found ? normalizeProducer(found) : null);
+          } else {
+            setProducer(null);
+          }
         }
       } finally {
         if (!cancelled) setLoading(false);
       }
-    }
+    })();
 
-    loadOne();
     return () => {
       cancelled = true;
     };
-  }, [safeId, fromList]);
+  }, [id]);
 
-  // Пробрасываем ошибку/лоадинг из списка, чтобы экран никогда не был «чёрным»
-  return {
-    producer,
-    loading: loading || listLoading,
-    error: error || listError,
-  };
+  return { producer, loading, error };
 }

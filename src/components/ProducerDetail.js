@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useProducer } from '../lib/useProducers';
 
-/* helpers */
+// helpers
 const getInitials = (name = '') =>
   String(name || '')
     .replace(/["«»]/g, '')
@@ -20,7 +20,7 @@ const stringHue = (s = '') => {
   return h;
 };
 
-// нормализация данных
+// приведение типов
 const asStr = (v, def = '') => (typeof v === 'string' ? v : def);
 const asStrArr = (v) =>
   Array.isArray(v) ? v.filter((x) => typeof x === 'string' && x.trim()) : [];
@@ -82,7 +82,7 @@ export default function ProducerDetail() {
     );
   }
 
-  // ——— СТРОГО приводим всё к строкам/массивам строк/объекту ———
+  // — безопасно нормализуем всё, НИЧЕГО не мапим —
   const name = asStr(producer.name, 'Без названия');
   const region = asStr(producer.region);
   const logo = asStr(producer.logo);
@@ -101,13 +101,13 @@ export default function ProducerDetail() {
       : undefined;
   const productionCapacity = asStr(producer.productionCapacity);
 
-  const hasPremium = badges.includes('Честный знак') && badges.includes('Меркурий');
-  const pictures = (gallery.length ? gallery : logo ? [logo] : []).slice(0, 8);
-
   const bgInitials = useMemo(() => {
     const h = stringHue(name || region || 'x');
     return `linear-gradient(135deg,hsl(${h} 80% 20% / .95),hsl(${(h + 40) % 360} 80% 30% / .95))`;
   }, [name, region]);
+
+  const banner =
+    (gallery.length && gallery[0]) || (logo && logo.trim() ? logo : '') || '';
 
   const contactValues = Object.values(contacts);
   const phones = contactValues.filter(
@@ -121,14 +121,14 @@ export default function ProducerDetail() {
       {Header}
 
       <div className="max-w-md mx-auto px-3 pt-3 space-y-3">
-        {/* Баннер */}
+        {/* Баннер — только одна картинка или фон-инициалы */}
         <div className="glass-card p-2">
           <div className="relative w-full rounded-xl overflow-hidden border border-white/10">
             <div className="w-full aspect-[16/10] bg-black/40">
-              {pictures.length ? (
+              {banner ? (
                 <img
                   loading="lazy"
-                  src={pictures[0]}
+                  src={banner}
                   alt={`${name} баннер`}
                   className="w-full h-full object-cover"
                   onError={(e) => {
@@ -141,42 +141,18 @@ export default function ProducerDetail() {
             </div>
 
             <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/60 via-black/10 to-transparent">
-              <div className="text-white font-extrabold text-[18px] leading-tight">{name}</div>
-
-              {!!badges.length && (
-                <div className="mt-1 flex items-center gap-1.5 flex-wrap">
-                  {badges.map((b, i) => (
-                    <span
-                      key={`${b}-${i}`}
-                      className={[
-                        'px-2 py-0.5 rounded-full text-[10px] font-semibold border backdrop-blur-sm',
-                        b === 'Проверенный'
-                          ? 'text-white bg-green-600/60 border-white/20'
-                          : 'text-white/90 bg-white/10 border-white/20',
-                      ].join(' ')}
-                      title={b}
-                    >
-                      {b}
-                    </span>
-                  ))}
-                  {hasPremium && (
-                    <span
-                      className="ml-auto w-6 h-6 rounded-full border border-[rgba(59,175,218,.7)] bg-white/10 grid place-items-center backdrop-blur-sm"
-                      title="Premium"
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="rgb(59,175,218)">
-                        <path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7l3-7z" />
-                      </svg>
-                    </span>
-                  )}
-                </div>
+              <div className="text-white font-extrabold text-[18px] leading-tight">
+                {name}
+              </div>
+              {region && (
+                <div className="mt-1 text-white/80 text-sm">{region}</div>
               )}
             </div>
           </div>
         </div>
 
-        {/* Лого + основная инфа */}
-        <div className={`glass-card p-3 ${hasPremium ? 'premium' : ''}`}>
+        {/* Лого + краткая инфа */}
+        <div className="glass-card p-3">
           <div className="grid grid-cols-[92px,1fr] gap-3 items-start">
             <div className="relative w-[92px] h-[92px] rounded-2xl overflow-hidden border border-white/10 bg-black/40 grid place-items-center">
               {logo ? (
@@ -200,54 +176,19 @@ export default function ProducerDetail() {
             </div>
 
             <div className="min-w-0">
-              {region && (
-                <div className="flex items-center gap-1 text-white/80 text-sm">
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                  >
-                    <path d="M12 2C8 2 4 6 4 11c0 5.5 7 11 8 11s8-5.5 8-11c0-5-4-9-8-9z" />
-                    <circle cx="12" cy="11" r="3" />
-                  </svg>
-                  <span>{region}</span>
+              {founded && (
+                <div className="text-white/80 text-sm">Основано: {founded}</div>
+              )}
+              {productionCapacity && (
+                <div className="text-white/80 text-sm">
+                  Мощность: {productionCapacity}
                 </div>
               )}
-
-              {!!categories.length && (
-                <div className="mt-1.5 flex flex-wrap gap-1">
-                  {categories.slice(0, 4).map((c, i) => (
-                    <span
-                      key={`${c}-${i}`}
-                      className="px-2 py-0.5 rounded-full text-[10px] font-semibold text-white/90 border border-white/15 bg-white/10 backdrop-blur-sm"
-                    >
-                      {c}
-                    </span>
-                  ))}
+              {exportMarkets.length > 0 && (
+                <div className="text-white/80 text-sm">
+                  Экспорт: {exportMarkets.join(', ')}
                 </div>
               )}
-
-              <div className="mt-2 grid grid-cols-2 gap-1.5">
-                {typeof founded !== 'undefined' && (
-                  <Fact icon="📅" title="Основано" value={String(founded)} />
-                )}
-                {productionCapacity && (
-                  <Fact icon="⚙️" title="Мощность" value={productionCapacity} />
-                )}
-                {exportMarkets.length > 0 && (
-                  <Fact
-                    icon="🌍"
-                    title="Экспорт"
-                    value={
-                      exportMarkets.slice(0, 3).join(', ') +
-                      (exportMarkets.length > 3 ? '…' : '')
-                    }
-                  />
-                )}
-              </div>
             </div>
           </div>
         </div>
@@ -305,20 +246,14 @@ export default function ProducerDetail() {
             </a>
           </div>
         )}
-      </div>
-    </div>
-  );
-}
 
-function Fact({ icon, title, value }) {
-  return (
-    <div className="rounded-lg border border-white/10 bg-white/5 backdrop-blur-sm px-2 py-1.5">
-      <div className="text-white/70 text-[10px] flex items-center gap-1">
-        <span className="text-[12px]">{icon}</span>
-        <span>{title}</span>
-      </div>
-      <div className="text-white font-semibold text-[12.5px] mt-0.5 leading-tight">
-        {String(value)}
+        {/* Отладка: посмотреть реальные данные, которые пришли */}
+        <details className="glass-card p-3">
+          <summary className="cursor-pointer text-white/80 text-sm">Отладка данных</summary>
+          <pre className="mt-2 text-[11px] text-white/80 whitespace-pre-wrap break-words">
+{JSON.stringify(producer, null, 2)}
+          </pre>
+        </details>
       </div>
     </div>
   );

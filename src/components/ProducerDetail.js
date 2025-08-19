@@ -5,7 +5,7 @@ import { useProducer } from '../lib/useProducers';
 
 /* helpers */
 const getInitials = (name = '') =>
-  (name || '')
+  String(name || '')
     .replace(/["«»]/g, '')
     .split(/\s+/)
     .filter(Boolean)
@@ -15,9 +15,16 @@ const getInitials = (name = '') =>
 
 const stringHue = (s = '') => {
   let h = 0;
-  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360;
+  const str = String(s || '');
+  for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) % 360;
   return h;
 };
+
+// нормализация данных
+const asStr = (v, def = '') => (typeof v === 'string' ? v : def);
+const asStrArr = (v) =>
+  Array.isArray(v) ? v.filter((x) => typeof x === 'string' && x.trim()) : [];
+const asObj = (v) => (v && typeof v === 'object' && !Array.isArray(v) ? v : {});
 
 export default function ProducerDetail() {
   const { id } = useParams();
@@ -32,7 +39,13 @@ export default function ProducerDetail() {
           className="flex items-center gap-1.5 text-[#23df81] hover:text-white transition"
         >
           <svg width="20" height="20" fill="none">
-            <path d="M13 5l-5 5 5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path
+              d="M13 5l-5 5 5 5"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
           <span className="font-semibold">Назад</span>
         </button>
@@ -46,7 +59,9 @@ export default function ProducerDetail() {
     return (
       <div className="bg-black min-h-screen pb-24">
         {Header}
-        <div className="max-w-md mx-auto px-4 pt-6 text-red-400">Ошибка загрузки: {String(error?.message || error)}</div>
+        <div className="max-w-md mx-auto px-4 pt-6 text-red-400">
+          Ошибка загрузки: {String(error?.message || error)}
+        </div>
       </div>
     );
   }
@@ -67,33 +82,38 @@ export default function ProducerDetail() {
     );
   }
 
-  const {
-    name = '',
-    region = '',
-    logo,
-    description,
-    fullDescription,
-    address,
-    site,
-    contacts = {},
-    badges = [],
-    gallery = [],
-    categories = [],
-    founded,
-    productionCapacity,
-    exportMarkets = [],
-  } = producer;
+  // ——— СТРОГО приводим всё к строкам/массивам строк/объекту ———
+  const name = asStr(producer.name, 'Без названия');
+  const region = asStr(producer.region);
+  const logo = asStr(producer.logo);
+  const description = asStr(producer.description);
+  const fullDescription = asStr(producer.fullDescription);
+  const address = asStr(producer.address);
+  const site = asStr(producer.site);
+  const categories = asStrArr(producer.categories);
+  const badges = asStrArr(producer.badges);
+  const gallery = asStrArr(producer.gallery);
+  const exportMarkets = asStrArr(producer.exportMarkets);
+  const contacts = asObj(producer.contacts);
+  const founded =
+    typeof producer.founded === 'number' || typeof producer.founded === 'string'
+      ? String(producer.founded)
+      : undefined;
+  const productionCapacity = asStr(producer.productionCapacity);
 
   const hasPremium = badges.includes('Честный знак') && badges.includes('Меркурий');
-  const pictures = (Array.isArray(gallery) && gallery.length ? gallery : logo ? [logo] : []).slice(0, 8);
+  const pictures = (gallery.length ? gallery : logo ? [logo] : []).slice(0, 8);
 
   const bgInitials = useMemo(() => {
     const h = stringHue(name || region || 'x');
     return `linear-gradient(135deg,hsl(${h} 80% 20% / .95),hsl(${(h + 40) % 360} 80% 30% / .95))`;
   }, [name, region]);
 
-  const phones = Object.values(contacts).filter((v) => typeof v === 'string' && /^[-+()\d\s]{7,}$/.test(v));
-  const emails = Object.values(contacts).filter((v) => typeof v === 'string' && /@/.test(v));
+  const contactValues = Object.values(contacts);
+  const phones = contactValues.filter(
+    (v) => typeof v === 'string' && /^[-+()0-9\s]{7,}$/.test(v)
+  );
+  const emails = contactValues.filter((v) => typeof v === 'string' && v.includes('@'));
   const safeSite = site ? (site.startsWith('http') ? site : `https://${site}`) : null;
 
   return (
@@ -111,7 +131,9 @@ export default function ProducerDetail() {
                   src={pictures[0]}
                   alt={`${name} баннер`}
                   className="w-full h-full object-cover"
-                  onError={(e) => (e.currentTarget.style.display = 'none')}
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
                 />
               ) : (
                 <div className="w-full h-full" style={{ background: bgInitials }} />
@@ -121,31 +143,34 @@ export default function ProducerDetail() {
             <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/60 via-black/10 to-transparent">
               <div className="text-white font-extrabold text-[18px] leading-tight">{name}</div>
 
-              <div className="mt-1 flex items-center gap-1.5 flex-wrap">
-                {badges.map((b, i) => (
-                  <span
-                    key={i}
-                    className={[
-                      'px-2 py-0.5 rounded-full text-[10px] font-semibold border backdrop-blur-sm',
-                      b === 'Проверенный'
-                        ? 'text-white bg-green-600/60 border-white/20'
-                        : 'text-white/90 bg-white/10 border-white/20',
-                    ].join(' ')}
-                  >
-                    {b}
-                  </span>
-                ))}
-                {hasPremium && (
-                  <span
-                    className="ml-auto w-6 h-6 rounded-full border border-[rgba(59,175,218,.7)] bg-white/10 grid place-items-center backdrop-blur-sm"
-                    title="Premium"
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="rgb(59,175,218)">
-                      <path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7l3-7z" />
-                    </svg>
-                  </span>
-                )}
-              </div>
+              {!!badges.length && (
+                <div className="mt-1 flex items-center gap-1.5 flex-wrap">
+                  {badges.map((b, i) => (
+                    <span
+                      key={`${b}-${i}`}
+                      className={[
+                        'px-2 py-0.5 rounded-full text-[10px] font-semibold border backdrop-blur-sm',
+                        b === 'Проверенный'
+                          ? 'text-white bg-green-600/60 border-white/20'
+                          : 'text-white/90 bg-white/10 border-white/20',
+                      ].join(' ')}
+                      title={b}
+                    >
+                      {b}
+                    </span>
+                  ))}
+                  {hasPremium && (
+                    <span
+                      className="ml-auto w-6 h-6 rounded-full border border-[rgba(59,175,218,.7)] bg-white/10 grid place-items-center backdrop-blur-sm"
+                      title="Premium"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="rgb(59,175,218)">
+                        <path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7l3-7z" />
+                      </svg>
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -160,7 +185,9 @@ export default function ProducerDetail() {
                   src={logo}
                   alt={name}
                   className="w-[86%] h-[86%] object-contain"
-                  onError={(e) => (e.currentTarget.style.display = 'none')}
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
                 />
               ) : (
                 <div
@@ -175,7 +202,14 @@ export default function ProducerDetail() {
             <div className="min-w-0">
               {region && (
                 <div className="flex items-center gap-1 text-white/80 text-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                  >
                     <path d="M12 2C8 2 4 6 4 11c0 5.5 7 11 8 11s8-5.5 8-11c0-5-4-9-8-9z" />
                     <circle cx="12" cy="11" r="3" />
                   </svg>
@@ -187,7 +221,7 @@ export default function ProducerDetail() {
                 <div className="mt-1.5 flex flex-wrap gap-1">
                   {categories.slice(0, 4).map((c, i) => (
                     <span
-                      key={i}
+                      key={`${c}-${i}`}
                       className="px-2 py-0.5 rounded-full text-[10px] font-semibold text-white/90 border border-white/15 bg-white/10 backdrop-blur-sm"
                     >
                       {c}
@@ -197,13 +231,20 @@ export default function ProducerDetail() {
               )}
 
               <div className="mt-2 grid grid-cols-2 gap-1.5">
-                {typeof founded !== 'undefined' && <Fact icon="📅" title="Основано" value={String(founded)} />}
-                {productionCapacity && <Fact icon="⚙️" title="Мощность" value={productionCapacity} />}
-                {exportMarkets && exportMarkets.length > 0 && (
+                {typeof founded !== 'undefined' && (
+                  <Fact icon="📅" title="Основано" value={String(founded)} />
+                )}
+                {productionCapacity && (
+                  <Fact icon="⚙️" title="Мощность" value={productionCapacity} />
+                )}
+                {exportMarkets.length > 0 && (
                   <Fact
                     icon="🌍"
                     title="Экспорт"
-                    value={exportMarkets.slice(0, 3).join(', ') + (exportMarkets.length > 3 ? '…' : '')}
+                    value={
+                      exportMarkets.slice(0, 3).join(', ') +
+                      (exportMarkets.length > 3 ? '…' : '')
+                    }
                   />
                 )}
               </div>
@@ -214,7 +255,9 @@ export default function ProducerDetail() {
         {(fullDescription || description) && (
           <div className="glass-card p-3">
             <div className="text-white font-semibold text-[15px] mb-1">О компании</div>
-            <div className="text-white/90 text-[14px] leading-relaxed">{fullDescription || description}</div>
+            <div className="text-white/90 text-[14px] leading-relaxed">
+              {fullDescription || description}
+            </div>
           </div>
         )}
 
@@ -274,7 +317,9 @@ function Fact({ icon, title, value }) {
         <span className="text-[12px]">{icon}</span>
         <span>{title}</span>
       </div>
-      <div className="text-white font-semibold text-[12.5px] mt-0.5 leading-tight">{value}</div>
+      <div className="text-white font-semibold text-[12.5px] mt-0.5 leading-tight">
+        {String(value)}
+      </div>
     </div>
   );
 }

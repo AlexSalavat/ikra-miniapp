@@ -1,0 +1,17 @@
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\firebase.js:7: apiKey: process.env.REACT_APP_FIREBASE_API_KEY || '',
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\firebase.js:8: authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || '',
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\firebase.js:9: projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || '',
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\firebase.js:10: storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || '',
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\firebase.js:11: messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || '',
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\firebase.js:12: appId: process.env.REACT_APP_FIREBASE_APP_ID || '',
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\admin\AdminLayout.js:4: const ADMIN_CODE = process.env.REACT_APP_ADMIN_CODE || '';
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\supabase.js:3: const URL = process.env.REACT_APP_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\supabase.js:5: process.env.REACT_APP_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\supabase.js:12: if (process.env.NODE_ENV === 'production') {
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\useProducers.js:53: if (process.env.NODE_ENV !== 'production') {
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\useProducers.js:68: if (!rows.length && process.env.NODE_ENV !== 'production') {
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\useProducers.js:103: if (!supabase && process.env.NODE_ENV !== 'production') {
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\useProducers.js:123: } else if (process.env.NODE_ENV !== 'production') {
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\useProducers.js:133: if (process.env.NODE_ENV !== 'production') {
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\useSuppliers.js:31: if (process.env.NODE_ENV !== 'production') {
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\useSuppliers.js:83: if (process.env.NODE_ENV !== 'production') {

@@ -33,3 +33,8 @@ local-changes.patch
 
 # ESLint debug
 .eslint.effective.json
+node_modules/
+build/
+dist/
+.env.*
+coverage/

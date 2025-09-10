@@ -1,0 +1,18 @@
+﻿Lifecycle scripts included in ikra-miniapp@0.1.0:
+  start
+    craco start
+  test
+    craco test
+  prepare
+    husky
+available via `npm run-script`:
+  build
+    craco build
+  eject
+    react-scripts eject
+  lint
+    eslint src --ext .js,.jsx
+  format
+    prettier -c .
+  format:write
+    prettier -w .

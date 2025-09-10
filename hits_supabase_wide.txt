@@ -1,0 +1,2 @@
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\supabase.js:1: import { createClient } from '@supabase/supabase-js';
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\supabase.js:17: export const supabase = URL && KEY ? createClient(URL, KEY) : null;

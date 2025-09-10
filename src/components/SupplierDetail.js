@@ -1,3 +1,4 @@
+// src/components/SupplierDetail.js
 import { Navigation, Pagination, Thumbs } from 'swiper/modules';
 import React, { useMemo, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -49,10 +50,22 @@ export default function SupplierDetail() {
     priceList,
     contacts = {},
     certs = [],
-    gallery = [],
+    gallery: galleryRaw = [],
     mapUrl,
     site: siteFromRoot,
   } = company || {};
+
+  // ✅ Нормализация путей (и логотипа, и галереи)
+  const logoPath = typeof logo === 'string' ? logo : '';
+  const galleryArr = Array.isArray(galleryRaw)
+    ? galleryRaw.filter(Boolean).map(String)
+    : typeof galleryRaw === 'string'
+      ? galleryRaw
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : [];
+  const images = (galleryArr.length ? galleryArr : logoPath ? [logoPath] : []).slice(0, 12);
 
   const initialsBG = useMemo(() => {
     const h = stringHue(name || city || region || 'x');
@@ -73,7 +86,6 @@ export default function SupplierDetail() {
 
   const swiperRef = useRef(null);
   const [activeIdx, setActiveIdx] = useState(0);
-  const images = (gallery && gallery.length ? gallery : logo ? [logo] : []).slice(0, 12);
 
   if (loading) return <div className="max-w-md mx-auto px-3 pt-6 text-white/80">Загрузка</div>;
   if (error)
@@ -147,10 +159,10 @@ export default function SupplierDetail() {
         <div className="glass-card p-3">
           <div className="grid grid-cols-[92px,1fr] gap-3 items-start">
             <div className="relative w-[92px] h-[92px] rounded-2xl overflow-hidden border border-white/10 bg-black/40 grid place-items-center">
-              {logo ? (
+              {logoPath ? (
                 <img
                   loading="lazy"
-                  src={logo}
+                  src={logoPath}
                   alt={name}
                   className="w-[86%] h-[86%] object-contain img-fade-in"
                   onError={(e) => e.currentTarget.remove()}

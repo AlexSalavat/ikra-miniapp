@@ -8,7 +8,7 @@ const Home = () => {
         position: 'relative',
         width: '100%',
         height: '100vh',
-        backgroundImage: 'url(/images/port-bg.webp)',
+        backgroundImage: 'url(/images/common/port-bg.webp)',
         backgroundSize: '100% 100%',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

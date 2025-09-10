@@ -1,0 +1,5 @@
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\leads.js:50: const { data, error } = await supabase.from('leads').insert(insertRow).select('id').single();
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\useProducers.js:61: .from('producers_app') // < читаем из VIEW
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\useProducers.js:112: .from('producers_app') // < читаем из VIEW
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\useSuppliers.js:41: .from('suppliers')
+C:\Users\Lenovo\OneDrive\Desktop\ikra-miniapp\src\lib\useSuppliers.js:92: .from('suppliers')
